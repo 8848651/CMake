@@ -1,0 +1,25 @@
+https://blog.csdn.net/qq_29493173/article/details/113094143
+进入用户./ssh文件下
+ssh-keygen -t rsa -C "youxiang@qq.com"
+三个空格
+验证：ssh -T git@github.com
+链接远程仓库：git remote add origin git@github.com:8848651/CMake.git
+查看远程分支：git remote
+创建本地分支：git checkout -b C++_CMake_Project_Make
+产看并切换本地分支：git branch
+切换主分支：git checkout master
+添加提交本地仓库：
+git add .
+git commit -m “注释内容”
+在分支下推送到远程分支：
+git push -u origin C++_CMake_Project_Make
+
+清除本地仓库主分支的所有文件和提交历史
+git checkout --orphan temp_branch
+git add -A
+git commit -m "Initial commit"
+git branch -D master
+git branch -m master
+
+
+
