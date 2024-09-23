@@ -1,5 +1,5 @@
 # 安装最小版本
-cmake_minimum_required(VERSION 3.20.0)
+cmake_minimum_required(VERSION 3.16.3)
 
 # 项目名称
 project(make_test)
