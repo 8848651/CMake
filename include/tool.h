@@ -6,6 +6,7 @@ namespace Utilities {
 
     //这是将字符ip转为sockaddr_in->sin_addr->s_addr(int32_t)的函数
     //即 192.168.1.1 ->  192存第一个字节，168存第二个字节，1存第三个字节，1存第四个字节
+    //inet_pton(AF_INET, "192.168.136.129", &addr.sin_addr.s_addr)
     int StrToIn_Addr(const char* ip_address) {
         int tmp = 0;
         char* endptr = (char*)&tmp;
