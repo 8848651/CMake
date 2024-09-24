@@ -6,33 +6,27 @@
 
 #IncludeRegexTransform: 
 
+../include/tool.h
+string.h
+-
+stdio.h
+-
+
 /home/develop/Project/Socket_Sever/src/main.cpp
 iostream
 -
-string
+stdio.h
 -
-sys/socket.h
--
-arpa/inet.h
+stdlib.h
 -
 unistd.h
 -
-cstring
+string.h
 -
-cstdlib
+arpa/inet.h
 -
-cstdio
+sys/socket.h
 -
-pthread.h
--
-vector
--
-map
--
-queue
--
-mutex
--
-condition_variable
--
+tool.h
+/home/develop/Project/Socket_Sever/src/tool.h
 
