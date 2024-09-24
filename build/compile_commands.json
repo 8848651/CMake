@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/develop/Project/Socket_Client/build",
+  "command": "/usr/bin/g++   -I/home/develop/Project/Socket_Client/include  -g   -std=gnu++14 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/develop/Project/Socket_Client/src/main.cpp",
+  "file": "/home/develop/Project/Socket_Client/src/main.cpp"
+}
+]
