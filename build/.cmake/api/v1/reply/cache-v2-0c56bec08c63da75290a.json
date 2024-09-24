@@ -839,7 +839,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "Project"
+			"value" : "Socket_Sever"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1135,6 +1135,78 @@
 		},
 		{
 			"name" : "Project_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/develop/Project/Socket_Sever"
+		},
+		{
+			"name" : "Sever_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/develop/Project/Socket_Sever/build"
+		},
+		{
+			"name" : "Sever_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/develop/Project/Socket_Sever"
+		},
+		{
+			"name" : "Socket_Sever_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/develop/Project/Socket_Sever/build"
+		},
+		{
+			"name" : "Socket_Sever_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/develop/Project/Socket_Sever"
+		},
+		{
+			"name" : "make_test_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/home/develop/Project/Socket_Sever/build"
+		},
+		{
+			"name" : "make_test_SOURCE_DIR",
 			"properties" : 
 			[
 				{

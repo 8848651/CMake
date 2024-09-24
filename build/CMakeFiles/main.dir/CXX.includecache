@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/develop/Project/Socket_Sever/src/main.cpp
+iostream
+-
+string
+-
+sys/socket.h
+-
+arpa/inet.h
+-
+unistd.h
+-
+cstring
+-
+cstdlib
+-
+cstdio
+-
+pthread.h
+-
+vector
+-
+map
+-
+queue
+-
+mutex
+-
+condition_variable
+-
+
