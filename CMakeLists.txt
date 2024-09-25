@@ -15,7 +15,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC_LIST)
 
+find_package(Threads REQUIRED)
+
 add_executable(
     main
     ${SRC_LIST}
 )
+target_link_libraries(main PRIVATE Threads::Threads)

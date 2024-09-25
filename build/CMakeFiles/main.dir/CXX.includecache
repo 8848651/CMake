@@ -6,11 +6,21 @@
 
 #IncludeRegexTransform: 
 
+../include/project/ConnectionStruct.h
+
+../include/stl/thread.h
+pthread.h
+-
+
+../include/stl/vector.h
+
 ../include/tool.h
 string.h
 -
 stdio.h
 -
+project/ConnectionStruct.h
+../include/project/ConnectionStruct.h
 
 /home/develop/Project/Socket_Sever/src/main.cpp
 iostream
@@ -27,6 +37,14 @@ arpa/inet.h
 -
 sys/socket.h
 -
+pthread.h
+-
 tool.h
 /home/develop/Project/Socket_Sever/src/tool.h
+stl/thread.h
+/home/develop/Project/Socket_Sever/src/stl/thread.h
+stl/vector.h
+/home/develop/Project/Socket_Sever/src/stl/vector.h
+project/ConnectionStruct.h
+/home/develop/Project/Socket_Sever/src/project/ConnectionStruct.h
 
