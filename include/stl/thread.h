@@ -57,22 +57,21 @@ namespace stl {
 
     class Thread {
     public:
-        void* (*start_routine)(void*);
         void* fun;
         void* arg;
+        pthread_t tid;
 
-        template<class Function, class... Args>
-        Thread(Function* _fun, Args... args) {
-            //start_routine = &Thread::runtime_init<Function, Args...>;
+        template<class T, class... Args>
+        Thread(T* _fun, Args... args) {
             fun = (void*)_fun;
             arg = new Tuple<Args...>(args...);
-            //Thread::runtime_init(this);
+            pthread_create(&tid, nullptr, &Thread::runtime_init<T, Args...>, this);
         };
 
         template<class T, class... Args>
         static void* runtime_init(void* arg) {
-            static constexpr int size = sizeof...(Types);
-            
+            static constexpr int size = sizeof...(Args);
+
             Thread* tem = (Thread*)arg;
             ((T*)(tem->fun))();
             Tuple<Args...>* args = (Tuple<Args...>*)tem->arg;
