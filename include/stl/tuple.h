@@ -38,8 +38,6 @@ namespace stl {
     };
 
 
-
-
     template<class... Types>
     class Tuple {
     public:

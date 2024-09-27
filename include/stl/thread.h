@@ -51,7 +51,6 @@ namespace stl {
     class AssistedQueue<0> {
     public:
         typedef IntList<0> QueueData;
-
     };
 
 
@@ -64,6 +63,7 @@ namespace stl {
         template<class T, class... Args>
         Thread(T* _fun, Args... args) {
             fun = (void*)_fun;
+            //参数模版无法展开 因为只有运行期才能new
             arg = new Tuple<Args...>(args...);
             pthread_create(&tid, nullptr, &Thread::runtime_init<T, Args...>, this);
         };
@@ -71,10 +71,10 @@ namespace stl {
         template<class T, class... Args>
         static void* runtime_init(void* arg) {
             static constexpr int size = sizeof...(Args);
-
+            Tuple<Args...>* args = (Tuple<Args...>*)tem->arg;
             Thread* tem = (Thread*)arg;
             ((T*)(tem->fun))();
-            Tuple<Args...>* args = (Tuple<Args...>*)tem->arg;
+
         };
 
 
