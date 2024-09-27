@@ -11,6 +11,12 @@
 ../include/stl/thread.h
 pthread.h
 -
+iostream
+-
+tuple
+-
+utility
+-
 
 ../include/stl/vector.h
 

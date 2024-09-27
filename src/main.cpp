@@ -16,11 +16,20 @@
 using namespace std;
 using namespace tool;
 
+void test() {
+    cout << "abcde" << endl;
+}
+
 
 
 int main() {
 
-    //tool::thread thread;
+    stl::Thread tt(test,10,20);
+    //tt.start();
+    
+
+    using abc = stl::AssistedQueue<10>::QueueData;
+    abc::print();
 
     // int lfd = socket(AF_INET, SOCK_STREAM, 0);
     // struct sockaddr_in addr;

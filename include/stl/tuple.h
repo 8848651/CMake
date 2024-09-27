@@ -9,13 +9,13 @@ namespace stl {
     public:
         T head;
         TupleBase<Types...> tail;
-        TupleBase(T head, TupleBase<Types...> tail) : head(std::move(head)), tail(std::move(tail)) {};
+        TupleBase(T head, TupleBase<Types...> tail) : head(head), tail(tail) {};
     };
 
     template<class T>
     struct TupleBase<T> {
         T head;
-        TupleBase(T head) : head(std::move(head)) {}
+        TupleBase(T head) : head(head) {}
     };
 
     template<size_t Index, class T, class... Types>
