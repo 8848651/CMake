@@ -24,8 +24,8 @@ void test() {
 
 int main() {
 
-    stl::Thread tt(test,10,20);
-    tt.start();
+    stl::Thread tt(test, 10, 20);
+
 
 
     // using abc = stl::AssistedQueue<10>::QueueData;
