@@ -4,6 +4,7 @@
 CMakeFiles/main.dir/src/main.cpp.o
  ../include/project/ConnectionStruct.h
  ../include/stl/thread.h
+ ../include/stl/tuple.h
  ../include/stl/vector.h
  ../include/tool.h
  /home/develop/Project/Socket_Sever/src/main.cpp

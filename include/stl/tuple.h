@@ -33,15 +33,15 @@ namespace stl {
     };
 
     template<class... Types>
-    class tuple {
+    class Tuple {
     public:
         TupleBase<Types...> base;
-        tuple() {}
-        tuple(Types... args) : base(args...) {}
+        Tuple() {}
+        Tuple(Types... args) : base(args...) {}
 
-        auto& operator[](size_t index) {
-            return TupleAccessor<index, Types...>::get(base);
-        }
+        // auto& operator[](size_t index) {
+        //     return TupleAccessor<index, Types...>::get(base);
+        // }
     };
 
 

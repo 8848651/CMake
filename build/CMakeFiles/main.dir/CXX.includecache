@@ -17,6 +17,12 @@ tuple
 -
 utility
 -
+stl/tuple.h
+../include/stl/stl/tuple.h
+
+../include/stl/tuple.h
+stddef.h
+-
 
 ../include/stl/vector.h
 

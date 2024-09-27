@@ -3,6 +3,7 @@
 #include <iostream>
 #include <tuple>
 #include <utility>
+#include "stl/tuple.h"
 
 namespace stl {
 
@@ -66,6 +67,8 @@ namespace stl {
     template<class... T>
     class ThreadWrapArg {
     public:
+        stl::Tuple<T...> args;
+        ThreadWrapArg(T... _args) : args(_args...) {};
 
 
     };
@@ -75,6 +78,7 @@ namespace stl {
     public:
         void (*start_routine)(void*);
         void* fun;
+        void* arg;
 
         template<class Function>
         Thread(Function* _fun) {
@@ -86,11 +90,12 @@ namespace stl {
         Thread(Function* _fun, Args... args) {
             start_routine = &Thread::runtime_init<Function>;
             fun = new ThreadWrapFun<Function>(_fun);
-
+            arg = new ThreadWrapArg<Args...>(args...);
 
 
         };
 
+        //static无法访问对象属性 所以无法通过fun()调用
         template<class T>
         static void runtime_init(void* arg) {
             ThreadWrapFun<T>* wrap = (ThreadWrapFun<T>*)arg;
