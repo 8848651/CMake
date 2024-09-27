@@ -67,6 +67,7 @@ namespace stl {
     class ThreadWrapArg {
     public:
 
+
     };
 
 
@@ -74,7 +75,6 @@ namespace stl {
     public:
         void (*start_routine)(void*);
         void* fun;
-        pthread_t thread;
 
         template<class Function>
         Thread(Function* _fun) {
@@ -84,18 +84,17 @@ namespace stl {
 
         template<class Function, class... Args>
         Thread(Function* _fun, Args... args) {
-            fun =(void*) _fun;
-            int result = pthread_create(&thread, NULL, &Thread::runtime_init<Function>, NULL);
+            start_routine = &Thread::runtime_init<Function>;
+            fun = new ThreadWrapFun<Function>(_fun);
 
 
 
         };
 
         template<class T>
-        static void* runtime_init(void* arg) {
-            // ThreadWrapFun<T>* wrap = (ThreadWrapFun<T>*)arg;
-            // (wrap->fun)();
-            printf("runtime_init\n");
+        static void runtime_init(void* arg) {
+            ThreadWrapFun<T>* wrap = (ThreadWrapFun<T>*)arg;
+            (wrap->fun)();
         };
 
         void start() {
