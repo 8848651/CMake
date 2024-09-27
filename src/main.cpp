@@ -17,7 +17,7 @@ using namespace std;
 using namespace tool;
 
 void test() {
-    cout << "abcde" << endl;
+    cout << "123321" << endl;
 }
 
 

@@ -7,7 +7,7 @@
 
 namespace stl {
 
-
+    class Thread;
 
 
     template<int Is>
@@ -19,6 +19,19 @@ namespace stl {
     template<int... Is>
     class IntList {
     public:
+
+        template<class T, class... Args>
+        static void* runtime_init(void* arg) {
+            static constexpr int size = sizeof...(Args);
+            Thread* tem = (Thread*)arg;
+            Tuple<Args...>* args = (Tuple<Args...>*)(tem->arg);
+            ((T*)(tem->fun))();
+            //TODO: 明天实现对参数的展开每一项的处理方式
+            // std::get<Is>(args->base)...
+
+
+        };
+
         static void print() {
             // 最典型std::get<Is>(tuple)... 参数展开
             // 对Is中的每个元素，调用print_helper(i)
@@ -58,26 +71,16 @@ namespace stl {
     public:
         void* fun;
         void* arg;
-        pthread_t tid;
 
         template<class T, class... Args>
         Thread(T* _fun, Args... args) {
+            static constexpr int size = sizeof...(Args) - 1;
+            void* (*runtime_init)(void*) =                                   //template暂时还不清楚这个语法
+                static_cast<void* (*)(void*)>(&AssistedQueue<size>::QueueData::template runtime_init<T, Args...>);
             fun = (void*)_fun;
-            //参数模版无法展开 因为只有运行期才能new
             arg = new Tuple<Args...>(args...);
-            pthread_create(&tid, nullptr, &Thread::runtime_init<T, Args...>, this);
+            runtime_init(this);
         };
-
-        template<class T, class... Args>
-        static void* runtime_init(void* arg) {
-            static constexpr int size = sizeof...(Args);
-            Tuple<Args...>* args = (Tuple<Args...>*)tem->arg;
-            Thread* tem = (Thread*)arg;
-            ((T*)(tem->fun))();
-
-        };
-
-
     };
 
 
