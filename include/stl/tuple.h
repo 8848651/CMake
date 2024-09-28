@@ -8,15 +8,34 @@ namespace stl {
     class TupleBase {
     public:
         T data;
-        TupleBase<U...> next;
-        TupleBase(T data, TupleBase<U...> next) : data(data), next(next) {}
+        TupleBase<U...> base;
+        TupleBase(T _data, U... _base) : data(_data), base(_base...) {}
     };
 
     template<class T>
     class TupleBase<T> {
     public:
         T data;
-        TupleBase(T data) : data(data) {}
+        TupleBase(T _data) : data(_data) {}
+    };
+
+
+    template<int Index>
+    class TupleFindElement {
+    public:
+        template<class... Types>
+        static auto find(TupleBase<Types...>& base) {
+            return TupleFindElement<Index - 1>::find(base.base);
+        };
+    };
+
+    template<>
+    class TupleFindElement<0> {
+    public:
+        template<class... Types>
+        static auto find(TupleBase<Types...>& base) {
+            return base.data;
+        };
     };
 
 
@@ -24,8 +43,8 @@ namespace stl {
     class Tuple {
     public:
         TupleBase<Types...> base;
-        Tuple() {}
-        Tuple(Types... args) : base(args...) {}
+        Tuple() {};
+        Tuple(Types... args) : base(args...) {};
     };
 
 

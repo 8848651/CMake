@@ -9,10 +9,6 @@ namespace stl {
 
     class Thread;
 
-
-    template<int Is>
-    class IntOne;
-
     template<int... Is>
     class IntList;
 
@@ -22,19 +18,16 @@ namespace stl {
 
         template<class T, class... Args>
         static void* runtime_init(void* arg) {
-            static constexpr int size = sizeof...(Args);
             Thread* tem = (Thread*)arg;
             Tuple<Args...>* args = (Tuple<Args...>*)(tem->arg);
-            ((T*)(tem->fun))();
-            //TODO: 明天实现对参数的展开每一项的处理方式
-            // std::get<Is>(args->base)...
-
-
+            ((T*)(tem->fun))(stl::TupleFindElement<Is>::find(args->base)...);
+            // function<Is>(args)...
+            //1:(stl::TupleFindElement<Is>::find(args->base),...)
+            //2:(stl::TupleFindElement<Is>::find(args->base)...)
+            //1和2不一样,注意这个逗号
         };
 
         static void print() {
-            // 最典型std::get<Is>(tuple)... 参数展开
-            // 对Is中的每个元素，调用print_helper(i)
             (print_helper(Is), ...);
         }
     private:
@@ -48,7 +41,7 @@ namespace stl {
     class Assemble;
 
     template<int First, int... Rest>
-    class Assemble<IntOne<First>, IntList<Rest...>> {
+    class Assemble<IntList<First>, IntList<Rest...>> {
     public:
         typedef IntList<Rest..., First> type;
     };
@@ -57,7 +50,7 @@ namespace stl {
     class AssistedQueue {
     public:
         typedef typename AssistedQueue<Is - 1>::QueueData QueueType;
-        typedef typename Assemble<IntOne<Is>, QueueType>::type QueueData;
+        typedef typename Assemble<IntList<Is>, QueueType>::type QueueData;
     };
 
     template<>
@@ -65,6 +58,7 @@ namespace stl {
     public:
         typedef IntList<0> QueueData;
     };
+
 
 
     class Thread {
