@@ -76,8 +76,9 @@ namespace stl {
                 static_cast<void* (*)(void*)>(&AssistedQueue<size>::QueueData::template runtime_init<T, Args...>);
             fun = (void*)_fun;
             arg = new Tuple<Args...>(args...);
-            //pthread_create(&tid, nullptr, runtime_init, this);
-            runtime_init(this);
+            pthread_create(&tid, nullptr, runtime_init, this);
+            pthread_detach(tid);
+            //runtime_init(this);
         };
     };
 
