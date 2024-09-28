@@ -12,27 +12,27 @@ namespace stl {
     template<int... Is>
     class IntList;
 
-    template<int... Is>
-    class IntList {
-    public:
+    // template<int... Is>
+    // class IntList {
+    // public:
 
-        template<class T, class... Args>
-        static void* runtime_init(void* arg) {
-            Thread* tem = (Thread*)arg;
-            Tuple<Args...>* args = (Tuple<Args...>*)(tem->arg);
-            ((T*)(tem->fun))(stl::TupleFindElement<Is>::find(args->base)...);
-            return nullptr;
-        };
+    //     template<class T, class... Args>
+    //     static void* runtime_init(void* arg) {
+    //         Thread* tem = (Thread*)arg;
+    //         Tuple<Args...>* args = (Tuple<Args...>*)(tem->arg);
+    //         ((T*)(tem->fun))(stl::TupleFindElement<Is>::find(args->base)...);
+    //         return nullptr;
+    //     };
 
-        static void print() {
-            //逗号运算符，展开参数列表
-            (print_helper(Is), ...);
-        }
-    private:
-        static void print_helper(int i) {
-            std::cout << i << " ";
-        }
-    };
+    //     static void print() {
+    //         //逗号运算符，展开参数列表
+    //         (print_helper(Is), ...);
+    //     }
+    // private:
+    //     static void print_helper(int i) {
+    //         std::cout << i << " ";
+    //     }
+    // };
 
 
     template<typename T, typename U>
@@ -62,20 +62,40 @@ namespace stl {
     };
 
 
+    
+
+    template<class T>
+    class AssistedThread;
+
+    template<int... Is>
+    class AssistedThread<IntList<Is...>> {
+        template<class T, class... Args>
+        static void* runtime_init(void* arg) {
+            Thread* tem = (Thread*)arg;
+            Tuple<Args...>* args = (Tuple<Args...>*)(tem->arg);
+            ((T*)(tem->fun))(stl::TupleFindElement<Is>::find(args->base)...);
+            return nullptr;
+        };
+    };
+
+
+
+
 
     class Thread {
     public:
-        void* fun;
-        void* arg;
+        void* fun = nullptr;
+        void* arg = nullptr;
+        void* (*runtime_init)(void*) = nullptr;
         pthread_t tid;
 
         template<class T, class... Args>
-        Thread(T* _fun, Args... args) {
+        Thread(T* _fun, Args... _args) {
             static constexpr int size = sizeof...(Args) - 1;
-            void* (*runtime_init)(void*) =                                   //template暂时还不清楚这个语法
-                static_cast<void* (*)(void*)>(&AssistedQueue<size>::QueueData::template runtime_init<T, Args...>);
+            //runtime_init = static_cast<void* (*)(void*)>(&AssistedQueue<size>::QueueData::template runtime_init<T, Args...>);
+            runtime_init = &AssistedThread<typename AssistedQueue<size>::QueueData>::template runtime_init<T, Args...>;
             fun = (void*)_fun;
-            arg = new Tuple<Args...>(args...);
+            arg = new Tuple<Args...>(_args...);
             pthread_create(&tid, nullptr, runtime_init, this);
             pthread_detach(tid);
             //runtime_init(this);
