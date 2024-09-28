@@ -27,11 +27,6 @@ int main() {
     stl::Thread tt(test, 10, 20);
 
 
-    stl::Tuple<int,int,int> t(1, 3, 2);
-    auto a = stl::TupleFindElement<1>::find(t.base);
-    cout << a << endl;
-
-
 
 
     // using abc = stl::AssistedQueue<10>::QueueData;

@@ -21,13 +21,11 @@ namespace stl {
             Thread* tem = (Thread*)arg;
             Tuple<Args...>* args = (Tuple<Args...>*)(tem->arg);
             ((T*)(tem->fun))(stl::TupleFindElement<Is>::find(args->base)...);
-            // function<Is>(args)...
-            //1:(stl::TupleFindElement<Is>::find(args->base),...)
-            //2:(stl::TupleFindElement<Is>::find(args->base)...)
-            //1和2不一样,注意这个逗号
+            return nullptr;
         };
 
         static void print() {
+            //逗号运算符，展开参数列表
             (print_helper(Is), ...);
         }
     private:
@@ -49,8 +47,12 @@ namespace stl {
     template<int Is>
     class AssistedQueue {
     public:
-        typedef typename AssistedQueue<Is - 1>::QueueData QueueType;
-        typedef typename Assemble<IntList<Is>, QueueType>::type QueueData;
+        //1:模式一
+        // typedef typename AssistedQueue<Is - 1>::QueueData QueueType;
+        // typedef typename Assemble<IntList<Is>, QueueType>::type QueueData;
+        //2:模式二
+        typedef AssistedQueue<Is - 1> QueueType;
+        typedef typename Assemble<IntList<Is>, typename QueueType::QueueData>::type QueueData;
     };
 
     template<>
@@ -65,6 +67,7 @@ namespace stl {
     public:
         void* fun;
         void* arg;
+        pthread_t tid;
 
         template<class T, class... Args>
         Thread(T* _fun, Args... args) {
@@ -73,6 +76,7 @@ namespace stl {
                 static_cast<void* (*)(void*)>(&AssistedQueue<size>::QueueData::template runtime_init<T, Args...>);
             fun = (void*)_fun;
             arg = new Tuple<Args...>(args...);
+            //pthread_create(&tid, nullptr, runtime_init, this);
             runtime_init(this);
         };
     };
