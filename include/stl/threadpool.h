@@ -15,7 +15,7 @@ namespace stl {
         template<class T, class... Args>
         ThreadPoolAssisted(T* _fun, Args... _args) {
             static constexpr int size = sizeof...(Args) - 1;
-            runtime_init = static_cast<void* (*)(void*)>(&AssistedQueue<size>::QueueData::template runtime_init<T, Args...>);
+            runtime_init = &AssistedThread<typename AssistedQueue<size>::QueueData>::template threadpool_runtime_init<T, Args...>;
             fun = (void*)_fun;
             arg = new Tuple<Args...>(_args...);
         };
@@ -25,6 +25,11 @@ namespace stl {
             arg = other.arg;
             runtime_init = other.runtime_init;
         };
+
+    public:
+        void start() {
+            runtime_init(this);
+        }
     };
 
     class ThreadPool {
@@ -33,6 +38,7 @@ namespace stl {
         int num_threads = 2;
         pthread_t tid_1;
         pthread_t tid_2;
+        //明天实现自定义vector
         std::vector<ThreadPoolAssisted> Assisted;
         ThreadPool(int a) {
             // pthread_create(&tid_1, nullptr, runtime_init, this);
@@ -44,8 +50,7 @@ namespace stl {
             ThreadPool* pool = static_cast<ThreadPool*>(arg);
             for (int i = 0; i < (pool->Assisted).size(); i++) {
                 ThreadPoolAssisted& task = pool->Assisted[i];
-                //调用任务
-                task.runtime_init(&task);
+                task.start();
             }
             return nullptr;
         };

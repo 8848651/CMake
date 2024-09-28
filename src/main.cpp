@@ -22,39 +22,34 @@ using namespace tool;
 
 int main() {
 
-    stl::ThreadPool pool(4);
 
-    vector<int> conn_struct_vec;
-    conn_struct_vec.push_back(10);
+    int lfd = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(10000);
+    addr.sin_addr.s_addr = inet_addr("0.0.0.0");
+    bind(lfd, (struct sockaddr*)&addr, sizeof(addr));
+    listen(lfd, 128);
+    int socket_cfd[100];
+    int client_num = 0;
+    while (1) {
 
+        struct sockaddr_in cliaddr;
+        int clilen = sizeof(cliaddr);
+        int cfd = accept(lfd, (struct sockaddr*)&cliaddr, (socklen_t*)&clilen);
+        cout << "有一个客户端连接" << endl;
+        socket_cfd[client_num] = cfd;
+        ConnectionStruct* conn_struct = new ConnectionStruct;
+        conn_struct->cfd = cfd;
+        conn_struct->client_id = socket_cfd;
+        stl::Thread thread(tool::Connection_2, conn_struct);
 
-    // int lfd = socket(AF_INET, SOCK_STREAM, 0);
-    // struct sockaddr_in addr;
-    // addr.sin_family = AF_INET;
-    // addr.sin_port = htons(10000);
-    // addr.sin_addr.s_addr = inet_addr("0.0.0.0");
-    // bind(lfd, (struct sockaddr*)&addr, sizeof(addr));
-    // listen(lfd, 128);
-    // int socket_cfd[100];
-    // int client_num = 0;
-    // while (1) {
-
-    //     struct sockaddr_in cliaddr;
-    //     int clilen = sizeof(cliaddr);
-    //     int cfd = accept(lfd, (struct sockaddr*)&cliaddr, (socklen_t*)&clilen);
-    //     cout << "有一个客户端连接" << endl;
-    //     socket_cfd[client_num] = cfd;
-    //     ConnectionStruct* conn_struct = new ConnectionStruct;
-    //     conn_struct->cfd = cfd;
-    //     conn_struct->client_id = socket_cfd;
-    //     stl::Thread thread(tool::Connection_2, conn_struct);
-
-    //     client_num++;
-    //     if (client_num > 2) {
-    //         cout << "连接数超过限制" << endl;
-    //         break;
-    //     }
-    // }
-    // close(lfd);
+        client_num++;
+        if (client_num > 2) {
+            cout << "连接数超过限制" << endl;
+            break;
+        }
+    }
+    close(lfd);
 
 }
