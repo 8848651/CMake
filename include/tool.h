@@ -26,8 +26,27 @@ namespace tool {
     }
 
     //连接后处理方法
-    void* Connection(void* arg) {
+    void* Connection_1(void* arg) {
         ConnectionStruct* conn_struct = (ConnectionStruct*)arg;
+        int cfd = conn_struct->cfd;
+        void* args = conn_struct->client_id;
+        while (1) {
+            char buf[1024];
+            memset(buf, 0, sizeof(buf));
+            int len = read(cfd, buf, sizeof(buf));
+            if (len > 0) {
+                printf("data from client: %s\n", buf);
+                write(cfd, buf, len);
+            }
+            else {
+                break;
+            }
+        }
+        close(cfd);
+    }
+
+    //连接后处理方法
+    void Connection_2(ConnectionStruct* conn_struct) {
         int cfd = conn_struct->cfd;
         void* args = conn_struct->client_id;
         while (1) {

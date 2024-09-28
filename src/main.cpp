@@ -35,17 +35,17 @@ int main() {
     int socket_cfd[100];
     int client_num = 0;
     while (1) {
-        pthread_t thread;
+
         struct sockaddr_in cliaddr;
         int clilen = sizeof(cliaddr);
         int cfd = accept(lfd, (struct sockaddr*)&cliaddr, (socklen_t*)&clilen);
         cout << "有一个客户端连接" << endl;
         socket_cfd[client_num] = cfd;
-        ConnectionStruct conn_struct;
-        conn_struct.cfd = cfd;
-        conn_struct.client_id = socket_cfd;
-        pthread_create(&thread, NULL, tool::Connection, &conn_struct);
-        pthread_detach(thread);
+        ConnectionStruct* conn_struct = new ConnectionStruct;
+        conn_struct->cfd = cfd;
+        conn_struct->client_id = socket_cfd;
+        stl::Thread thread(tool::Connection_2, conn_struct);
+        
         client_num++;
         if (client_num > 2) {
             cout << "连接数超过限制" << endl;
