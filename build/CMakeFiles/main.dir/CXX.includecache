@@ -8,6 +8,12 @@
 
 ../include/project/ConnectionStruct.h
 
+../include/stl/construct.h
+tool.h
+../include/stl/tool.h
+
+../include/stl/list.h
+
 ../include/stl/thread.h
 pthread.h
 -
@@ -65,6 +71,10 @@ tool.h
 /home/develop/Project/Socket_Sever/src/tool.h
 stl/thread.h
 /home/develop/Project/Socket_Sever/src/stl/thread.h
+stl/construct.h
+/home/develop/Project/Socket_Sever/src/stl/construct.h
+stl/list.h
+/home/develop/Project/Socket_Sever/src/stl/list.h
 stl/vector.h
 /home/develop/Project/Socket_Sever/src/stl/vector.h
 stl/threadpool.h

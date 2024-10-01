@@ -6,44 +6,44 @@ namespace stl {
     template<typename T>
     class vector {
     public:
-        int size;
-        T* begin;
-        T* end;
-        T data[16];
+        typedef T* iterator;
+
+    public:
+        iterator begin;
+        iterator cap;
+        iterator end;
 
     public:
         vector();
-        bool add(T value);
-        bool remove(T value);
+        vector(size_t size);
+        vector(size_t size, const T& value);
+
+
+    public:
+        void push_back(const T& value);
+        void pop_back();
+        size_t size() const { return cap - begin; };
+
     };
 
     template<typename T>
     vector<T>::vector() {
-        size = 0;
-        begin = data;
-        end = data + size;
+        begin = cap = static_cast<T*>(malloc(16 * sizeof(T)));
+        end = begin + 16;
     }
 
     template<typename T>
-    bool vector<T>::add(T value) {
-        if (size == 16) {
-            return false;
-        }
-        *(end++) = value;
-        size++;
-        return true;
+    vector<T>::vector(size_t size) {
+        size_t length = size < 16 ? 16 : size;
+        begin = static_cast<T*>(malloc(length * sizeof(T)));
+        cap = begin + size;
+        end = begin + length;
     }
 
     template<typename T>
-    bool vector<T>::remove(T value) {
-        for (T* it = begin; it != end; it++) {
-            if (*it == value) {
-                *it = *(end - 1);
-                end--;
-                size--;
-                return true;
-            }
-            return false;
-        }
+    void vector<T>::push_back(const T& value) {
+
     }
+
+
 }

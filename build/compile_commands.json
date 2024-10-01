@@ -1,7 +1,7 @@
 [
 {
   "directory": "/home/develop/Project/Socket_Sever/build",
-  "command": "/usr/bin/g++   -I/home/develop/Project/Socket_Sever/include  -g   -std=gnu++14 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/develop/Project/Socket_Sever/src/main.cpp",
+  "command": "/usr/bin/g++   -I/home/develop/Project/Socket_Sever/include  -g   -Wno-return-type -std=gnu++14 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/develop/Project/Socket_Sever/src/main.cpp",
   "file": "/home/develop/Project/Socket_Sever/src/main.cpp"
 }
 ]

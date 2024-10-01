@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.16.3)
 # 项目名称
 project(Socket_Sever)
 
+# 关闭编译警告
+add_compile_options(-Wno-return-type)
+
 # 指定C++版本
 set(CMAKE_CXX_STANDARD 14)
 
