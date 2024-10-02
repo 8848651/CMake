@@ -18,27 +18,21 @@
 
 
 using namespace std;
+using namespace stl;
 using namespace tool;
 
-class C {};
+class C {
+public:
+    int a;
+    C() : a(1) {};
+    C(int b) : a(b) {};
+
+};
 
 
 
 
 int main() {
-
-    stl::is_same_temp<int>::type a;
-    stl::is_same_temp<int*>::type b;
-    stl::is_same_temp<C>::type c;
-
-    cout << a << endl;
-    cout << b << endl;
-    cout << c << endl;
-
-
-
-
-
 
     // int lfd = socket(AF_INET, SOCK_STREAM, 0);
     // struct sockaddr_in addr;

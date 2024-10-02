@@ -34,11 +34,23 @@ pthread.h
 vector
 -
 
+../include/stl/too.h
+cstddef
+-
+cstdint
+-
+
 ../include/stl/tuple.h
 stddef.h
 -
 
 ../include/stl/vector.h
+stl/construct.h
+-
+stl/tuple.h
+-
+stl/too.h
+-
 
 ../include/tool.h
 string.h
