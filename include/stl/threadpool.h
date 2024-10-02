@@ -39,9 +39,9 @@ namespace stl {
         pthread_t tid_1;
         pthread_t tid_2;
         //明天实现自定义vector
-        std::vector<ThreadPoolAssisted> Assisted;
-        ThreadPool(size_t a) {
-            // pthread_create(&tid_1, nullptr, runtime_init, this);
+        stl::vector<ThreadPoolAssisted> Assisted;
+        ThreadPool() {
+            pthread_create(&tid_1, nullptr, runtime_init, this);
             // pthread_create(&tid_2, nullptr, runtime_init, this);
         };
 
@@ -49,7 +49,7 @@ namespace stl {
             // 在vector中取出任务
             ThreadPool* pool = static_cast<ThreadPool*>(arg);
             for (int i = 0; i < (pool->Assisted).size(); i++) {
-                ThreadPoolAssisted& task = pool->Assisted[i];
+                ThreadPoolAssisted task = (pool->Assisted)[i];
                 task.start();
             }
             return nullptr;

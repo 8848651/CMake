@@ -14,6 +14,7 @@ namespace stl {
         typedef T reference;
 
     public:
+        size_t* ReferenceCount = nullptr;
         iterator begin;
         iterator cap;
         iterator end;
@@ -22,7 +23,9 @@ namespace stl {
         vector();
         vector(size_t size);
         vector(size_t size, T&& value);
+        vector(const vector<T>& other);
         reference operator[](size_t index) { return *(begin + index); };
+        ~vector();
 
 
     public:
@@ -37,6 +40,7 @@ namespace stl {
     vector<T>::vector() {
         begin = cap = static_cast<T*>(malloc(16 * sizeof(T)));
         end = begin + 16;
+        (*ReferenceCount)++;
     }
 
     template<typename T>
@@ -46,6 +50,7 @@ namespace stl {
         cap = begin + size;
         end = begin + length;
         constructor_vector(begin, cap, type());
+        (*ReferenceCount)++;
     }
 
     template<typename T>
@@ -55,6 +60,17 @@ namespace stl {
         cap = begin + size;
         end = begin + length;
         constructor_vector(begin, cap, value, type());
+        (*ReferenceCount)++;
+    }
+
+
+    template<typename T>
+    vector<T>::vector(const vector<T>& other) {
+        begin = other.begin;
+        cap = other.cap;
+        end = other.end;
+        ReferenceCount = other.ReferenceCount;
+        (*ReferenceCount)++;
     }
 
     template<typename T>
@@ -65,13 +81,21 @@ namespace stl {
             size_t new_length = length * 2;
             T* new_begin = static_cast<T*>(malloc(new_length * sizeof(T)));
             stl::my_memcpy(begin, new_begin, length * sizeof(T));
-            free(begin);
+            if (ReferenceCount == 0) { free(begin); }
             begin = new_begin;
             cap = begin + length;
             end = begin + new_length;
         }
         constructor_vector(cap, cap + 1, value, type());
         cap++;
+    }
+
+    template<typename T>
+    vector<T>::~vector() {
+        if (ReferenceCount == 0) {
+            free(begin);
+        }
+        ReferenceCount--;
     }
 
 }

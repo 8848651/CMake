@@ -20,6 +20,7 @@ namespace stl {
     };
 
 
+    //TODO:list暂时不实现，后续再补充
     template<typename T>
     class list {
     public:
