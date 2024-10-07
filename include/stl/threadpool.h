@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <pthread.h>
 #include <vector>
+#include <mutex>
 
 namespace stl {
 
@@ -41,24 +42,26 @@ namespace stl {
         //明天实现自定义vector
         stl::vector<ThreadPoolAssisted> Assisted;
         ThreadPool() {
+            std::cout << "线程池开启" << std::endl;
             pthread_create(&tid_1, nullptr, runtime_init, this);
-            // pthread_create(&tid_2, nullptr, runtime_init, this);
+            pthread_create(&tid_2, nullptr, runtime_init, this);
         };
 
         static void* runtime_init(void* arg) {
-            // 在vector中取出任务
             ThreadPool* pool = static_cast<ThreadPool*>(arg);
-            for (int i = 0; i < (pool->Assisted).size(); i++) {
-                ThreadPoolAssisted task = (pool->Assisted)[i];
+            while (true) {
+                // 在vector中取出任务
+                ThreadPoolAssisted task = (pool->Assisted).pop_back();
                 task.start();
             }
-            return nullptr;
         };
 
         template<class T, class... Args>
         bool submit(T* _fun, Args... _args) {
             //向vector中添加任务
+            std::cout << "任务添加" << std::endl;
             Assisted.push_back(ThreadPoolAssisted(_fun, _args...));
+            //判断线程是否等待，如果等待唤醒
         };
     };
 }

@@ -67,7 +67,7 @@ namespace tool {
 
 
     //连接后处理方法
-    void Connection_2(int cfd, stl::vector<int>* args) {
+    void Connection_3(int cfd, stl::vector<int>* args) {
         while (1) {
             char buf[1024];
             memset(buf, 0, sizeof(buf));

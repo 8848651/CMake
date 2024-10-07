@@ -16,6 +16,14 @@ tool.h
 
 ../include/stl/list.h
 
+../include/stl/queue.h
+stl/construct.h
+-
+stl/tuple.h
+-
+stl/too.h
+-
+
 ../include/stl/thread.h
 pthread.h
 -
@@ -35,6 +43,8 @@ pthread.h
 -
 vector
 -
+mutex
+-
 
 ../include/stl/too.h
 cstddef
@@ -47,6 +57,8 @@ stddef.h
 -
 
 ../include/stl/vector.h
+mutex
+-
 stl/construct.h
 -
 stl/tuple.h
@@ -87,6 +99,8 @@ tool.h
 /home/develop/Project/Socket_Sever/src/tool.h
 stl/thread.h
 /home/develop/Project/Socket_Sever/src/stl/thread.h
+stl/queue.h
+/home/develop/Project/Socket_Sever/src/stl/queue.h
 stl/construct.h
 /home/develop/Project/Socket_Sever/src/stl/construct.h
 stl/list.h

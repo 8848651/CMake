@@ -1,4 +1,5 @@
 #pragma once
+#include <mutex>
 #include <stl/construct.h>
 #include <stl/tuple.h>
 #include <stl/too.h>
@@ -14,7 +15,8 @@ namespace stl {
         typedef T reference;
 
     public:
-        size_t* ReferenceCount = nullptr;
+        //std::mutex mtx;
+        size_t* ReferenceCount = new size_t(0);
         iterator begin;
         iterator cap;
         iterator end;
@@ -30,21 +32,21 @@ namespace stl {
 
     public:
         void push_back(const T& value);
-        reference pop_back() { return *(--cap); };
+        reference pop_back();
         size_t size() const { return cap - begin; };
         size_t length() const { return end - begin; };
 
     };
 
     template<typename T>
-    vector<T>::vector() {
+    stl::vector<T>::vector() {
         begin = cap = static_cast<T*>(malloc(16 * sizeof(T)));
         end = begin + 16;
         (*ReferenceCount)++;
     }
 
     template<typename T>
-    vector<T>::vector(size_t size) {
+    stl::vector<T>::vector(size_t size) {
         size_t length = size < 16 ? 16 : size;
         begin = static_cast<T*>(malloc(length * sizeof(T)));
         cap = begin + size;
@@ -54,7 +56,7 @@ namespace stl {
     }
 
     template<typename T>
-    vector<T>::vector(size_t size, T&& value) {
+    stl::vector<T>::vector(size_t size, T&& value) {
         size_t length = size < 16 ? 16 : size;
         begin = static_cast<T*>(malloc(length * sizeof(T)));
         cap = begin + size;
@@ -63,9 +65,8 @@ namespace stl {
         (*ReferenceCount)++;
     }
 
-
     template<typename T>
-    vector<T>::vector(const vector<T>& other) {
+    stl::vector<T>::vector(const vector<T>& other) {
         begin = other.begin;
         cap = other.cap;
         end = other.end;
@@ -74,7 +75,14 @@ namespace stl {
     }
 
     template<typename T>
-    void vector<T>::push_back(const T& value) {
+    typename stl::vector<T>::reference stl::vector<T>::pop_back() {
+        //std::lock_guard<std::mutex> lock(mtx);
+        return *(--cap);
+    }
+
+    template<typename T>
+    void stl::vector<T>::push_back(const T& value) {
+        //std::lock_guard<std::mutex> lock(mtx);
         size_t length = cap - begin;
         if (cap == end) {
             //进行扩容
@@ -91,7 +99,7 @@ namespace stl {
     }
 
     template<typename T>
-    vector<T>::~vector() {
+    stl::vector<T>::~vector() {
         if (ReferenceCount == 0) {
             free(begin);
         }
