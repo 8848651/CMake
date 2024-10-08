@@ -13,6 +13,9 @@ namespace stl {
     template <class T>
     class queue {
     public:
+        typedef typename stl::is_same_temp<T>::type type;
+
+    public:
         static const int SIZE = 10;
         T* _begin;
         T* begin;
@@ -22,6 +25,8 @@ namespace stl {
         queue();
         ~queue() { free(_begin); };
         void push(const T& value);
+        T pop();
+        bool empty() const { return begin == end; };
     };
 
     template <class T>
@@ -34,30 +39,23 @@ namespace stl {
     template <class T>
     void queue<T>::push(const T& value) {
 
-        if ((end + 1 == begin) || (end == _begin + SIZE && begin == _begin)) {
+        if ((end++ == begin) || (end == _begin + SIZE && begin == _begin)) {
             throw std::overflow_error("队列已满");
         }
-        if (end == _begin + SIZE - 1) {
-            end = _begin;
-        }
-        else {
-            end++; 
-        }
+
 
         if (end == _begin + SIZE) {
-            if (_begin == begin) {
-                //抛出异常
-            }
             end = _begin;
         }
         else {
-            if (end++ == begin) {
-                //抛出异常
-            }
             end++;
         }
-
     };
+
+    template <class T>
+    T queue<T>::pop() {
+        if (begin == end) { throw std::overflow_error("队列为空"); }
+    }
 
 
 

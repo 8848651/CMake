@@ -51,7 +51,7 @@ namespace stl {
         begin = static_cast<T*>(malloc(length * sizeof(T)));
         cap = begin + size;
         end = begin + length;
-        constructor_vector(begin, cap, type());
+        constructor(begin, cap, type());
         (*ReferenceCount)++;
     }
 
@@ -61,7 +61,7 @@ namespace stl {
         begin = static_cast<T*>(malloc(length * sizeof(T)));
         cap = begin + size;
         end = begin + length;
-        constructor_vector(begin, cap, value, type());
+        constructor(begin, cap, value, type());
         (*ReferenceCount)++;
     }
 
@@ -94,7 +94,7 @@ namespace stl {
             cap = begin + length;
             end = begin + new_length;
         }
-        constructor_vector(cap, cap + 1, value, type());
+        constructor(cap, cap + 1, value, type());
         cap++;
     }
 
