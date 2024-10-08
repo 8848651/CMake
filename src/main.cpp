@@ -36,18 +36,30 @@ public:
 
 int main() {
 
-    int x = 100;
-    stl::Node<C> n1{ x };
-    stl::Node<C> n2{ x };
-    n1.next = &n2;
 
-    stl::NodeBase<C> nn = n1;
-    std::cout << "n1.next = " << n1.next << std::endl;
-    std::cout << "n2 = " << &n2 << std::endl;
-    std::cout << "nn.next=  " << nn.next << std::endl;
-    std::cout << "nn.ptr=  " << nn.ptr << std::endl;
-    std::cout << "ptr  " << &n1 << std::endl;
-    std::cout << "nn.data  " << nn->a << std::endl;
+    stl::queue<int> q;
+    q.push(1);
+    q.push(1);
+    q.push(1);
+    q.push(1);
+    q.pop();
+    q.push(1);
+
+    std::cout << q.size() << std::endl;
+
+
+    // int x = 100;
+    // stl::Node<C> n1{ x };
+    // stl::Node<C> n2{ x };
+    // n1.next = &n2;
+
+    // stl::NodeBase<C> nn = n1;
+    // std::cout << "n1.next = " << n1.next << std::endl;
+    // std::cout << "n2 = " << &n2 << std::endl;
+    // std::cout << "nn.next=  " << nn.next << std::endl;
+    // std::cout << "nn.ptr=  " << nn.ptr << std::endl;
+    // std::cout << "ptr  " << &n1 << std::endl;
+    // std::cout << "nn.data  " << nn->a << std::endl;
     //std::cout << "n1:data  " << n1.data << std::endl;
     //std::cout << "*nn  " << *nn << std::endl;
 

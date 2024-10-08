@@ -15,8 +15,9 @@ namespace stl {
     public:
         typedef typename stl::is_same_temp<T>::type type;
 
-    public:
-        static const int SIZE = 10;
+    private:
+        static const int SIZE = 5;
+        size_t length = 0;
         T* _begin;
         T* begin;
         T* end;
@@ -27,6 +28,7 @@ namespace stl {
         void push(const T& value);
         T pop();
         bool empty() const { return begin == end; };
+        size_t size() { return length; };
     };
 
     template <class T>
@@ -38,11 +40,13 @@ namespace stl {
 
     template <class T>
     void queue<T>::push(const T& value) {
+        auto temp = end + 1;
 
-        if ((end++ == begin) || (end == _begin + SIZE && begin == _begin)) {
+        if ((temp == begin) || (end == _begin + SIZE - 1 && length == SIZE - 1)) {
             throw std::overflow_error("队列已满");
         }
 
+        constructor(end, end, value, type());
 
         if (end == _begin + SIZE) {
             end = _begin;
@@ -50,11 +54,27 @@ namespace stl {
         else {
             end++;
         }
+        length++;
+
+        //std::cout << end << std::endl;
+
     };
 
     template <class T>
     T queue<T>::pop() {
         if (begin == end) { throw std::overflow_error("队列为空"); }
+        T* temp = begin;
+
+        if (begin == _begin + SIZE) {
+            begin = _begin;
+        }
+        else {
+            begin++;
+        }
+        length--;
+
+        return *temp;
+
     }
 
 
