@@ -6,6 +6,7 @@ CMakeFiles/main.dir/src/main.cpp.o
  ../include/stl/construct.h
  ../include/stl/list.h
  ../include/stl/queue.h
+ ../include/stl/string.h
  ../include/stl/thread.h
  ../include/stl/threadpool.h
  ../include/stl/too.h

@@ -5,6 +5,7 @@ CMakeFiles/main.dir/src/main.cpp.o: ../include/project/ConnectionStruct.h
 CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/construct.h
 CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/list.h
 CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/queue.h
+CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/string.h
 CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/thread.h
 CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/threadpool.h
 CMakeFiles/main.dir/src/main.cpp.o: ../include/stl/too.h

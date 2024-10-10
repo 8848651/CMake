@@ -24,6 +24,14 @@ stl/tuple.h
 stl/too.h
 -
 
+../include/stl/string.h
+stl/construct.h
+-
+stl/tuple.h
+-
+stl/too.h
+-
+
 ../include/stl/thread.h
 pthread.h
 -
@@ -99,6 +107,8 @@ tool.h
 /home/develop/Project/Socket_Sever/src/tool.h
 stl/thread.h
 /home/develop/Project/Socket_Sever/src/stl/thread.h
+stl/string.h
+/home/develop/Project/Socket_Sever/src/stl/string.h
 stl/queue.h
 /home/develop/Project/Socket_Sever/src/stl/queue.h
 stl/construct.h

@@ -43,7 +43,8 @@ namespace stl {
         auto temp = end + 1;
 
         if ((temp == begin) || (end == _begin + SIZE - 1 && length == SIZE - 1)) {
-            throw std::overflow_error("队列已满");
+            //丢弃当前任务
+            throw std::overflow_error("队列已满,无法加入新任务");
         }
 
         constructor(end, end, value, type());
@@ -62,7 +63,9 @@ namespace stl {
 
     template <class T>
     T queue<T>::pop() {
-        if (begin == end) { throw std::overflow_error("队列为空"); }
+        if (begin == end) {
+            throw std::overflow_error("队列为空,无法取出任务");
+        }
         T* temp = begin;
 
         if (begin == _begin + SIZE) {

@@ -10,6 +10,7 @@
 
 #include "tool.h"
 #include "stl/thread.h"
+#include "stl/string.h"
 #include "stl/queue.h"
 #include "stl/construct.h"
 #include "stl/list.h"
@@ -27,7 +28,9 @@ public:
     int a;
     C() : a(1) {};
     C(int b) : a(b) {};
-    void test() {};
+    void test()  {
+        a = a + 1;
+    };
 
 };
 
@@ -36,16 +39,16 @@ public:
 
 int main() {
 
+    stl::string str("1");
+    if (str == "1") {
+        std::cout << "str is empty" << std::endl;
+    }
+    else {
+        std::cout << "1111111111111111" << std::endl;
+    }
 
-    stl::queue<int> q;
-    q.push(1);
-    q.push(1);
-    q.push(1);
-    q.push(1);
-    q.pop();
-    q.push(1);
 
-    std::cout << q.size() << std::endl;
+
 
 
     // int x = 100;

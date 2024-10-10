@@ -31,6 +31,27 @@ namespace stl {
         }
 
         return dest;
+    };
+
+    //判断两个字符数组是否相同
+    bool str_same(const char* s1, const char* s2) {
+        while (*s1 && *s2) {
+            if (*s1 != *s2) {
+                return false;
+            }
+            ++s1;
+            ++s2;
+        }
+        return !(*s1 || *s2);
+    };
+
+    //计算字符数组的长度
+    size_t str_len(const char* s) {
+        size_t len = 0;
+        while (*s++) {
+            ++len;
+        }
+        return len;
     }
 
 }
