@@ -1,11 +1,22 @@
 #pragma once
 #include <string.h>
 #include <stdio.h>
-
-#include "project/ConnectionStruct.h"
 #include "stl/vector.h"
+#include <unistd.h>
 
-namespace tool {
+namespace project {
+
+    class connectionstruct {
+    public:
+        int cfd;
+        //TODO: 以后将其换为vector不必担心长度问题
+        stl::vector<int> client_id;
+        connectionstruct() {};
+        connectionstruct(int cfd, void* args) {
+            //this->cfd = cfd;
+            //this->client_id = (int(*)[10])args;
+        };
+    };
 
     //这是将字符ip转为sockaddr_in->sin_addr->s_addr(int32_t)的函数
     //即 192.168.1.1 ->  192存第一个字节，168存第二个字节，1存第三个字节，1存第四个字节
@@ -28,7 +39,7 @@ namespace tool {
 
     //连接后处理方法
     void* Connection_1(void* arg) {
-        ConnectionStruct* conn_struct = (ConnectionStruct*)arg;
+        connectionstruct* conn_struct = (connectionstruct*)arg;
         int cfd = conn_struct->cfd;
         //void* args = conn_struct->client_id;
         while (1) {
@@ -47,7 +58,7 @@ namespace tool {
     }
 
     //连接后处理方法
-    void Connection_2(ConnectionStruct* conn_struct) {
+    void Connection_2(connectionstruct* conn_struct) {
         int cfd = conn_struct->cfd;
         //void* args = conn_struct->client_id;
         while (1) {

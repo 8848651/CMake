@@ -6,9 +6,15 @@
 
 #IncludeRegexTransform: 
 
-../include/project/ConnectionStruct.h
+../include/project/connect.h
+string.h
+-
+stdio.h
+-
 stl/vector.h
 ../include/project/stl/vector.h
+unistd.h
+-
 
 ../include/stl/construct.h
 
@@ -103,6 +109,6 @@ stl/vector.h
 /home/develop/Project/Socket_Sever/src/stl/vector.h
 stl/threadpool.h
 /home/develop/Project/Socket_Sever/src/stl/threadpool.h
-project/ConnectionStruct.h
-/home/develop/Project/Socket_Sever/src/project/ConnectionStruct.h
+project/connect.h
+/home/develop/Project/Socket_Sever/src/project/connect.h
 

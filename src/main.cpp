@@ -16,19 +16,19 @@
 #include "stl/list.h"
 #include "stl/vector.h"
 #include "stl/threadpool.h"
-#include "project/ConnectionStruct.h"
+#include "project/connect.h"
 
 
 using namespace std;
 using namespace stl;
-using namespace tool;
+using namespace project;
 
 class C {
 public:
     int a;
     C() : a(1) {};
     C(int b) : a(b) {};
-    void test()  {
+    void test() {
         a = a + 1;
     };
 
