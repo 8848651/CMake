@@ -8,7 +8,7 @@
 #include <pthread.h>
 #include <vector>
 
-#include "tool.h"
+
 #include "stl/thread.h"
 #include "stl/string.h"
 #include "stl/queue.h"

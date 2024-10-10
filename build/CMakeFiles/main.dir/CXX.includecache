@@ -11,8 +11,6 @@ stl/vector.h
 ../include/project/stl/vector.h
 
 ../include/stl/construct.h
-tool.h
-../include/stl/tool.h
 
 ../include/stl/list.h
 
@@ -25,8 +23,6 @@ stl/too.h
 -
 
 ../include/stl/string.h
-stl/construct.h
--
 stl/tuple.h
 -
 stl/too.h
@@ -74,16 +70,6 @@ stl/tuple.h
 stl/too.h
 -
 
-../include/tool.h
-string.h
--
-stdio.h
--
-project/ConnectionStruct.h
-../include/project/ConnectionStruct.h
-stl/vector.h
-../include/stl/vector.h
-
 /home/develop/Project/Socket_Sever/src/main.cpp
 iostream
 -
@@ -103,8 +89,6 @@ pthread.h
 -
 vector
 -
-tool.h
-/home/develop/Project/Socket_Sever/src/tool.h
 stl/thread.h
 /home/develop/Project/Socket_Sever/src/stl/thread.h
 stl/string.h
