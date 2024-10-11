@@ -79,7 +79,7 @@ namespace stl {
         typedef std::true_type type;
     };
 
-    
+
     //-------------------------------------------
 
     // vector<int> a(10);
@@ -102,6 +102,7 @@ namespace stl {
     // vector<int> a(10,10);
     template <class T>
     void constructor(T* first, T* last, const T& value, std::true_type) {
+        if (first == last) { *first = value; return; }
         for (T* ptr = first; ptr != last; ++ptr) {
             *ptr = value;
         }
@@ -110,6 +111,10 @@ namespace stl {
     // vector<A> a(10,{10});
     template <class T>
     void constructor(T* first, T* last, const T& value, std::false_type) {
+        if (first == last) {
+            ::new ((void*)first) T(value);
+            return;
+        }
         while (first < last) {
             auto temp = first;
             ::new ((void*)temp) T(value);

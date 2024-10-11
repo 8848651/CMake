@@ -29,7 +29,7 @@ namespace stl {
 
     public:
         void start() {
-            runtime_init(this);
+            runtime_init((void*)this);
         }
     };
 
@@ -40,17 +40,19 @@ namespace stl {
         pthread_t tid_1;
         pthread_t tid_2;
         //明天实现自定义vector
-        stl::vector<ThreadPoolAssisted> Assisted;
+        stl::queue<ThreadPoolAssisted> Assisted;
         ThreadPool() {
             std::cout << "线程池开启" << std::endl;
             pthread_create(&tid_1, nullptr, runtime_init, this);
-            pthread_create(&tid_2, nullptr, runtime_init, this);
+            //pthread_create(&tid_2, nullptr, runtime_init, this);
+            pthread_detach(tid_1);
         };
 
         static void* runtime_init(void* arg) {
             ThreadPool* pool = static_cast<ThreadPool*>(arg);
             while (true) {
                 // 在vector中取出任务
+                std::cout << "取出任务" << std::endl;
                 ThreadPoolAssisted task = (pool->Assisted).pop_back();
                 task.start();
             }

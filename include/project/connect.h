@@ -94,4 +94,22 @@ namespace project {
         close(cfd);
     }
 
+    //连接后处理方法
+    void Connection_Http_Test(int cfd) {
+        char buffer[4096];
+        memset(buffer, 0, sizeof(buffer));
+        int len = read(cfd, buffer, sizeof(buffer) - 1);
+        if (len > 0) {
+            std::cout << "Received request:\n" << buffer << std::endl;
+        }
+
+        const char* response = "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            "Content-Length: 13\r\n"
+            "\r\n"
+            "Hello, World!";
+        write(cfd, response, strlen(response));
+        close(cfd);
+    }
+
 }

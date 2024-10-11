@@ -1,6 +1,7 @@
 #pragma once
 #include <mutex>
 #include <stl/construct.h>
+#include <condition_variable>
 #include <stl/tuple.h>
 #include <stl/too.h>
 namespace stl {
@@ -20,6 +21,7 @@ namespace stl {
         static const int SIZE = 5;
         size_t length = 0;
         std::mutex mtx;
+        std::condition_variable variable;
         T* _begin;
         T* begin;
         T* end;
@@ -27,8 +29,8 @@ namespace stl {
     public:
         queue();
         ~queue() { free(_begin); };
-        void push(const T& value);
-        T pop();
+        void push_back(const T& value);
+        T pop_back();
         bool empty() const { return begin == end; };
         size_t size() { return length; };
     };
@@ -41,13 +43,15 @@ namespace stl {
     };
 
     template <class T>
-    void queue<T>::push(const T& value) {
-        std::lock_guard<std::mutex> lock(mtx);
+    void queue<T>::push_back(const T& value) {
+        //std::lock_guard<std::mutex> lock(mtx);
+        std::unique_lock<std::mutex> lock(mtx);
         auto temp = end + 1;
 
         if ((temp == begin) || (end == _begin + SIZE - 1 && length == SIZE - 1)) {
-            //丢弃当前任务
-            throw std::overflow_error("队列已满,无法加入新任务");
+            //丢弃当前任务,并阻塞等待
+            variable.wait(lock, [this]() { return begin != end; });
+            //throw std::overflow_error("队列已满,无法加入新任务");
         }
 
         constructor(end, end, value, type());
@@ -59,15 +63,17 @@ namespace stl {
             end++;
         }
         length++;
-
+        variable.notify_all();
     };
 
     template <class T>
-    T queue<T>::pop() {
-        std::lock_guard<std::mutex> lock(mtx);
-        
+    T queue<T>::pop_back() {
+        std::unique_lock<std::mutex> lock(mtx);
+
         if (begin == end) {
-            throw std::overflow_error("队列为空,无法取出任务");
+            //阻塞等待
+            variable.wait(lock, [this]()->bool { return begin != end; });
+            //throw std::overflow_error("队列为空,无法取出任务");
         }
         T* temp = begin;
 
@@ -78,7 +84,8 @@ namespace stl {
             begin++;
         }
         length--;
-
+        variable.notify_all();
+        
         return *temp;
 
     }
