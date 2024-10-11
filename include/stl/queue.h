@@ -1,4 +1,5 @@
 #pragma once
+#include <mutex>
 #include <stl/construct.h>
 #include <stl/tuple.h>
 #include <stl/too.h>
@@ -18,6 +19,7 @@ namespace stl {
     private:
         static const int SIZE = 5;
         size_t length = 0;
+        std::mutex mtx;
         T* _begin;
         T* begin;
         T* end;
@@ -40,6 +42,7 @@ namespace stl {
 
     template <class T>
     void queue<T>::push(const T& value) {
+        std::lock_guard<std::mutex> lock(mtx);
         auto temp = end + 1;
 
         if ((temp == begin) || (end == _begin + SIZE - 1 && length == SIZE - 1)) {
@@ -57,12 +60,12 @@ namespace stl {
         }
         length++;
 
-        //std::cout << end << std::endl;
-
     };
 
     template <class T>
     T queue<T>::pop() {
+        std::lock_guard<std::mutex> lock(mtx);
+        
         if (begin == end) {
             throw std::overflow_error("队列为空,无法取出任务");
         }

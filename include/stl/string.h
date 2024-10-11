@@ -16,6 +16,9 @@ namespace stl {
     public:
         string() : data(new char[1] {'\0'}), size(0) {};
         string(const char* str);
+        string(const string& other) : data(new char[other.size + 1]), size(other.size) {
+            my_memcpy((void*)data, (void*)other.data, size);
+        }
         ~string() { delete[] data; };
 
     public:
@@ -25,6 +28,7 @@ namespace stl {
     public:
         size_t length() const { return size; };
         const char* c_str() const { return data; };
+        string substr(const char str);
         void print(std::ostream& os) const { os.write(data, size); };
     };
 
@@ -56,6 +60,31 @@ namespace stl {
     bool string::operator==(const char*& other) const {
         if (size != str_len(other)) { return false; }
         return str_same(data, other);
+    }
+
+
+    //字符串切割 123,456 -> 123 456 
+    string string::substr(const char str) {
+        size_t i = 0;
+        char* _data = data;
+        for (; i < size + 1; i++) {
+            _data++;
+            if (data[i] == str) { break; }
+        }
+        if (i == size + 1) { return string(); }
+        if (i == 0) {
+            string temp(++data);
+            data = new char[1] {'\0'};
+            size = 0;
+            return temp;
+        }
+        size_t len = size - i + 1;
+        char* _new_data = new char[len];
+        my_memcpy((void*)_new_data, (void*)_data, size);
+        size = i;
+        *(data + i) = '\0';
+        return string(_new_data);
+
     }
 
 

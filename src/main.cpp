@@ -39,32 +39,16 @@ public:
 
 int main() {
 
-    stl::string str("1");
-    if (str == "1") {
-        std::cout << "str is empty" << std::endl;
-    }
-    else {
-        std::cout << "1111111111111111" << std::endl;
-    }
+    "{\"name\":\"John\",\"age\":\"18\"}";
 
+    stl::string  str1 = ",123";
+    stl::string str2 = str1.substr(',');
 
+    cout << str1 << endl;
+    cout << str2 << endl;
 
-
-
-    // int x = 100;
-    // stl::Node<C> n1{ x };
-    // stl::Node<C> n2{ x };
-    // n1.next = &n2;
-
-    // stl::NodeBase<C> nn = n1;
-    // std::cout << "n1.next = " << n1.next << std::endl;
-    // std::cout << "n2 = " << &n2 << std::endl;
-    // std::cout << "nn.next=  " << nn.next << std::endl;
-    // std::cout << "nn.ptr=  " << nn.ptr << std::endl;
-    // std::cout << "ptr  " << &n1 << std::endl;
-    // std::cout << "nn.data  " << nn->a << std::endl;
-    //std::cout << "n1:data  " << n1.data << std::endl;
-    //std::cout << "*nn  " << *nn << std::endl;
+    cout << str1.length() << endl;
+    cout << str2.length() << endl;
 
 
     // int lfd = socket(AF_INET, SOCK_STREAM, 0);
