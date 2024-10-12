@@ -42,7 +42,7 @@ namespace stl {
         //明天实现自定义vector
         stl::queue<ThreadPoolAssisted> Assisted;
         ThreadPool() {
-            std::cout << "线程池开启" << std::endl;
+            //std::cout << "线程池开启" << std::endl;
             pthread_create(&tid_1, nullptr, runtime_init, this);
             //pthread_create(&tid_2, nullptr, runtime_init, this);
             pthread_detach(tid_1);
@@ -52,7 +52,7 @@ namespace stl {
             ThreadPool* pool = static_cast<ThreadPool*>(arg);
             while (true) {
                 // 在vector中取出任务
-                std::cout << "取出任务" << std::endl;
+                // std::cout << "取出任务" << std::endl;
                 ThreadPoolAssisted task = (pool->Assisted).pop_back();
                 task.start();
             }
@@ -61,7 +61,7 @@ namespace stl {
         template<class T, class... Args>
         bool submit(T* _fun, Args... _args) {
             //向vector中添加任务
-            std::cout << "任务添加" << std::endl;
+            //std::cout << "任务添加" << std::endl;
             Assisted.push_back(ThreadPoolAssisted(_fun, _args...));
             //判断线程是否等待，如果等待唤醒
         };

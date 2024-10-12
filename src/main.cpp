@@ -64,7 +64,7 @@ int main() {
         pool.submit(project::Connection_Http_Test, cfd);
 
         client_num++;
-        if (client_num > 2) {
+        if (client_num > 10) {
             cout << "连接数超过限制" << endl;
             break;
         }

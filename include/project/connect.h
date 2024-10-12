@@ -99,9 +99,8 @@ namespace project {
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int len = read(cfd, buffer, sizeof(buffer) - 1);
-        if (len > 0) {
-            std::cout << "Received request:\n" << buffer << std::endl;
-        }
+        std::cout << "len:" << len;
+        std::cout << std::endl;
 
         const char* response = "HTTP/1.1 200 OK\r\n"
             "Content-Type: text/plain\r\n"
