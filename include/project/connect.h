@@ -99,8 +99,43 @@ namespace project {
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int len = read(cfd, buffer, sizeof(buffer) - 1);
-        std::cout << "len:" << len;
-        std::cout << std::endl;
+        std::cout << "len:" << len << std::endl;
+        stl::string str(buffer);
+        std::cout << "len:" << str.length() << std::endl;
+        std::cout << "-----------------------------------" << std::endl;
+        std::cout << buffer << std::endl;
+        std::cout << "-----------------------------------" << std::endl;
+
+        for (int i = 0; i < len; i++) {
+            if (buffer[i] == '\r') {
+                buffer[i] = '-';
+            }
+            if (buffer[i] == '\n') {
+                buffer[i] = '+';
+            }
+        }
+
+        std::cout << buffer << std::endl;
+
+
+        /*
+len:323
+len:323
+-----------------------------------
+GET /select?id=10 HTTP/1.1
+Host: 192.168.136.129:10000
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0
+Accept: *\/*
+Origin: null
+Accept - Encoding : gzip, deflate
+Accept - Language : zh - CN, zh;q = 0.9, en;q = 0.8
+
+
+---------------------------------- -
+GET / select ? id = 10 HTTP / 1.1 - +Host : 192.168.136.129 : 10000 - +Connection : keep - alive - +User - Agent : Mozilla / 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit / 537.36 (KHTML, like Gecko) Chrome / 129.0.0.0 Safari / 537.36 Edg / 129.0.0.0 - +Accept : *\/*-+Origin: null-+Accept-Encoding: gzip, deflate-+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8-+-+
+         */
+
 
         const char* response = "HTTP/1.1 200 OK\r\n"
             "Content-Type: text/plain\r\n"
