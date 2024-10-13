@@ -17,18 +17,41 @@ namespace stl {
         typedef  NodeMap<key, value>* NodePtr;
 
     public:
-        BasePtr father_ptr;
-        BasePtr forward_ptr;
-        BasePtr backward_ptr;
+        BasePtr forward;
+        BasePtr left;
+        BasePtr right;
         NodePtr data_ptr;
         Color color;
 
-    public:
-        NodeBaseMap() : father_ptr(nullptr), forward_ptr(nullptr), backward_ptr(nullptr), data_ptr(nullptr), color(Color::red) {};
 
-    public:
-        void operator++(int) {};
-        NodePtr operator->() { return data_ptr; };
+     public:
+        void operator++(int) {
+            //判断当前节点是否有右子树，如果没有将当前节点指向父节点
+            if (right == nullptr) {
+                //拷贝赋值
+                *this = *forward;
+                return;
+            }
+            //如果有右子树,找到右子树的最左节点
+            *this = *get_left_most(this);
+        };
+
+
+        //获取能够通过右节点访问到该节点最长父节点
+        BasePtr get_parent_right(BasePtr ptr) {
+            if (ptr->forward->right == ptr) {
+                return get_parent_right(ptr->forward);
+            }
+            return ptr;
+        }
+
+        //获取当前节点的最左子节点
+        BasePtr get_left_most(BasePtr ptr) {
+            while (ptr->left != nullptr) {
+                ptr = ptr->left;
+            }
+            return ptr;
+        }
 
     };
 
