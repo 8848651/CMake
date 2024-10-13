@@ -24,12 +24,15 @@ namespace stl {
         Color color;
 
 
-     public:
+public:
         void operator++(int) {
             //判断当前节点是否有右子树，如果没有将当前节点指向父节点
             if (right == nullptr) {
+                //如果是最左子节点，通过右节点访问到该节点最长父节点就是父节点
+                //否则就是通过右节点访问到该节点最长父节点的父节点
+                BasePtr tmp = get_parent_right(this);
                 //拷贝赋值
-                *this = *forward;
+                *this = *(tmp->forward);
                 return;
             }
             //如果有右子树,找到右子树的最左节点
