@@ -13,7 +13,7 @@ namespace stl {
     class IntList;
 
 
-    template<typename T, typename U>
+    template<class T, class U>
     class Assemble;
 
     template<int First, int... Rest>

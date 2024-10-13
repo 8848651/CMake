@@ -3,14 +3,14 @@ namespace stl {
 
 
 
-    template<typename T, typename U>
+    template<class T, class U>
     class is_same {
     public:
         typedef std::false_type type;
         static type value;
     };
 
-    template<typename T>
+    template<class T>
     class is_same<T, T> {
     public:
         typedef std::true_type type;
@@ -31,7 +31,7 @@ namespace stl {
         typedef std::true_type type;
     };
 
-    template<typename T>
+    template<class T>
     class is_fundamental_type {
     public:
         typedef typename stl::value_type<
@@ -61,19 +61,19 @@ namespace stl {
     };
 
 
-    template<typename T, typename U = void>
+    template<class T, typename U = void>
     class is_same_temp {
     public:
         typedef std::false_type type;
     };
 
-    template<typename T>
+    template<class T>
     class is_same_temp<T*, void> {
     public:
         typedef std::true_type type;
     };
 
-    template<typename T>
+    template<class T>
     class is_same_temp<T, typename stl::void_type<stl::is_fundamental_type<T>::value>::type> {
     public:
         typedef std::true_type type;

@@ -7,7 +7,7 @@ namespace stl {
 
 
 
-    template<typename T>
+    template<class T>
     class vector {
     public:
         typedef typename stl::is_same_temp<T>::type type;
@@ -38,14 +38,14 @@ namespace stl {
 
     };
 
-    template<typename T>
+    template<class T>
     stl::vector<T>::vector() {
         begin = cap = static_cast<T*>(malloc(16 * sizeof(T)));
         end = begin + 16;
         (*ReferenceCount)++;
     }
 
-    template<typename T>
+    template<class T>
     stl::vector<T>::vector(size_t size) {
         size_t length = size < 16 ? 16 : size;
         begin = static_cast<T*>(malloc(length * sizeof(T)));
@@ -55,7 +55,7 @@ namespace stl {
         (*ReferenceCount)++;
     }
 
-    template<typename T>
+    template<class T>
     stl::vector<T>::vector(size_t size, T&& value) {
         size_t length = size < 16 ? 16 : size;
         begin = static_cast<T*>(malloc(length * sizeof(T)));
@@ -65,7 +65,7 @@ namespace stl {
         (*ReferenceCount)++;
     }
 
-    template<typename T>
+    template<class T>
     stl::vector<T>::vector(const vector<T>& other) {
         begin = other.begin;
         cap = other.cap;
@@ -74,13 +74,13 @@ namespace stl {
         (*ReferenceCount)++;
     }
 
-    template<typename T>
+    template<class T>
     typename stl::vector<T>::reference stl::vector<T>::pop_back() {
         //std::lock_guard<std::mutex> lock(mtx);
         return *(--cap);
     }
 
-    template<typename T>
+    template<class T>
     void stl::vector<T>::push_back(const T& value) {
         //std::lock_guard<std::mutex> lock(mtx);
         size_t length = cap - begin;
@@ -98,7 +98,7 @@ namespace stl {
         cap++;
     }
 
-    template<typename T>
+    template<class T>
     stl::vector<T>::~vector() {
         if (ReferenceCount == 0) {
             free(begin);

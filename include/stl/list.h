@@ -41,7 +41,7 @@ namespace stl {
 
 
     //TODO:list暂时不实现，后续再补充
-    template<typename T>
+    template<class T>
     class list {
     public:
         typedef NodeBase<T> iterator;
