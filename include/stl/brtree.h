@@ -128,6 +128,7 @@ namespace stl {
         size++;
     };
 
+    //红黑树插入节点有问题,明天再看
     template<class T, class U>
     typename BrTree<T, U>::NodePtr BrTree<T, U>::node_insert(typename BrTree<T, U>::NodePtr data_ptr, typename BrTree<T, U>::NodePtr root_ptr) {
         if (data_ptr->first < root_ptr->first) {
