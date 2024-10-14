@@ -18,6 +18,7 @@
 #include "stl/vector.h"
 #include "stl/threadpool.h"
 #include "project/connect.h"
+#include "stl/brtree.h"
 
 
 using namespace std;
@@ -41,11 +42,8 @@ public:
 int main() {
 
 
-    std::map<int, int> m = { {3, 2}, {2, 3},{1, 1},{0,5} };
-
-    for (auto it = m.begin(); it != m.end(); ++it) {
-        std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
-    }
+    stl::BrTree<int, int> tree;
+    tree.insert(1, 1);
 
 
 
