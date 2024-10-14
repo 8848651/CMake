@@ -44,6 +44,8 @@ int main() {
 
     stl::BrTree<int, int> tree;
     tree.insert(1, 1);
+    std::cout << tree.size << std::endl;
+    tree.traverse_test();
 
 
 

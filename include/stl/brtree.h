@@ -90,6 +90,7 @@ namespace stl {
     class BrTree {
         typedef  BrTreeNode<T, U> Iterator;
         typedef  BrTreeNode<T, U>* NodePtr;
+        //typedef  typename BrTreeNode<T, U>::BasePtr BasePtr;
 
     public:
         NodePtr root_ptr = nullptr;
@@ -105,7 +106,8 @@ namespace stl {
         NodePtr node_insert(NodePtr data_ptr, NodePtr root_ptr);
         void traverse_test() {
             //获取树的最左子节点
-            BrTreeNode<T, U> ptr{ get_parent_right(root_ptr) };
+            root_ptr = root_ptr->get_parent_right(root_ptr);
+            BrTreeNode<T, U> ptr{ root_ptr };
             for (int i = 0;i < size;i++) {
                 std::cout << "ptr->first  " << ptr->first << " ptr->second " << ptr->second << std::endl;
                 ptr++;
@@ -119,10 +121,11 @@ namespace stl {
         if (root_ptr == nullptr) {
             root_ptr = data_ptr;
             root_ptr->color = Color::black;
+            size++;
             return;
         }
-        data_ptr = node_insert(data_ptr, root_ptr);
-        if (data_ptr == nullptr) { return; }
+        node_insert(data_ptr, root_ptr);
+        //if (data_ptr == nullptr) { return; }
         //调整红黑树
 
         size++;
@@ -131,7 +134,7 @@ namespace stl {
     //红黑树插入节点有问题,明天再看
     template<class T, class U>
     typename BrTree<T, U>::NodePtr BrTree<T, U>::node_insert(typename BrTree<T, U>::NodePtr data_ptr, typename BrTree<T, U>::NodePtr root_ptr) {
-        if (data_ptr->first < root_ptr->first) {
+        if ((*data_ptr)->first < (*root_ptr)->first) {
             if (root_ptr->left == nullptr) {
                 root_ptr->left = data_ptr;
                 data_ptr->forward = root_ptr;
@@ -140,7 +143,7 @@ namespace stl {
             }
             return node_insert(data_ptr, root_ptr->left);
         }
-        else if (data_ptr->first > root_ptr->first) {
+        else if ((*data_ptr)->first > (*root_ptr)->first) {
             if (root_ptr->right == nullptr) {
                 root_ptr->right = data_ptr;
                 data_ptr->forward = root_ptr;
@@ -149,7 +152,7 @@ namespace stl {
             }
             return node_insert(data_ptr, root_ptr->right);
         }
-        root_ptr->second = data_ptr->second;
+        (*root_ptr)->second = (*data_ptr)->second;
         return nullptr;
 
     };
