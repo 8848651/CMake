@@ -38,6 +38,9 @@ namespace stl {
 
     public:
         DataPtr operator->() { return data_ptr; };
+        bool operator==(const BrTreeNode<T, U>& other) {
+            return (data_ptr == other.data_ptr) && (left == other.left) && (right == other.right) && (forward == other.forward);
+        };
 
     };
 
@@ -53,19 +56,24 @@ namespace stl {
             return;
         }
         //如果有右子树,找到右子树的最左节点
-        *this = *get_left_most(this);
+        *this = *get_left_most(right);
     };
 
     //获取能够通过右节点访问到该节点最长父节点
     template<class T, class U>
     typename BrTreeNode<T, U>::BasePtr BrTreeNode<T, U>::get_parent_right(typename BrTreeNode<T, U>::BasePtr ptr) {
-        if (ptr->forward->right == ptr) {
-            return get_parent_right(ptr->forward);
+        //迭代器本身地址不能参与比较
+        if (ptr->forward->right != nullptr) {
+            //能进入这里说明ptr->forward->right != nullptr,并且树一定是有一个最长父节点
+            //不存在*(ptr->forward->right) ！= *ptr 这种情况
+            if (*(ptr->forward->right) == *ptr) {
+                return get_parent_right(ptr->forward);
+            }
         }
         return ptr;
     }
 
-    //获取当前节点的最左子节点
+    //获取右子树的最左子节点
     template<class T, class U>
     typename BrTreeNode<T, U>::BasePtr  BrTreeNode<T, U>::get_left_most(typename BrTreeNode<T, U>::BasePtr ptr) {
         while (ptr->left != nullptr) {
@@ -90,7 +98,6 @@ namespace stl {
     class BrTree {
         typedef  BrTreeNode<T, U> Iterator;
         typedef  BrTreeNode<T, U>* NodePtr;
-        //typedef  typename BrTreeNode<T, U>::BasePtr BasePtr;
 
     public:
         NodePtr root_ptr = nullptr;
@@ -102,17 +109,9 @@ namespace stl {
 
     public:
         void insert(T key, U value);
-
+        Iterator GetIterator() { return root_ptr->get_left_most(root_ptr); };
         NodePtr node_insert(NodePtr data_ptr, NodePtr root_ptr);
-        void traverse_test() {
-            //获取树的最左子节点
-            root_ptr = root_ptr->get_parent_right(root_ptr);
-            BrTreeNode<T, U> ptr{ root_ptr };
-            for (int i = 0;i < size;i++) {
-                std::cout << "ptr->first  " << ptr->first << " ptr->second " << ptr->second << std::endl;
-                ptr++;
-            }
-        };
+        void traverse_test();
     };
 
     template<class T, class U>
@@ -131,7 +130,7 @@ namespace stl {
         size++;
     };
 
-    //红黑树插入节点有问题,明天再看
+    //树的插入操作
     template<class T, class U>
     typename BrTree<T, U>::NodePtr BrTree<T, U>::node_insert(typename BrTree<T, U>::NodePtr data_ptr, typename BrTree<T, U>::NodePtr root_ptr) {
         if ((*data_ptr)->first < (*root_ptr)->first) {
@@ -154,6 +153,26 @@ namespace stl {
         }
         (*root_ptr)->second = (*data_ptr)->second;
         return nullptr;
+
+    };
+
+
+    //中序遍历
+    template<class T, class U>
+    void BrTree<T, U>::traverse_test() {
+        // std::cout << "root first: " << (*(root_ptr))->first << std::endl;
+        // std::cout << "root second: " << (*(root_ptr))->second << std::endl;
+        // std::cout << "Iterator first: " << GetIterator()->first << std::endl;
+        // std::cout << "Iterator second: " << GetIterator()->second << std::endl;
+        //获取树的最左子节点
+        BrTreeNode<T, U> ptr{ GetIterator() };
+        for (int i = 0;i < size - 1;i++) {
+            std::cout << "first  " << ptr->first << " second " << ptr->second << " left: "
+                << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
+            ptr++;
+        }
+        std::cout << "first  " << ptr->first << " second " << ptr->second << " left: "
+            << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
 
     };
 
