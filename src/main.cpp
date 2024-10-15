@@ -43,12 +43,11 @@ int main() {
 
 
     stl::BrTree<int, int> tree;
-    tree.insert(9, 900);
-    tree.insert(5, 500);
     tree.insert(7, 700);
-    tree.insert(4, 400);
-    tree.insert(6, 600);
-    tree.insert(8, 800);
+    tree.insert(3, 300);
+    tree.insert(5, 500);
+    //tree.insert(8, 800);
+    //tree.insert(1, 100);
     // 4 5 6 7 8 9
 
     std::cout << "size: " << tree.size << std::endl;

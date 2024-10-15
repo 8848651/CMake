@@ -37,13 +37,17 @@ namespace stl {
         BasePtr get_left_most(BasePtr ptr);
 
     public:
+        //左旋
+        static void rotate_left(BasePtr ptr);
+        //右旋
+        static void rotate_right(BasePtr ptr);
+
+    public:
         DataPtr operator->() { return data_ptr; };
         bool operator==(const BrTreeNode<T, U>& other) {
             return (data_ptr == other.data_ptr) && (left == other.left) && (right == other.right) && (forward == other.forward);
         };
 
-    public:
-        void trim(BasePtr ptr);
 
     };
 
@@ -83,10 +87,49 @@ namespace stl {
         return ptr;
     }
 
+    //左旋
     template<class T, class U>
-    void BrTreeNode<T, U>::trim(typename BrTreeNode<T, U>::BasePtr ptr) {
-        
+    void BrTreeNode<T, U>::rotate_left(typename BrTreeNode<T, U>::BasePtr ptr) {
+        BasePtr futher_ptr = ptr->forward;
+        if (futher_ptr->forward != nullptr) {
+            if (futher_ptr->forward->left == futher_ptr) {
+                futher_ptr->forward->left = ptr;
+            }
+            else {
+                futher_ptr->forward->right = ptr;
+            }
+        }
+        if (ptr->right != nullptr) {
+            ptr->right->forward = futher_ptr;
+        }
+        ptr->forward = futher_ptr->forward;
+        futher_ptr->forward = ptr;
+        futher_ptr->left = ptr->right;
+        ptr->right = futher_ptr;
     }
+
+    //右旋
+    template<class T, class U>
+    void BrTreeNode<T, U>::rotate_right(typename BrTreeNode<T, U>::BasePtr ptr) {
+        BasePtr futher_ptr = ptr->forward;
+        if (futher_ptr->forward != nullptr) {
+            if (futher_ptr->forward->left == futher_ptr) {
+                futher_ptr->forward->left = ptr;
+            }
+            else {
+                futher_ptr->forward->right = ptr;
+            }
+        }
+        if (ptr->left != nullptr) {
+            ptr->left->forward = futher_ptr;
+        }
+        ptr->forward = futher_ptr->forward;
+        futher_ptr->forward = ptr;
+        futher_ptr->right = ptr->left;
+        ptr->left = futher_ptr;
+    }
+
+
 
 
     template<class T, class U>
@@ -119,21 +162,22 @@ namespace stl {
         Iterator GetIterator() { return root_ptr->get_left_most(root_ptr); };
         NodePtr node_insert(NodePtr data_ptr, NodePtr root_ptr);
         void traverse_test();
+        void trim(NodePtr ptr);
     };
 
     template<class T, class U>
     void BrTree<T, U>::insert(T key, U value) {
         size++;
-        BrTreeData<T, U>* data_ptr = new BrTreeData<T, U>(key, value);
+        NodePtr data_ptr = new BrTreeData<T, U>(key, value);
         if (root_ptr == nullptr) {
             root_ptr = data_ptr;
             root_ptr->color = Color::black;
             return;
         }
-        node_insert(data_ptr, root_ptr);
+        data_ptr = node_insert(data_ptr, root_ptr);
         if (data_ptr == nullptr) { return; }
         //调整红黑树
-
+        trim(data_ptr);
     };
 
     //树的插入操作
@@ -163,10 +207,85 @@ namespace stl {
     };
 
 
+    template<class T, class U>
+    void BrTree<T, U>::trim(typename BrTree<T, U>::NodePtr ptr) {
+        if (ptr == root_ptr || ptr->forward == root_ptr) { root_ptr->color = Color::black; return; }
+        NodePtr uncle_ptr = nullptr;
+        NodePtr futher_ptr = ptr->forward;
+        NodePtr grand_futher_ptr = futher_ptr->forward;
+        bool is_left_child = ptr == ptr->forward->left;
+        bool is_left_futhe = futher_ptr == grand_futher_ptr->left;
+        if (is_left_futhe) {
+            uncle_ptr = grand_futher_ptr->right;
+        }
+        else {
+            uncle_ptr = grand_futher_ptr->left;
+        }
+        //如果叔叔节点是红色,则将父节点和叔叔节点染成黑色,并将爷爷节点作为插入节点
+        if (uncle_ptr != nullptr && uncle_ptr->color == Color::red) {
+            futher_ptr->color = Color::black;
+            uncle_ptr->color = Color::black;
+            grand_futher_ptr->color = Color::red;
+            return trim(grand_futher_ptr);
+        }
+
+        if (is_left_futhe) {
+            if (is_left_child) {
+                // LL型
+                futher_ptr->color = Color::black;
+                grand_futher_ptr->color = Color::red;
+                if (grand_futher_ptr == root_ptr) {
+                    root_ptr = futher_ptr;
+                }
+                Iterator::rotate_left(futher_ptr);
+                return;
+            }
+            else {
+                // LR型
+                ptr->color = Color::black;
+                grand_futher_ptr->color = Color::red;
+                if (grand_futher_ptr == root_ptr) {
+                    root_ptr = ptr;
+                }
+                Iterator::rotate_right(ptr);
+                Iterator::rotate_left(ptr);
+                return;
+            }
+        }
+        else {
+            if (is_left_child) {
+                // RL型
+                ptr->color = Color::black;
+                grand_futher_ptr->color = Color::red;
+                if (grand_futher_ptr == root_ptr) {
+                    root_ptr = ptr;
+                }
+                Iterator::rotate_left(ptr);
+                Iterator::rotate_right(ptr);
+                return;
+            }
+            else {
+                // RR型
+                futher_ptr->color = Color::black;
+                grand_futher_ptr->color = Color::red;
+                if (grand_futher_ptr == root_ptr) {
+                    root_ptr = futher_ptr;
+                }
+                Iterator::rotate_right(futher_ptr);
+                return;
+            }
+        }
+
+    }
+
+
     //中序遍历
     template<class T, class U>
     void BrTree<T, U>::traverse_test() {
-        //获取树的最左子节点
+        std::cout << "Iterator frist  " << GetIterator()->first << "   Iterator second  " << GetIterator()->second << std::endl;
+        std::cout << "root frist  " << (*root_ptr)->first << "    root second  " << (*root_ptr)->second << std::endl;
+        // //获取树的最左子节点
+        std::cout << "开始遍历" << std::endl;
         BrTreeNode<T, U> ptr{ GetIterator() };
         for (int i = 0;i < size - 1;i++) {
             std::cout << "first  " << ptr->first << " second " << ptr->second << std::endl;
