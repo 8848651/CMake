@@ -30,7 +30,7 @@ namespace stl {
 
     public:
         //中序遍历
-        virtual void operator++(int);
+        void operator++(int);
         //获取能够通过右节点访问到该节点最长父节点
         BasePtr get_parent_right(BasePtr ptr);
         //获取当前节点的最左子节点
@@ -41,6 +41,9 @@ namespace stl {
         bool operator==(const BrTreeNode<T, U>& other) {
             return (data_ptr == other.data_ptr) && (left == other.left) && (right == other.right) && (forward == other.forward);
         };
+
+    public:
+        void trim(BasePtr ptr);
 
     };
 
@@ -81,6 +84,12 @@ namespace stl {
     }
 
     template<class T, class U>
+    void BrTreeNode<T, U>::trim(typename BrTreeNode<T, U>::BasePtr ptr) {
+        
+    }
+
+
+    template<class T, class U>
     class BrTreeData :public BrTreeNode<T, U> {
     public:
         T first;
@@ -114,18 +123,17 @@ namespace stl {
 
     template<class T, class U>
     void BrTree<T, U>::insert(T key, U value) {
+        size++;
         BrTreeData<T, U>* data_ptr = new BrTreeData<T, U>(key, value);
         if (root_ptr == nullptr) {
             root_ptr = data_ptr;
             root_ptr->color = Color::black;
-            size++;
             return;
         }
         node_insert(data_ptr, root_ptr);
-        //if (data_ptr == nullptr) { return; }
+        if (data_ptr == nullptr) { return; }
         //调整红黑树
 
-        size++;
     };
 
     //树的插入操作
@@ -158,19 +166,15 @@ namespace stl {
     //中序遍历
     template<class T, class U>
     void BrTree<T, U>::traverse_test() {
-        // std::cout << "root first: " << (*(root_ptr))->first << std::endl;
-        // std::cout << "root second: " << (*(root_ptr))->second << std::endl;
-        // std::cout << "Iterator first: " << GetIterator()->first << std::endl;
-        // std::cout << "Iterator second: " << GetIterator()->second << std::endl;
         //获取树的最左子节点
         BrTreeNode<T, U> ptr{ GetIterator() };
         for (int i = 0;i < size - 1;i++) {
-            std::cout << "first  " << ptr->first << " second " << ptr->second << " left: "
-                << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
+            std::cout << "first  " << ptr->first << " second " << ptr->second << std::endl;
+            //std::cout << " left: " << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
             ptr++;
         }
-        std::cout << "first  " << ptr->first << " second " << ptr->second << " left: "
-            << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
+        std::cout << "first  " << ptr->first << " second " << ptr->second << std::endl;
+        //std::cout << " left: " << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
 
     };
 
