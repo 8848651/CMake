@@ -64,8 +64,6 @@ namespace stl {
     typename BrTreeNode<T, U>::BasePtr BrTreeNode<T, U>::get_parent_right(typename BrTreeNode<T, U>::BasePtr ptr) {
         //迭代器本身地址不能参与比较
         if (ptr->forward->right != nullptr) {
-            //能进入这里说明ptr->forward->right != nullptr,并且树一定是有一个最长父节点
-            //不存在*(ptr->forward->right) ！= *ptr 这种情况
             if (*(ptr->forward->right) == *ptr) {
                 return get_parent_right(ptr->forward);
             }
