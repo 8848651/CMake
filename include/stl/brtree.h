@@ -74,6 +74,10 @@ namespace stl {
             if (*(ptr->forward->right) == *ptr) {
                 return get_parent_right(ptr->forward);
             }
+            //不会执行,这是判断的另一种方法通过迭代器中data_ptr 即原节点指针
+            if (ptr->forward->right == ptr->data_ptr) {
+                return get_parent_right(ptr->forward);
+            }
         }
         return ptr;
     }
@@ -178,7 +182,8 @@ namespace stl {
         //树插入后调整红黑树
         void trim(NodePtr ptr);
         //获取最大值节点
-        NodePtr get_max_point(NodePtr ptr);
+        NodePtr get_max_point_1(NodePtr ptr);
+        NodePtr get_max_point_2(NodePtr ptr);
 
     };
 
@@ -297,10 +302,10 @@ namespace stl {
 
     //获取最大值节点
     template<class T, class U>
-    typename BrTree<T, U>::NodePtr BrTree<T, U>::get_max_point(typename BrTree<T, U>::NodePtr ptr) {
+    typename BrTree<T, U>::NodePtr BrTree<T, U>::get_max_point_1(typename BrTree<T, U>::NodePtr ptr) {
         if (ptr == nullptr) { return nullptr; }
-        NodePtr right_ptr = get_max_point(ptr->right);
-        NodePtr left_ptr = get_max_point(ptr->left);
+        NodePtr right_ptr = get_max_point_1(ptr->right);
+        NodePtr left_ptr = get_max_point_1(ptr->left);
         if (right_ptr == nullptr && left_ptr == nullptr) { return ptr; }
         if (right_ptr == nullptr) {
             //比较左子节点和根节点
@@ -330,6 +335,14 @@ namespace stl {
         else {
             return right_ptr;
         }
+    };
+
+    //获取最大值节点
+    template<class T, class U>
+    typename BrTree<T, U>::NodePtr BrTree<T, U>::get_max_point_2(typename BrTree<T, U>::NodePtr ptr) {
+        NodePtr max_ptr = ptr;
+        BrTreeNode<T, U> iterator_ptr=get_iterator();
+
     };
 
 
