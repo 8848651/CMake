@@ -49,9 +49,12 @@ int main() {
     tree.insert(10, 0);
 
 
-    std::cout << "size: " << tree.size << std::endl;
+    //tree.get_max_point_2(tree.root_ptr);
+
     std::cout << "max: " << (*tree.get_max_point_1(tree.root_ptr))->first << std::endl;
-    std::cout << "max: " << (*tree.get_max_point_2(tree.root_ptr)->forward)->first << std::endl;
+    std::cout << "max: " << (*tree.get_max_point_2(tree.root_ptr))->first << std::endl;
+    std::cout << "max: " << (*tree.get_max_point(tree.root_ptr))->first << std::endl;
+    std::cout << "min: " << (*tree.get_min_point(tree.root_ptr))->first << std::endl;
 
 
     //tree.traverse_test();
