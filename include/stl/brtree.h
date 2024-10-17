@@ -464,11 +464,16 @@ namespace stl {
             }
             else {
                 //注意这里为什么没有用节点替换,相邻节点可能造成this->left=this情况，在遍历时爆栈
-                if ((*(node_ptr->forward->left)) == *node_ptr) {
-                    node_ptr->forward->left = node_ptr->left;
+                if (node_ptr->forward->left == nullptr) {
+                    node_ptr->forward->right = node_ptr->left;
                 }
                 else {
-                    node_ptr->forward->right = node_ptr->left;
+                    if ((*(node_ptr->forward->left)) == *node_ptr) {
+                        node_ptr->forward->left = node_ptr->left;
+                    }
+                    else {
+                        node_ptr->forward->right = node_ptr->left;
+                    }
                 }
                 node_ptr->left->forward = node_ptr->forward;
             }
@@ -480,11 +485,16 @@ namespace stl {
                 root_ptr->forward = nullptr;
             }
             else {
-                if ((*(node_ptr->forward->left)) == *node_ptr) {
-                    node_ptr->forward->left = node_ptr->right;
+                if (node_ptr->forward->left == nullptr) {
+                    node_ptr->forward->right = node_ptr->right;
                 }
                 else {
-                    node_ptr->forward->right = node_ptr->right;
+                    if ((*(node_ptr->forward->left)) == *node_ptr) {
+                        node_ptr->forward->left = node_ptr->right;
+                    }
+                    else {
+                        node_ptr->forward->right = node_ptr->right;
+                    }
                 }
                 node_ptr->right->forward = node_ptr->forward;
             }

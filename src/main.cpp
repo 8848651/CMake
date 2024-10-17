@@ -42,25 +42,15 @@ public:
 int main() {
 
 
+  
     stl::BrTree<int, int> tree;
-    tree.insert(5, 0);
+    tree.insert(1, 0);
     tree.insert(2, 0);
-    tree.insert(4, 0);
     tree.insert(3, 0);
-    //tree.insert(1, 0);
-
-
-
-
-    //tree.get_max_point_2(tree.root_ptr);
-
-    // std::cout << "max: " << (*tree.get_max_point_1(tree.root_ptr))->first << std::endl;
-    // std::cout << "max: " << (*tree.get_max_point_2(tree.root_ptr))->first << std::endl;
-    // std::cout << "max: " << (*tree.get_max_point(tree.root_ptr))->first << std::endl;
-    // std::cout << "min: " << (*tree.get_min_point(tree.root_ptr))->first << std::endl;
-
+    tree.insert(4, 0);
+    tree.insert(5, 0);
+    // 删除节点 4
     tree.remove(2);
-    std::cout << tree.node_size(tree.root_ptr) << std::endl;
     tree.traverse_test();
 
 
