@@ -115,10 +115,6 @@ namespace stl {
             old_ptr->right->forward = new_ptr;
         }
         new_ptr->color = old_ptr->color;
-        old_ptr->left = nullptr;
-        old_ptr->right = nullptr;
-        old_ptr->forward = nullptr;
-        old_ptr->data_ptr = nullptr;
     }
 
     //左旋
@@ -169,11 +165,16 @@ namespace stl {
     template<class T, class U>
     class BrTreeData :public BrTreeNode<T, U> {
     public:
+        bool is_pointer_first = false;
+        bool is_pointer_second = false;
         T first;
         U second;
 
     public:
-        BrTreeData(T key, U value) : first(key), second(value), BrTreeNode<T, U>(this) {};
+        BrTreeData(T key, U value) : first(key), second(value), BrTreeNode<T, U>(this) {
+            is_pointer_first = std::is_pointer<T>::value;
+            is_pointer_second = std::is_pointer<U>::value;
+        };
     };
 
 
@@ -182,12 +183,6 @@ namespace stl {
     class BrTree {
         typedef  BrTreeNode<T, U> Iterator;
         typedef  BrTreeNode<T, U>* NodePtr;
-
-    public:
-        Iterator test() {
-            NodePtr temp = nullptr;
-            return static_cast<Iterator>(temp);
-        };
 
     public:
         NodePtr root_ptr = nullptr;
@@ -199,11 +194,7 @@ namespace stl {
     public:
         void insert(T key, U value);
         //获取树的最左子节点,即迭代器的起点
-        Iterator get_iterator(NodePtr ptr) {
-            NodePtr temp = ptr->get_left_most(ptr);
-            //BrTreeNode<T, U> 有一个BrTreeNode<T, U>*为参数的构造函数
-            return static_cast<Iterator>(temp);
-        };
+        Iterator get_iterator(NodePtr ptr);
         //插入节点
         NodePtr node_insert(NodePtr data_ptr, NodePtr root_ptr);
         //中序遍历
@@ -219,11 +210,22 @@ namespace stl {
         size_t node_size(NodePtr ptr);
         //根据key查找节点
         NodePtr find_node(T key);
+        //删除节点
+        void remove(T key);
         //bst普通删除节点
         void bst_remove(NodePtr ptr);
-  
+        //红黑树删除节点
+        void br_remove(NodePtr ptr);
+
+
 
     };
+    template<class T, class U>
+    typename BrTree<T, U>::Iterator BrTree<T, U>::get_iterator(typename BrTree<T, U>::NodePtr ptr) {
+        NodePtr temp = ptr->get_left_most(ptr);
+        //BrTreeNode<T, U> 有一个BrTreeNode<T, U>*为参数的构造函数
+        return static_cast<Iterator>(temp);
+    }
 
     template<class T, class U>
     void BrTree<T, U>::insert(T key, U value) {
@@ -236,7 +238,7 @@ namespace stl {
         data_ptr = node_insert(data_ptr, root_ptr);
         if (data_ptr == nullptr) { return; }
         //调整红黑树
-        trim(data_ptr);
+        //trim(data_ptr);
     };
 
     //树的插入操作
@@ -356,6 +358,7 @@ namespace stl {
 
     //获取最大值节点,不优雅
     //重构 获取最大值节点只需要获取最右子树即可
+    //这个是集遍历查询与一体的
     template<class T, class U>
     typename BrTree<T, U>::NodePtr BrTree<T, U>::get_max_point_1(typename BrTree<T, U>::NodePtr ptr) {
         if (ptr == nullptr) { return nullptr; }
@@ -433,6 +436,14 @@ namespace stl {
         }
         return nullptr;
     }
+
+    //删除节点
+    template<class T, class U>
+    void BrTree<T, U>::remove(T key) {
+        NodePtr temp = find_node(key);
+        bst_remove(temp);
+    }
+
     //bst普通删除节点,取左子树最大值或右子树最小值替换当前节点
     template<class T, class U>
     void BrTree<T, U>::bst_remove(NodePtr node_ptr) {
@@ -440,72 +451,56 @@ namespace stl {
         if (node_ptr->left != nullptr && node_ptr->right != nullptr) {
             //取左子树最大值或右子树最小值替换当前节点
             NodePtr max_ptr = get_max_point(node_ptr->left);
+            std::cout << "max_ptr first  " << (*max_ptr)->first << " second " << (*max_ptr)->second << std::endl;
             NodePtr temp_ptr = new BrTreeNode<T, U>(*max_ptr);
-            //将临时节点替换到最大节点
-            if (temp_ptr->forward->left == max_ptr) {
-                temp_ptr->forward->left = temp_ptr;
-            }
-            else {
-                temp_ptr->forward->right = temp_ptr;
-            }
-            if (temp_ptr->left != nullptr) { temp_ptr->left->forward = temp_ptr; }
-            if (temp_ptr->right != nullptr) { temp_ptr->right->forward = temp_ptr; }
-            if (!is_root) {
-                //将最大值节点替换到当前节点位置
-                if (node_ptr->forward->left == node_ptr) {
-                    node_ptr->forward->left = max_ptr;
-                }
-                else {
-                    node_ptr->forward->right = max_ptr;
-                }
-            }
-            max_ptr->forward = node_ptr->forward;
-            max_ptr->left = node_ptr->left;
-            max_ptr->right = node_ptr->right;
-            max_ptr->left->forward = max_ptr;
-            max_ptr->right->forward = max_ptr;
-            delete node_ptr;
+            BrTreeNode<T, U>::replace_node(max_ptr, temp_ptr);
+            BrTreeNode<T, U>::replace_node(node_ptr, max_ptr);
             return bst_remove(temp_ptr);
         }
         if (node_ptr->left != nullptr) {
-            auto temp = node_ptr->data_ptr;
             if (is_root) {
                 root_ptr = node_ptr->left;
                 root_ptr->forward = nullptr;
             }
-            if (temp->forward->left == temp) {
-                temp->forward->left = node_ptr->left;
-            }
             else {
-                temp->forward->right = node_ptr->left;
+                //注意这里为什么没有用节点替换,相邻节点可能造成this->left=this情况，在遍历时爆栈
+                if ((*(node_ptr->forward->left)) == *node_ptr) {
+                    node_ptr->forward->left = node_ptr->left;
+                }
+                else {
+                    node_ptr->forward->right = node_ptr->left;
+                }
+                node_ptr->left->forward = node_ptr->forward;
             }
-            delete temp;
             return;
         }
         if (node_ptr->right != nullptr) {
-            auto temp = node_ptr->data_ptr;
             if (is_root) {
                 root_ptr = node_ptr->right;
                 root_ptr->forward = nullptr;
             }
-            if (temp->forward->left == temp) {
-                temp->forward->left = node_ptr->right;
-            }
             else {
-                temp->forward->right = node_ptr->right;
+                if ((*(node_ptr->forward->left)) == *node_ptr) {
+                    node_ptr->forward->left = node_ptr->right;
+                }
+                else {
+                    node_ptr->forward->right = node_ptr->right;
+                }
+                node_ptr->right->forward = node_ptr->forward;
             }
-            delete temp;
             return;
         }
-        auto temp = node_ptr->data_ptr;
-        if (is_root) { root_ptr = nullptr; }
-        if (temp->forward->left == temp) {
-            temp->forward->left = nullptr;
+        if (is_root) {
+            root_ptr = nullptr;
         }
         else {
-            temp->forward->right = nullptr;
+            if ((*(node_ptr->forward->left)) == *node_ptr) {
+                node_ptr->forward->left = nullptr;
+            }
+            else {
+                node_ptr->forward->right = nullptr;
+            }
         }
-        delete temp;
         return;
     }
 
@@ -513,11 +508,11 @@ namespace stl {
     //中序遍历
     template<class T, class U>
     void BrTree<T, U>::traverse_test() {
-        std::cout << "Iterator frist  " << get_iterator()->first << "   Iterator second  " << get_iterator()->second << std::endl;
+        BrTreeNode<T, U> ptr = get_iterator(root_ptr);
+        std::cout << "Iterator frist  " << ptr->first << "   Iterator second  " << ptr->second << std::endl;
         std::cout << "root frist  " << (*root_ptr)->first << "    root second  " << (*root_ptr)->second << std::endl;
         // //获取树的最左子节点
         std::cout << "开始遍历" << std::endl;
-        BrTreeNode<T, U> ptr = get_iterator(root_ptr);
         size_t size = node_size(root_ptr);
         for (int i = 0;i < size - 1;i++) {
             std::cout << "first  " << ptr->first << " second " << ptr->second << std::endl;

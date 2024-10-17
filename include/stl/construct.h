@@ -82,6 +82,21 @@ namespace stl {
 
     //-------------------------------------------
 
+    template<class T>
+    class is_pointer {
+    public:
+        static constexpr bool value = false;
+    };
+
+    template<class T>
+    class is_pointer<T*> {
+    public:
+        static constexpr bool value = true;
+    };
+
+
+    //-------------------------------------------
+
     // vector<int> a(10);
     template <class T>
     void constructor(T* first, T* last, std::true_type) {
