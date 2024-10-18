@@ -44,13 +44,12 @@ int main() {
 
   
     stl::BrTree<int, int> tree;
-    tree.insert(1, 0);
-    tree.insert(2, 0);
-    tree.insert(3, 0);
-    tree.insert(4, 0);
-    tree.insert(5, 0);
-    // 删除节点 4
-    tree.remove(2);
+    tree.insert(100, 0);
+    tree.insert(50, 0);
+    tree.insert(150, 0);
+    tree.insert(120, 0);
+    // 删除节点 150（叶子节点）
+    tree.remove(150);
     tree.traverse_test();
 
 

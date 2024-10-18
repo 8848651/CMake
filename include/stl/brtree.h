@@ -511,9 +511,11 @@ namespace stl {
         if (node_ptr->left != nullptr && node_ptr->right != nullptr) {
             //取左子树最大值或右子树最小值替换当前节点
             NodePtr max_ptr = get_max_point(node_ptr->left);
+            std::cout << "max_ptr first  " << (*max_ptr)->first << std::endl;
             NodePtr temp_ptr = new BrTreeNode<T, U>(static_cast<BrTreeData<T, U>*>(nullptr));
             BrTreeNode<T, U>::replace_node(max_ptr, temp_ptr);
             BrTreeNode<T, U>::replace_node(node_ptr, max_ptr);
+            if (is_root) { root_ptr = max_ptr; }
             return bst_remove(temp_ptr);
         }
         if (node_ptr->left != nullptr || node_ptr->right != nullptr) {
