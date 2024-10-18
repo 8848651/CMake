@@ -252,7 +252,7 @@ namespace stl {
         BrTree() : root_ptr(nullptr) {};
 
     public:
-        void insert(T key, U value);
+        NodePtr insert(T key, U value);
         //获取树的最左子节点,即迭代器的起点
         Iterator get_iterator(NodePtr ptr);
         //插入节点
@@ -288,17 +288,14 @@ namespace stl {
     }
 
     template<class T, class U>
-    void BrTree<T, U>::insert(T key, U value) {
+    typename BrTree<T, U>::NodePtr BrTree<T, U>::insert(T key, U value) {
         NodePtr data_ptr = new BrTreeData<T, U>(key, value);
         if (root_ptr == nullptr) {
             root_ptr = data_ptr;
             root_ptr->color = Color::black;
             return;
         }
-        data_ptr = node_insert(data_ptr, root_ptr);
-        if (data_ptr == nullptr) { return; }
-        //调整红黑树
-        //trim(data_ptr);
+        return node_insert(data_ptr, root_ptr);
     };
 
     //树的插入操作
@@ -511,11 +508,11 @@ namespace stl {
         if (node_ptr->left != nullptr && node_ptr->right != nullptr) {
             //取左子树最大值或右子树最小值替换当前节点
             NodePtr max_ptr = get_max_point(node_ptr->left);
-            std::cout << "max_ptr first  " << (*max_ptr)->first << std::endl;
             NodePtr temp_ptr = new BrTreeNode<T, U>(static_cast<BrTreeData<T, U>*>(nullptr));
             BrTreeNode<T, U>::replace_node(max_ptr, temp_ptr);
             BrTreeNode<T, U>::replace_node(node_ptr, max_ptr);
             if (is_root) { root_ptr = max_ptr; }
+            delete node_ptr;
             return bst_remove(temp_ptr);
         }
         if (node_ptr->left != nullptr || node_ptr->right != nullptr) {
@@ -531,6 +528,7 @@ namespace stl {
             else {
                 BrTreeNode<T, U>::replace_node_only_child(node_ptr);
             }
+            delete node_ptr;
             return;
         }
         if (is_root) {
@@ -539,6 +537,7 @@ namespace stl {
         else {
             BrTreeNode<T, U>::delete_leaf(node_ptr);
         }
+        delete node_ptr;
         return;
     }
 
