@@ -44,6 +44,11 @@ namespace stl {
         static void rotate_right(BasePtr ptr);
         //节点替换
         static void replace_node(BasePtr old_ptr, BasePtr new_ptr);
+        //如果节点只有左右子节点,用子节点替换
+        static void replace_node_only_child(BasePtr ptr);
+        //删除叶子节点
+        static void delete_leaf(BasePtr ptr);
+
 
     public:
         DataPtr operator->() { return data_ptr; };
@@ -105,16 +110,71 @@ namespace stl {
                 old_ptr->forward->right = new_ptr;
             }
         }
-        new_ptr->forward = old_ptr->forward;
         if (old_ptr->left != nullptr) {
-            new_ptr->left = old_ptr->left;
             old_ptr->left->forward = new_ptr;
         }
         if (old_ptr->right != nullptr) {
-            new_ptr->right = old_ptr->right;
             old_ptr->right->forward = new_ptr;
         }
+        new_ptr->forward = old_ptr->forward;
+        new_ptr->left = old_ptr->left;
+        new_ptr->right = old_ptr->right;
         new_ptr->color = old_ptr->color;
+        old_ptr->forward = nullptr;
+        old_ptr->left = nullptr;
+        old_ptr->right = nullptr;
+    }
+
+    //如果节点只有左右子节点,用子节点替换
+    template<class T, class U>
+    void BrTreeNode<T, U>::replace_node_only_child(typename BrTreeNode<T, U>::BasePtr ptr) {
+        if (ptr->left != nullptr) {
+            if (ptr->forward->left == nullptr) {
+                ptr->forward->right = ptr->left;
+            }
+            else {
+                if (ptr->forward->left == ptr) {
+                    ptr->forward->left = ptr->left;
+                }
+                else {
+                    ptr->forward->right = ptr->left;
+                }
+            }
+            ptr->left->forward = ptr->forward;
+            return;
+        }
+        if (ptr->right != nullptr) {
+            if (ptr->forward->left == nullptr) {
+                ptr->forward->right = ptr->right;
+            }
+            else {
+                if (ptr->forward->left == ptr) {
+                    ptr->forward->left = ptr->right;
+                }
+                else {
+                    ptr->forward->right = ptr->right;
+                }
+            }
+            ptr->right->forward = ptr->forward;
+            return;
+        }
+    }
+
+    //删除叶子节点
+    template<class T, class U>
+    void BrTreeNode<T, U>::delete_leaf(typename BrTreeNode<T, U>::BasePtr ptr) {
+        if (ptr->forward->left == nullptr) {
+            ptr->forward->right = nullptr;
+        }
+        else {
+            if (ptr->forward->left == ptr) {
+                ptr->forward->left = nullptr;
+            }
+            else {
+                ptr->forward->right = nullptr;
+            }
+        }
+        return;
     }
 
     //左旋
@@ -451,52 +511,23 @@ namespace stl {
         if (node_ptr->left != nullptr && node_ptr->right != nullptr) {
             //取左子树最大值或右子树最小值替换当前节点
             NodePtr max_ptr = get_max_point(node_ptr->left);
-            std::cout << "max_ptr first  " << (*max_ptr)->first << " second " << (*max_ptr)->second << std::endl;
-            NodePtr temp_ptr = new BrTreeNode<T, U>(*max_ptr);
+            NodePtr temp_ptr = new BrTreeNode<T, U>(static_cast<BrTreeData<T, U>*>(nullptr));
             BrTreeNode<T, U>::replace_node(max_ptr, temp_ptr);
             BrTreeNode<T, U>::replace_node(node_ptr, max_ptr);
             return bst_remove(temp_ptr);
         }
-        if (node_ptr->left != nullptr) {
+        if (node_ptr->left != nullptr || node_ptr->right != nullptr) {
             if (is_root) {
-                root_ptr = node_ptr->left;
+                if (node_ptr->left != nullptr) {
+                    root_ptr = node_ptr->left;
+                }
+                else {
+                    root_ptr = node_ptr->right;
+                }
                 root_ptr->forward = nullptr;
             }
             else {
-                //注意这里为什么没有用节点替换,相邻节点可能造成this->left=this情况，在遍历时爆栈
-                if (node_ptr->forward->left == nullptr) {
-                    node_ptr->forward->right = node_ptr->left;
-                }
-                else {
-                    if ((*(node_ptr->forward->left)) == *node_ptr) {
-                        node_ptr->forward->left = node_ptr->left;
-                    }
-                    else {
-                        node_ptr->forward->right = node_ptr->left;
-                    }
-                }
-                node_ptr->left->forward = node_ptr->forward;
-            }
-            return;
-        }
-        if (node_ptr->right != nullptr) {
-            if (is_root) {
-                root_ptr = node_ptr->right;
-                root_ptr->forward = nullptr;
-            }
-            else {
-                if (node_ptr->forward->left == nullptr) {
-                    node_ptr->forward->right = node_ptr->right;
-                }
-                else {
-                    if ((*(node_ptr->forward->left)) == *node_ptr) {
-                        node_ptr->forward->left = node_ptr->right;
-                    }
-                    else {
-                        node_ptr->forward->right = node_ptr->right;
-                    }
-                }
-                node_ptr->right->forward = node_ptr->forward;
+                BrTreeNode<T, U>::replace_node_only_child(node_ptr);
             }
             return;
         }
@@ -504,12 +535,7 @@ namespace stl {
             root_ptr = nullptr;
         }
         else {
-            if ((*(node_ptr->forward->left)) == *node_ptr) {
-                node_ptr->forward->left = nullptr;
-            }
-            else {
-                node_ptr->forward->right = nullptr;
-            }
+            BrTreeNode<T, U>::delete_leaf(node_ptr);
         }
         return;
     }
