@@ -3,12 +3,12 @@
 namespace project {
 
 
-    class Http {
+    class http {
 
     public:
 
 
-    }
+    };
 
 
 }

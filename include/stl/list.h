@@ -3,39 +3,40 @@ namespace stl {
 
 
     template <class T> class NodeBase;
-    template <class T> class Node;
+    template <class T> class NodeData;
 
     template <class T>
     class NodeBase {
     public:
         typedef  NodeBase<T>* BasePtr;
-        typedef  Node<T>* NodePtr;
+        typedef  NodeData<T>* NodePtr;
 
     public:
+        BasePtr forward;
         BasePtr next;
         NodePtr ptr;
 
     public:
-        NodeBase() : next(nullptr), ptr(nullptr) {};
-        NodeBase(BasePtr _next, NodePtr _ptr) : next(_next), ptr(_ptr) {};
+        NodeBase() : forward(nullptr), next(nullptr), ptr(nullptr) {};
+        NodeBase(NodePtr _ptr) : forward(nullptr), next(nullptr), ptr(_ptr) {};
+        NodeBase(BasePtr other) :forward(other->forward), next(other->next), ptr(other->ptr) {};
 
     public:
-        void operator=(const NodeBase<T>& other) { next = other.next;ptr = other.ptr; };
-        void operator++(int) { next = next->next;ptr = next->ptr; };
-        bool operator==(const NodeBase<T>& other) { return this == &other; };
+        void operator++(int) { *this = *next; };
+        bool operator==(const NodeBase<T>& other) { return forward == other.forward && next == other.next && ptr == other.ptr; };
         T& operator*() { return ptr->data; };
         T* operator->() { return &(ptr->data); };
 
     };
 
     template <class T>
-    class Node : public NodeBase<T> {
+    class NodeData : public NodeBase<T> {
     public:
         T data;
 
     public:
-        Node() {};
-        Node(const T& _data) : data(_data), NodeBase<T>(nullptr, this) {};
+        NodeData() {};
+        NodeData(const T& _data) : data(_data), NodeBase<T>(this) {};
     };
 
 
@@ -45,10 +46,11 @@ namespace stl {
     class list {
     public:
         typedef NodeBase<T> iterator;
+        typedef NodeBase<T>* pointer;
 
     public:
-        iterator begin;
-        iterator end;
+        pointer begin;
+        pointer end;
 
     public:
         list();

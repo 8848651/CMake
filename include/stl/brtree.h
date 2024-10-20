@@ -27,7 +27,7 @@ namespace stl {
         BrTreeNode(DataPtr _data_ptr) : forward(nullptr), left(nullptr), right(nullptr), color(Color::red), data_ptr(_data_ptr) {};
         BrTreeNode(const BrTreeNode<T, U>& _node) : forward(_node.forward), left(_node.left), right(_node.right), color(_node.color), data_ptr(nullptr) {};
         BrTreeNode(BasePtr other) : forward(other->forward), left(other->left), right(other->right), color(other->color), data_ptr(other->data_ptr) {};
-
+        virtual ~BrTreeNode() {};
 
     public:
         //中序遍历
@@ -222,20 +222,41 @@ namespace stl {
     }
 
 
+    //-------------------------------------------
 
+    template<class T>
+    class br_is_pointer {
+    public:
+        constexpr static bool value = false;
+    };
+
+    template<class T>
+    class br_is_pointer<T*> {
+    public:
+        constexpr static bool value = true;
+    };
+
+
+    //通过返回值类型判断是否是指针
+    template<class T>
+    typename std::enable_if<stl::br_is_pointer<T>::value>::type br_destroy(T ptr) { delete ptr; }
+
+    template<class T>
+    typename std::enable_if<!stl::br_is_pointer<T>::value>::type br_destroy(T) {}
+
+    //-------------------------------------------
 
     template<class T, class U>
     class BrTreeData :public BrTreeNode<T, U> {
     public:
-        bool is_pointer_first = false;
-        bool is_pointer_second = false;
         T first;
         U second;
 
     public:
-        BrTreeData(T key, U value) : first(key), second(value), BrTreeNode<T, U>(this) {
-            is_pointer_first = std::is_pointer<T>::value;
-            is_pointer_second = std::is_pointer<U>::value;
+        BrTreeData(T key, U value) : first(key), second(value), BrTreeNode<T, U>(this) {};
+        virtual ~BrTreeData() {
+            br_destroy(first);
+            br_destroy(second);
         };
     };
 
@@ -266,7 +287,7 @@ namespace stl {
         //删除节点
         NodePtr remove(T key);
         //删除节点
-        NodePtr remove(NodePtr ptr);
+        NodePtr node_remove(NodePtr ptr);
         //树删除黑色节点后调整红黑树
         void remove_trim(NodePtr ptr);
 
@@ -330,7 +351,10 @@ namespace stl {
             }
             return node_insert(data_ptr, root_ptr->right);
         }
+        //如果U为指针类型,先释放原来的指针
+        br_destroy((*root_ptr)->second);
         (*root_ptr)->second = (*data_ptr)->second;
+        delete data_ptr;
         return nullptr;
 
     };
@@ -496,19 +520,20 @@ namespace stl {
     template<class T, class U>
     typename BrTree<T, U>::NodePtr BrTree<T, U>::remove(T key) {
         NodePtr temp = find_node(key);
-        NodePtr temp_trim = remove(temp);
+        NodePtr temp_trim = node_remove(temp);
         if (is_BrTree && temp_trim != nullptr) {
             root_ptr->color = Color::black;
             root_ptr->forward = nullptr;
             temp_trim->forward->left == temp_trim ? temp_trim->forward->left = nullptr : temp_trim->forward->right = nullptr;
             remove_trim(temp_trim);
+            delete temp_trim;
         }
         return nullptr;
     }
 
     //删除节点,取左子树最大值或右子树最小值替换当前节点
     template<class T, class U>
-    typename BrTree<T, U>::NodePtr BrTree<T, U>::remove(typename BrTree<T, U>::NodePtr node_ptr) {
+    typename BrTree<T, U>::NodePtr BrTree<T, U>::node_remove(typename BrTree<T, U>::NodePtr node_ptr) {
         bool is_root = node_ptr == root_ptr;
         if (node_ptr->left != nullptr && node_ptr->right != nullptr) {
             //取左子树最大值或右子树最小值替换当前节点
@@ -518,7 +543,7 @@ namespace stl {
             BrTreeNode<T, U>::replace_node(node_ptr, max_ptr);
             if (is_root) { root_ptr = max_ptr; }
             delete node_ptr;
-            return remove(temp_ptr);
+            return node_remove(temp_ptr);
         }
         if (node_ptr->left != nullptr || node_ptr->right != nullptr) {
             if (is_root) {

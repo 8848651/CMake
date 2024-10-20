@@ -25,31 +25,18 @@ using namespace std;
 using namespace stl;
 using namespace project;
 
-class C {
-public:
-    int a;
-    C() : a(1) {};
-    C(int b) : a(b) {};
-    void test() {
-        a = a + 1;
-    };
-
-};
-
 
 
 
 int main() {
 
 
-  
-    stl::BrTree<int, int> tree;
-    tree.insert(100, 0);
-    tree.insert(50, 0);
-    tree.insert(150, 0);
-    tree.insert(120, 0);
-    tree.insert(130, 0);
-    tree.remove(150);
+
+    stl::BrTree<int, stl::string> tree;
+    tree.insert(1, "hello");
+    tree.insert(2, "world");
+    tree.insert(3, "!");
+
     tree.traverse_test();
 
 
