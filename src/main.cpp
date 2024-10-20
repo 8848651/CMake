@@ -48,7 +48,7 @@ int main() {
     tree.insert(50, 0);
     tree.insert(150, 0);
     tree.insert(120, 0);
-    // 删除节点 150（叶子节点）
+    tree.insert(130, 0);
     tree.remove(150);
     tree.traverse_test();
 
