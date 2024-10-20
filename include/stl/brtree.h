@@ -141,6 +141,7 @@ namespace stl {
                 }
             }
             ptr->left->forward = ptr->forward;
+            ptr->left->color = ptr->color;
             return;
         }
         if (ptr->right != nullptr) {
@@ -155,6 +156,7 @@ namespace stl {
                     ptr->forward->right = ptr->right;
                 }
             }
+            ptr->left->color = ptr->color;
             ptr->right->forward = ptr->forward;
             return;
         }
@@ -260,7 +262,7 @@ namespace stl {
         //中序遍历
         void traverse_test();
         //树插入后调整红黑树
-        void trim(NodePtr ptr);
+        void insert_trim(NodePtr ptr);
         //获取最大值节点
         NodePtr get_max_point(NodePtr ptr);
         NodePtr get_min_point(NodePtr ptr);
@@ -273,9 +275,14 @@ namespace stl {
         //删除节点
         void remove(T key);
         //bst普通删除节点
-        void bst_remove(NodePtr ptr);
+        NodePtr remove(NodePtr ptr);
         //红黑树删除节点
         void br_remove(NodePtr ptr);
+        //树删除黑色节点后调整红黑树
+        void remove_trim(NodePtr ptr);
+        //树删除黑色节点后调整红黑树
+        void remove_trim_2(NodePtr ptr);
+
 
 
 
@@ -293,7 +300,7 @@ namespace stl {
         if (root_ptr == nullptr) {
             root_ptr = data_ptr;
             root_ptr->color = Color::black;
-            return;
+            return nullptr;
         }
         return node_insert(data_ptr, root_ptr);
     };
@@ -326,7 +333,7 @@ namespace stl {
 
 
     template<class T, class U>
-    void BrTree<T, U>::trim(typename BrTree<T, U>::NodePtr ptr) {
+    void BrTree<T, U>::insert_trim(typename BrTree<T, U>::NodePtr ptr) {
         if (ptr == root_ptr || ptr->forward == root_ptr) { root_ptr->color = Color::black; return; }
         NodePtr uncle_ptr = nullptr;
         NodePtr futher_ptr = ptr->forward;
@@ -498,12 +505,12 @@ namespace stl {
     template<class T, class U>
     void BrTree<T, U>::remove(T key) {
         NodePtr temp = find_node(key);
-        bst_remove(temp);
+        remove(temp);
     }
 
-    //bst普通删除节点,取左子树最大值或右子树最小值替换当前节点
+    //删除节点,取左子树最大值或右子树最小值替换当前节点
     template<class T, class U>
-    void BrTree<T, U>::bst_remove(NodePtr node_ptr) {
+    BrTree<T, U>::NodePtr BrTree<T, U>::remove(BrTree<T, U>::NodePtr node_ptr) {
         bool is_root = node_ptr == root_ptr;
         if (node_ptr->left != nullptr && node_ptr->right != nullptr) {
             //取左子树最大值或右子树最小值替换当前节点
@@ -513,33 +520,98 @@ namespace stl {
             BrTreeNode<T, U>::replace_node(node_ptr, max_ptr);
             if (is_root) { root_ptr = max_ptr; }
             delete node_ptr;
-            return bst_remove(temp_ptr);
+            return remove(temp_ptr);
         }
         if (node_ptr->left != nullptr || node_ptr->right != nullptr) {
             if (is_root) {
-                if (node_ptr->left != nullptr) {
-                    root_ptr = node_ptr->left;
-                }
-                else {
-                    root_ptr = node_ptr->right;
-                }
+                root_ptr = node_ptr->left != nullptr ? node_ptr->left : node_ptr->right;
                 root_ptr->forward = nullptr;
             }
             else {
                 BrTreeNode<T, U>::replace_node_only_child(node_ptr);
             }
             delete node_ptr;
-            return;
+            return nullptr;
         }
         if (is_root) {
             root_ptr = nullptr;
         }
         else {
-            BrTreeNode<T, U>::delete_leaf(node_ptr);
+            if (node_ptr->color == Color::red) {
+                BrTreeNode<T, U>::delete_leaf(node_ptr);
+            }
+            else {
+                return node_ptr;
+            }
         }
         delete node_ptr;
-        return;
+        return nullptr;
     }
+
+
+    //红黑树调整传入一个双黑节点
+    template<class T, class U>
+    void BrTree<T, U>::remove_trim(typename BrTree<T, U>::NodePtr node_ptr) {
+        bool is_root = node_ptr == root_ptr->forward;
+        //兄弟节点是否为左节点
+        bool is_left = node_ptr->forward->right == node_ptr;
+        NodePtr ptr = is_left ? node_ptr->forward->left : node_ptr->forward->right;
+
+        if (ptr->color == Color::red) {
+            Color color_temp = ptr->color;
+            ptr->color = ptr->forward->color;
+            ptr->forward->color = color_temp;
+            if (is_root) { root_ptr = ptr; }
+            is_left ? BrTreeNode<T, U>::rotate_right(ptr) : BrTreeNode<T, U>::rotate_left(ptr);
+            return remove_trim(node_ptr);
+        }
+
+
+        if (is_left && ptr->left != nullptr && ptr->right->color == Color::red) {
+            //LL型
+            ptr->left->color = ptr->color;
+            ptr->color = ptr->forward->color;
+            ptr->forward->color = Color::black;
+            if (is_root) { root_ptr = ptr; }
+            BrTreeNode<T, U>::rotate_left(ptr);
+            return;
+        }
+        if (is_left && ptr->right != nullptr && ptr->right->color == Color::red) {
+            //LR型
+            ptr->left->color = ptr->forward->color;
+            ptr->forward->color = Color::black;
+            if (is_root) { root_ptr = ptr->right; }
+            BrTreeNode<T, U>::rotate_right(ptr->right);
+            BrTreeNode<T, U>::rotate_left(ptr);
+            return;
+        }
+
+        if ((!is_left) && ptr->right != nullptr && ptr->right->color == Color::red) {
+            //RR型
+            ptr->right->color = ptr->color;
+            ptr->color = ptr->forward->color;
+            ptr->forward->color = Color::black;
+            if (is_root) { root_ptr = ptr; }
+            BrTreeNode<T, U>::rotate_right(ptr);
+            return;
+        }
+        if ((!is_left) && ptr->left != nullptr && ptr->left->color == Color::red) {
+            //RL型
+            ptr->right->color = ptr->forward->color;
+            ptr->forward->color = Color::black;
+            if (is_root) { root_ptr = ptr->left; }
+            BrTreeNode<T, U>::rotate_left(ptr->left);
+            BrTreeNode<T, U>::rotate_right(ptr);
+            return;
+        }
+
+        //兄弟节点为全黑子节点
+        ptr->color = Color::red;
+        return remove_trim(node_ptr->forward);
+
+    }
+
+
 
 
     //中序遍历
@@ -560,6 +632,10 @@ namespace stl {
         //std::cout << " left: " << ptr.left << " right: " << ptr.right << " forward: " << ptr.forward << std::endl;
 
     };
+
+
+
+
 
 }
 
