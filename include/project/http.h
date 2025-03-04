@@ -3,12 +3,7 @@
 namespace project {
 
 
-    class http {
 
-    public:
-
-
-    };
 
 
 }

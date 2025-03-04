@@ -19,6 +19,7 @@
 #include "stl/threadpool.h"
 #include "project/connect.h"
 #include "stl/brtree.h"
+#include <thread>
 
 
 using namespace std;
@@ -26,18 +27,16 @@ using namespace stl;
 using namespace project;
 
 
+void ABC(int cfd) {
 
+    cout << cfd << endl;
+}
 
 int main() {
 
 
-
-    stl::BrTree<int, stl::string> tree;
-    tree.insert(1, "hello");
-    tree.insert(2, "world");
-    tree.insert(3, "!");
-
-    tree.traverse_test();
+    stl::ThreadSimple thread1(ABC, 1);
+    sleep(1);
 
 
 

@@ -5,6 +5,7 @@
 #include <utility>
 #include "stl/tuple.h"
 
+
 namespace stl {
 
     class Thread;
@@ -41,7 +42,9 @@ namespace stl {
 
 
 
-
+    /*
+     * 线程简化版1,只考虑基本数据类型
+     */
     template<class T>
     class AssistedThread;
 
@@ -85,6 +88,48 @@ namespace stl {
             //runtime_init(this);
         };
     };
+
+    /*
+     * 线程简化版2,只考虑基本数据类型
+     */
+
+
+    template<class T, class... Args>
+    class ThreadSimpleTemp {
+    public:
+        Tuple<Args...> args;
+        T* fun;
+        ThreadSimpleTemp(T* _fun, Args... _args) :fun(_fun) {
+            args = Tuple<Args...>(_args...);
+        };
+    };
+
+    template<typename>
+    class ThreadTemp;
+
+    template<int... Is>
+    class ThreadTemp<IntList<Is...>> {
+    public:
+        template<class T, class... Args>
+        static void* run(void* arg) {
+            ThreadSimpleTemp<T, Args...> tem = *(ThreadSimpleTemp<T, Args...>*)arg;
+            (tem.fun)(stl::TupleFindElement<Is>::find(tem.args.base)...);
+        };
+    };
+
+    class ThreadSimple {
+    public:
+        pthread_t tid;
+        template<class T, class... Args>
+        ThreadSimple(T* _fun, Args... _args) {
+            ThreadSimpleTemp<T, Args...>* temp = new  ThreadSimpleTemp<T, Args...>(_fun, _args...);
+            static constexpr int size = sizeof...(Args) - 1;
+            void* (*runtime_init)(void*) = &ThreadTemp<typename AssistedQueue<size>::QueueData>::template run<T, Args...>;
+            pthread_create(&tid, nullptr, runtime_init, temp);
+            pthread_detach(tid);
+        };
+    };
+
 
 
 }

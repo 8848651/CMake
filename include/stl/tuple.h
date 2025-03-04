@@ -9,6 +9,7 @@ namespace stl {
     public:
         T data;
         TupleBase<U...> base;
+        TupleBase() {}
         TupleBase(T _data, U... _base) : data(_data), base(_base...) {}
     };
 
@@ -16,6 +17,7 @@ namespace stl {
     class TupleBase<T> {
     public:
         T data;
+        TupleBase() {}
         TupleBase(T _data) : data(_data) {}
     };
 
