@@ -19,6 +19,20 @@ namespace stl {
 
     //-------------------------------------------
 
+    template<int T, int U>
+    class is_nmber_add {
+    public:
+        constexpr static int value = T + U;
+    };
+
+    template<int T, int U>
+    class is_nmber_minus {
+    public:
+        constexpr static int value = T - U;
+    };
+
+    //-------------------------------------------
+
     template<bool T>
     class value_type {
     public:

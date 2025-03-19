@@ -9,22 +9,21 @@
 #include <pthread.h>
 #include <vector>
 
-
-#include "stl/thread.h"
-#include "stl/string.h"
-#include "stl/queue.h"
-#include "stl/construct.h"
-#include "stl/list.h"
-#include "stl/vector.h"
-#include "stl/threadpool.h"
-#include "project/connect.h"
-#include "stl/brtree.h"
-#include <thread>
+#include "stl/bind.h"
+// #include "stl/thread.h"
+// #include "stl/string.h"
+// #include "stl/queue.h"
+// #include "stl/construct.h"
+// #include "stl/list.h"
+// #include "stl/vector.h"
+// #include "stl/threadpool.h"
+// #include "project/connect.h"
+// #include "stl/brtree.h"
+// #include <thread>
 
 
 using namespace std;
 using namespace stl;
-using namespace project;
 
 
 void ABC(int cfd) {
@@ -34,9 +33,8 @@ void ABC(int cfd) {
 
 int main() {
 
+    stl::PP(1, 2, 4, "hello", "world", 2, 5, 8);
 
-    stl::ThreadSimple thread1(ABC, 1);
-    sleep(1);
 
 
 

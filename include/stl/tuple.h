@@ -1,11 +1,14 @@
 #pragma once
 #include <stddef.h>
+#include "construct.h"
 namespace stl {
 
 
     // <1 <2 <3...>>
     template<class T, class... U>
     class TupleBase {
+    public:
+        typedef T type;
     public:
         T data;
         TupleBase<U...> base;
@@ -16,10 +19,14 @@ namespace stl {
     template<class T>
     class TupleBase<T> {
     public:
+        typedef T type;
+    public:
         T data;
         TupleBase() {}
         TupleBase(T _data) : data(_data) {}
     };
+
+    //-------------------------------------------------------------------------
 
 
     template<int Index>
@@ -39,6 +46,29 @@ namespace stl {
             return base.data;
         };
     };
+
+    //-------------------------------------------------------------------------
+
+    template<int Index, class T>
+    class TupleFindType {
+    public:
+        template<class... Types>
+        constexpr static int find(TupleBase<Types...>& base) {
+            constexpr int value = TupleFindType<Index - 1, T>::find(base.base);
+            return is_nmber_add<value, is_same<T, decltype(base.data)>::value ? 1 : 0>::value;
+        };
+    };
+
+    template<class T>
+    class TupleFindType<0, T> {
+    public:
+        template<class... Types>
+        constexpr static int find(TupleBase<Types...>& base) {
+            return is_nmber_add<is_same<T, decltype(base.data)>::value ? 1 : 0, 0>::value;
+        };
+    };
+
+    //-------------------------------------------------------------------------
 
 
     template<class... Types>
