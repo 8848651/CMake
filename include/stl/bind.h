@@ -8,74 +8,53 @@ namespace stl {
         _1, _2, _3, _4, _5, _6, _7, _8, _9, _10
     };
 
-    template<class T>
-    class TT;
-
-    template<int... Is>
-    class TT<IntList<Is...>> {
-    public:
-        template<class... Args>
-        static int run(Args... args) {
-            static constexpr int size = sizeof...(Args) - 1;
-            Tuple<Args...> _args(args...);
-            int a = TupleFindType<4, placeholders>::find(_args.base);
-            auto b = TupleFindElement<4>::find(_args.base);
-            std::cout << "a=" << a << std::endl;
-            std::cout << "b=" << b << std::endl;
-            return 0;
+    template<int N>
+    class bind_assisted_helper {
+        template<class... T, class... U>
+        constexpr auto test(Tuple<T...>& _data, Tuple<U...>& _args) {
+            constexpr int a = TupleFindType<N, placeholders>::find(_data.base);
+            auto b = TupleFindElement<N>::find(_data.base);
+            return b;
         };
     };
 
     template<class... Args>
-    void PP(Args... args) {
-        static constexpr int size = sizeof...(Args) - 1;
-        TT<class AssistedQueue<size>::QueueData>::run(args...);
-    };
+    void tt(Args... args) {};
 
 
-
-
-
-    template<typename>
-    class BindTemp;
-
-    class Bind;
+    template<class U>
+    class bind_assisted;
 
     template<int... Is>
-    class BindTemp<IntList<Is...>> {
+    class bind_assisted<IntList<Is...>> {
     public:
-        template<class T, class... Args>
-        static void run(void* func) {
-            Bind* bind = (Bind*)func;
-            T* obj = (T*)(bind->method);
-            Tuple<Args...> _args = *(Tuple<Args...>*)(bind->data);
-            obj(TupleFindElement<Is>::find(_args.base)...);
-        }
-    };
+        template<class T, class... M, class... N>
+        static void run(T* _func, Tuple<M...>& _data, Tuple<N...>& _args) {
+            Tuple<decltype(bind_assisted_helper<Is>::test(_data, _args))...> _args_tmp;
 
-    class Bind {
-    public:
-        void* _method = nullptr;
-        void* _data = nullptr;
-        void (*_func)(void*) = nullptr;
-
-        void* data = nullptr;
-        using FuncType = int;
-
-        template<class T, class... Args>
-        Bind(T* func, Args... args) {
-            _method = (void*)func;
-            _data = new Tuple<Args...>(args...);
-            static constexpr int size = sizeof...(Args) - 1;
-            _func = &BindTemp<typename AssistedQueue<size>::QueueData>::template run<T, Args...>;
-        };
-
-        template<class... Args>
-        auto operator()(Args... args) {
-            _func(this);
-            data = new Tuple<Args...>(args...);
         };
     };
+
+    template<class T, class... Args>
+    class anybind {
+    public:
+        T* _func;
+        Tuple<Args...> _data;
+        static constexpr int _size = sizeof...(Args) - 1;
+        anybind(T* func, Args... args) : _func(func), _data(args...) {};
+
+        template<class... U>
+        auto operator()(U... args) {
+            Tuple<U...> _args(args...);
+            bind_assisted<class AssistedQueue<_size>::QueueData>::run(_func, _data, _args);
+        };
+    };
+
+    template<class T, class... Args>
+    auto bind(T* func, Args... args) {
+        return anybind<T, Args...>(func, args...);
+    };
+
 
 
 
