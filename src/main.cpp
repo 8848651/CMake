@@ -33,8 +33,6 @@ void ABC(int cfd) {
 
 int main() {
 
-    stl::PP(1, 2, 4, "hello", "world", 2, 5, 8);
-
 
 
 
