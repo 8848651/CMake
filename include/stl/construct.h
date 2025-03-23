@@ -28,7 +28,7 @@ namespace stl {
     template<int T, int U>
     class is_nmber_minus {
     public:
-        constexpr static int value = T - U;
+        constexpr static int value = T >= U ? T - U : 0;
     };
 
     //-------------------------------------------

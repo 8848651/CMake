@@ -13,7 +13,6 @@ namespace stl {
     template<int... Is>
     class IntList;
 
-
     template<class T, class U>
     class Assemble;
 

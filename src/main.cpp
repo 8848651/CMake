@@ -25,13 +25,26 @@
 using namespace std;
 using namespace stl;
 
+class myclass {
+public:
+    int a = 10;
 
-void ABC(int cfd) {
+    myclass(int b) {
+        a = b;
+    }
+};
 
-    cout << cfd << endl;
+
+void ABC(int a, myclass b, int c,string d) {
+
+    cout << "a " << a << " b " << b.a << " c " << c << " d " << d << endl;
 }
 
 int main() {
+
+    auto temp = bind(ABC, 10, placeholders::_1, 30, placeholders::_2);
+    temp(myclass(10000),"321");
+
 
 
 
@@ -66,5 +79,4 @@ int main() {
     //     }
     // }
     // close(lfd);
-
 }
