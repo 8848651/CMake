@@ -5,6 +5,12 @@
 #include "thread.h"
 namespace stl {
 
+    //需要注意的点
+    //1:bind是函数不是类，如果是类类类型和方法类型无法区分
+    //2:注意在方法里参数展开是从右到左展开，执行也是从右到左
+    //3:constexpr类型初始化后无法改变的，可以通过is_nmber_minus将数转为类型，再将类型转为数实现
+    //4:在使用三目运算符时后面两个类型必须是相同的，否则会出现编译错误，可以使用if constexpr,C++11没有可以使用ConditionalDispatcher代替
+
     enum class placeholders {
         _1, _2, _3, _4, _5, _6, _7, _8, _9, _10
     };
@@ -19,7 +25,7 @@ namespace stl {
     // 当Flag为true时的特化版本
     template <typename T, typename U>
     struct ConditionalDispatcher<true, T, U> {
-        static auto execute(T t,U u) -> decltype(t) { return t; }
+        static auto execute(T t, U u) -> decltype(t) { return t; }
     };
 
     // 当Flag为false时的特化版本
@@ -39,7 +45,7 @@ namespace stl {
             //必须保证stl::is_nmber_minus<a, 1>::value>=0
             auto c = TupleFindElement<stl::is_nmber_minus<a, 1>::value>::find(_args.base);
             constexpr bool flag = stl::is_same<decltype(b), placeholders>::value ? true : false;
-            return ConditionalDispatcher<flag, decltype(c), decltype(b)>::execute(c,b);
+            return ConditionalDispatcher<flag, decltype(c), decltype(b)>::execute(c, b);
         };
 
     };

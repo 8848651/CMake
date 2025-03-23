@@ -8,18 +8,20 @@
 #include <sys/socket.h>
 #include <pthread.h>
 #include <vector>
+#include <thread>
+#include <functional>
 
 #include "stl/bind.h"
-// #include "stl/thread.h"
-// #include "stl/string.h"
-// #include "stl/queue.h"
-// #include "stl/construct.h"
-// #include "stl/list.h"
-// #include "stl/vector.h"
-// #include "stl/threadpool.h"
-// #include "project/connect.h"
-// #include "stl/brtree.h"
-// #include <thread>
+#include "stl/thread.h"
+#include "stl/string.h"
+#include "stl/queue.h"
+#include "stl/construct.h"
+#include "stl/list.h"
+#include "stl/vector.h"
+#include "stl/threadpool.h"
+#include "project/connect.h"
+#include "stl/brtree.h"
+
 
 
 using namespace std;
@@ -35,15 +37,18 @@ public:
 };
 
 
-void ABC(int a, myclass b, int c,string d) {
+void ABC(int a, myclass b, int c,std::string d) {
 
     cout << "a " << a << " b " << b.a << " c " << c << " d " << d << endl;
 }
 
 int main() {
 
-    auto temp = bind(ABC, 10, placeholders::_1, 30, placeholders::_2);
-    temp(myclass(10000),"321");
+    auto temp = bind(ABC, 10, stl::placeholders::_1, 30, stl::placeholders::_2);
+    temp(myclass(10000), "321");
+
+    //std::thread t(ABC, 10, myclass(10000), 30, "321");
+    //std::bind(ABC, 10, myclass(10000), 30, "321");
 
 
 
