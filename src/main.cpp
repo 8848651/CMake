@@ -44,7 +44,7 @@ void ABC(int a, myclass b, int c,std::string d) {
 
 int main() {
 
-    std::cout<<"200"<<std::endl;
+    std::cout<<"300"<<std::endl;
     auto temp = bind(ABC, 10, stl::placeholders::_1, 30, stl::placeholders::_2);
     temp(myclass(10000), "321");
 
