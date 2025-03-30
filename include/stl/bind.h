@@ -3,6 +3,7 @@
 #include "tuple.h"
 #include "construct.h"
 #include "thread.h"
+#include "template.h"
 namespace stl {
 
     //需要注意的点
@@ -19,21 +20,6 @@ namespace stl {
         return os << (static_cast<int>(ph) + 1);
     }
 
-    template <bool Flag, typename T, typename U>
-    struct ConditionalDispatcher;
-
-    // 当Flag为true时的特化版本
-    template <typename T, typename U>
-    struct ConditionalDispatcher<true, T, U> {
-        static auto execute(T t, U u) -> decltype(t) { return t; }
-    };
-
-    // 当Flag为false时的特化版本
-    template <typename T, typename U>
-    struct ConditionalDispatcher<false, T, U> {
-        static auto execute(T t, U u) -> decltype(u) { return u; }
-    };
-
     template<int N>
     class bind_assisted_helper {
     public:
@@ -45,7 +31,7 @@ namespace stl {
             //必须保证stl::is_nmber_minus<a, 1>::value>=0
             auto c = TupleFindElement<stl::is_nmber_minus<a, 1>::value>::find(_args.base);
             constexpr bool flag = stl::is_same<decltype(b), placeholders>::value ? true : false;
-            return ConditionalDispatcher<flag, decltype(c), decltype(b)>::execute(c, b);
+            return conditional_selector<flag, decltype(c), decltype(b)>::execute(c, b);
         };
 
     };

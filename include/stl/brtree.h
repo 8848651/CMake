@@ -1,4 +1,5 @@
 #pragma once
+#include "template.h"
 
 namespace stl {
 
@@ -221,28 +222,6 @@ namespace stl {
         ptr->left = futher_ptr;
     }
 
-
-    //-------------------------------------------
-
-    template<class T>
-    class br_is_pointer {
-    public:
-        constexpr static bool value = false;
-    };
-
-    template<class T>
-    class br_is_pointer<T*> {
-    public:
-        constexpr static bool value = true;
-    };
-
-
-    //通过返回值类型判断是否是指针
-    template<class T>
-    typename std::enable_if<stl::br_is_pointer<T>::value>::type br_destroy(T ptr) { delete ptr; }
-
-    template<class T>
-    typename std::enable_if<!stl::br_is_pointer<T>::value>::type br_destroy(T) {}
 
     //-------------------------------------------
 

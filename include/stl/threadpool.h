@@ -4,6 +4,7 @@
 #include <vector>
 #include <mutex>
 
+
 namespace stl {
 
     class ThreadPoolAssisted {
@@ -33,13 +34,44 @@ namespace stl {
         }
     };
 
+
+
+    template<typename>
+    class ThreadPoolTemp;
+
+    template<class T, class... Args>
+    class ThreadPoolSimple;
+
+    template<int... Is>
+    class ThreadPoolTemp<IntList<Is...>> {
+    public:
+        template<class T, class... Args>
+        static void* run(void* arg) {
+            ThreadPoolSimple<T, Args...> tem = *(ThreadPoolSimple<T, Args...>*)arg;
+            (tem.fun)(stl::TupleFindElement<Is>::find(tem.args.base)...);
+        };
+    };
+
+    template<class T, class... Args>
+    class ThreadPoolSimple {
+    public:
+        T* fun;
+        Tuple<Args...> arg;
+        ThreadPoolSimple(T* _fun, Args... _args): fun(_fun), arg(_args...) {};
+
+    public:
+        void start() {
+            static constexpr int size = sizeof...(Args) - 1;
+            ThreadPoolTemp<typename AssistedQueue<size>::QueueData>::template run<T, Args...>(this);  
+        }
+    };
+
     class ThreadPool {
     public:
         //一个线程池两个线程 后续实现自定义线程数
         int num_threads = 2;
         pthread_t tid_1;
         pthread_t tid_2;
-        //明天实现自定义vector
         stl::queue<ThreadPoolAssisted> Assisted;
         ThreadPool() {
             //std::cout << "线程池开启" << std::endl;

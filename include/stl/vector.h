@@ -3,6 +3,7 @@
 #include <stl/construct.h>
 #include <stl/tuple.h>
 #include <stl/too.h>
+#include "template.h"
 namespace stl {
 
 

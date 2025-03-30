@@ -39,14 +39,23 @@ public:
 
 void ABC(int a, myclass b, int c,std::string d) {
 
-    cout << "a " << a << " b " << b.a << " c " << c << " d " << d << endl;
+    std::cout << "a " << a << " b " << b.a << " c " << c << " d " << d << std::endl;
 }
 
 int main() {
 
-    std::cout<<"300"<<std::endl;
-    auto temp = bind(ABC, 10, stl::placeholders::_1, 30, stl::placeholders::_2);
-    temp(myclass(10000), "321");
+    stl::string str = "123 321";
+    stl::string str2 = str.substr(' ');
+    std::cout << str2 << std::endl;
+
+    stl::Thread thread(ABC, 10, myclass(10000), 30, "321");
+
+
+
+
+    // std::cout<<"300"<<std::endl;
+    // auto temp = bind(ABC, 10, stl::placeholders::_1, 30, stl::placeholders::_2);
+    // temp(myclass(10000), "321");
 
     //std::thread t(ABC, 10, myclass(10000), 30, "321");
     //std::bind(ABC, 10, myclass(10000), 30, "321");
