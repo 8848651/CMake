@@ -44,11 +44,13 @@ void ABC(int a, myclass b, int c,std::string d) {
 
 int main() {
 
+    std::cout<<"300"<<std::endl;
     auto temp = bind(ABC, 10, stl::placeholders::_1, 30, stl::placeholders::_2);
     temp(myclass(10000), "321");
 
     //std::thread t(ABC, 10, myclass(10000), 30, "321");
     //std::bind(ABC, 10, myclass(10000), 30, "321");
+    //tt
 
 
 
