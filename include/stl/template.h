@@ -128,6 +128,38 @@ namespace stl {
         static type value;
     };
 
+    //是否为void类型
+    template<class T>
+    class is_void_type {
+    public:
+        typedef typename stl::value_type<stl::is_same<T, void>::value>::type type;
+        static type value;
+    };
+
+    //判断T是引用还是指针
+    template<class T>
+    class is_type {
+    public:
+        static void* execute(const T& u) { return new T{ u }; };
+        static auto _cast(void*& u) { return *static_cast<T*>(u); };
+    };
+
+    template<>
+    class is_type<void> {
+    public:
+        static void execute(void* u) { return; };
+        static void _cast(void*& u) { return; };
+    };
+
+    template<class T>
+    class is_type<T*> {
+    public:
+        static void* execute(T*& u) { return u; };;
+        static auto _cast(void*& u) { return static_cast<T*>(u); };
+    };
+
+
+
 
     //基本数据类型和指针类型-其他引用类型  常用于初始化
     template<bool T>

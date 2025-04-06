@@ -34,6 +34,10 @@ template.h
 
 ../include/stl/construct.h
 
+../include/stl/function.h
+bind.h
+../include/stl/bind.h
+
 ../include/stl/list.h
 
 ../include/stl/queue.h
@@ -133,6 +137,8 @@ functional
 -
 stl/bind.h
 /home/develop/Project/Socket_Sever/src/stl/bind.h
+stl/function.h
+/home/develop/Project/Socket_Sever/src/stl/function.h
 stl/thread.h
 /home/develop/Project/Socket_Sever/src/stl/thread.h
 stl/string.h

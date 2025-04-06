@@ -12,6 +12,7 @@
 #include <functional>
 
 #include "stl/bind.h"
+#include "stl/function.h"
 #include "stl/thread.h"
 #include "stl/string.h"
 #include "stl/queue.h"
@@ -31,24 +32,37 @@ class myclass {
 public:
     int a = 10;
 
+    myclass() {};
     myclass(int b) {
         a = b;
     }
 };
 
 
-void ABC(int a, myclass b, int c,std::string d) {
+void ABC1(int a, myclass b, int c, std::string d) {
 
     std::cout << "a " << a << " b " << b.a << " c " << c << " d " << d << std::endl;
 }
 
+int ABC2(int a,int b) {
+
+    std::cout << a+b << std::endl;
+    //return new int(100);
+    //return 1001;
+    return a+b;
+}
+
+int ABC3() {
+}
+
 int main() {
 
-    stl::string str = "123 321";
-    stl::string str2 = str.substr(' ');
-    std::cout << str2 << std::endl;
+    using eve = stl::function<int(int)>;
+    
 
-    stl::Thread thread(ABC, 10, myclass(10000), 30, "321");
+
+
+
 
 
 

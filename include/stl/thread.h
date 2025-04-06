@@ -83,16 +83,23 @@ namespace stl {
         };
     };
 
-    class ThreadSimple {
+    class thread {
     public:
         pthread_t tid;
         template<class T, class... Args>
-        ThreadSimple(T* _fun, Args... _args) {
+        thread(T* _fun, Args... _args) {
             ThreadSimpleTemp<T, Args...>* temp = new  ThreadSimpleTemp<T, Args...>(_fun, _args...);
             static constexpr int size = sizeof...(Args) - 1;
             void* (*runtime_init)(void*) = &ThreadTemp<typename AssistedQueue<size>::QueueData>::template run<T, Args...>;
             pthread_create(&tid, nullptr, runtime_init, temp);
             pthread_detach(tid);
+        };
+
+        void join() {
+            int result = pthread_join(tid, nullptr);
+            if (result != 0) {
+                throw std::runtime_error("Failed to join thread");
+            }
         };
     };
 

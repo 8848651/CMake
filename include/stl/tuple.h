@@ -14,6 +14,7 @@ namespace stl {
         TupleBase<U...> base;
         TupleBase() {}
         TupleBase(T _data, U... _base) : data(_data), base(_base...) {}
+        TupleBase(const TupleBase<U...>& _base) : data(_base.data), base(_base.base) {}
     };
 
     template<class T>
@@ -24,6 +25,7 @@ namespace stl {
         T data;
         TupleBase() {}
         TupleBase(T _data) : data(_data) {}
+        TupleBase(const TupleBase<T>& _base) : data(_base.data) {}
     };
 
     //-------------------------------------------------------------------------
@@ -77,6 +79,7 @@ namespace stl {
         TupleBase<Types...> base;
         Tuple() {};
         Tuple(Types... args) : base(args...) {};
+        Tuple(const Tuple<Types...>& _base) : base(_base.base) {};
     };
 
 

@@ -107,13 +107,7 @@ namespace stl {
         }
 
         // Destructor to clean up nodes
-        ~list() { clear(); }
-
-        // Iterator to begin
-        iterator begin() { return *this->begin; }
-
-        // Iterator to end
-        iterator end() { return *this->end; }
+        ~list() { clear(); };
 
     };
 

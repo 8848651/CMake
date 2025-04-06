@@ -44,14 +44,18 @@ namespace stl {
     class bind_assisted<IntList<Is...>> {
     public:
         template<class T, class... M, class... N>
-        static void run(T* _func, Tuple<M...>& _data, Tuple<N...>& _args) {
+        static auto run(T* _func, Tuple<M...>& _data, Tuple<N...>& _args) {
+            static constexpr int _size_args = sizeof...(N) - 1;
+            static constexpr int _size_data = sizeof...(M) - 1;
+            constexpr int a = stl::TupleFindType<_size_data, stl::placeholders>::find(_data.base);
+            static_assert(_size_args != a, "入参和占位符数量不匹配");
             Tuple<decltype(bind_assisted_helper<Is>::_test(_data, _args))...> _args_tmp(bind_assisted_helper<Is>::_test(_data, _args)...);
-            _func(TupleFindElement<Is>::find(_args_tmp.base)...);
+            return _func(TupleFindElement<Is>::find(_args_tmp.base)...);
         };
 
         template<class T, class... M>
-        static void run(T* _func, Tuple<M...>& _data) {
-            _func(TupleFindElement<Is>::find(_data.base)...);
+        static auto run(T* _func, Tuple<M...>& _data) {
+            return _func(TupleFindElement<Is>::find(_data.base)...);
         };
 
 
@@ -64,22 +68,35 @@ namespace stl {
         Tuple<Args...> _data;
         static constexpr int _size = sizeof...(Args) - 1;
         anybind(T* func, Args... args) : _func(func), _data(args...) {};
+        anybind(const anybind& other) : _func(other._func), _data(other._data) {};
 
         template<class... U>
         auto operator()(U... args) {
             Tuple<U...> _args(args...);
-            bind_assisted<class AssistedQueue<_size>::QueueData>::run(_func, _data, _args);
+            return bind_assisted<class AssistedQueue<_size>::QueueData>::run(_func, _data, _args);
+        };
+
+        template<class... U>
+        auto operator()(Tuple<U...>& _args) {
+            return bind_assisted<class AssistedQueue<_size>::QueueData>::run(_func, _data, _args);
         };
 
         auto operator()() {
-            bind_assisted<class AssistedQueue<_size>::QueueData>::run(_func, _data);
+            return bind_assisted<class AssistedQueue<_size>::QueueData>::run(_func, _data);
         };
+
     };
 
     template<class T, class... Args>
     auto bind(T* func, Args... args) {
         return anybind<T, Args...>(func, args...);
     };
+
+    template<class T>
+    auto bind(T* func) {
+        return func;
+    };
+
 
 
 
