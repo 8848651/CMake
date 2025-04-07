@@ -44,12 +44,12 @@ void ABC1(int a, myclass b, int c, std::string d) {
     std::cout << "a " << a << " b " << b.a << " c " << c << " d " << d << std::endl;
 }
 
-int ABC2(int a,int b) {
+void ABC2(int a,int b) {
 
     std::cout << a+b << std::endl;
     //return new int(100);
     //return 1001;
-    return a+b;
+    //return a+b;
 }
 
 int ABC3() {
@@ -57,8 +57,9 @@ int ABC3() {
 
 int main() {
 
-    using eve = stl::function<int(int)>;
-    
+    using ABC = stl::function_bind<void(void)>;
+    ABC abc = stl::bind(ABC2, 10, 20);
+    abc();
 
 
 

@@ -2,12 +2,16 @@
 #include "bind.h"
 namespace stl {
 
-    
+
     template<class T>
     class callbase_function;
 
     template<bool T>
     class callbase_function_;
+
+    template<class T>
+    class function_lambda_ptr_helper;
+
 
     template<>
     class callbase_function_<true> {
@@ -81,11 +85,11 @@ namespace stl {
 
     template<class T>
     class function_fun<false, T> {
-    public:        
-          template<class... M>
-          static auto execute() {
-              return callbase_function<stl::anybind<M...>>::template call_2<T>;
-          }
+    public:
+        template<class... M>
+        static auto execute() {
+            return callbase_function<stl::anybind<M...>>::template call_2<T>;
+        }
     };
 
     template<class T>
@@ -105,7 +109,7 @@ namespace stl {
         template<class... M>
         function_bind(const stl::anybind<M...>& bind) {
             this->_data = new callbase_function<stl::anybind<M...>>(bind);
-            this->fun=stl::function_fun<_size, T, U...>::template execute<M...>();
+            this->fun = stl::function_fun<_size, T, U...>::template execute<M...>();
         };
 
         template<class... M>
@@ -117,11 +121,146 @@ namespace stl {
         };
 
         T operator()() {
-            void* _temp = fun(_data,nullptr);
+            void* _temp = fun(_data, nullptr);
             return is_type<T>::_cast(_temp);
         };
 
     };
+
+
+
+    //-----------------------------------------------------------------------------------------
+    //function_lambda_ptr
+    template<int... Is>
+    class function_lambda_ptr_helper<IntList<Is...>> {
+    public:
+        template<class T, class M, class... Args>
+        static void* execute(M& lambda_ptr, Tuple<Args...>& args) {
+            constexpr bool is_same_1 = stl::is_same<T, decltype(lambda_ptr(stl::TupleFindElement<Is>::find(args.base)...))>::value;
+            static_assert(!is_same_1, "返回值类型不匹配");
+            constexpr bool is_same_2 = stl::is_same<T, void>::value;
+            return stl::is_type<T>::execute(lambda_ptr(stl::TupleFindElement<Is>::find(args.base)...));
+        };
+
+        template<class T, class M>
+        static void* execute(M& lambda_ptr)  };
+    };
+
+    template<class M>
+    class function_lambda_ptr {
+    public:
+        M _lambda_ptr;
+
+        function_lambda_ptr(const M& _lambda_ptr) : _lambda_ptr(_lambda_ptr) {};
+
+        template<class T, class... U>
+        static void* call_1(void* data, void* args) {
+            static constexpr int _size = sizeof...(U) - 1;
+            Tuple<U...>* _args = static_cast<Tuple<U...>*>(args);
+            function_lambda_ptr<M>* _ptr = static_cast<function_lambda_ptr<M>*>(data);
+            return function_lambda_ptr_helper<typename AssistedQueue<_size>::QueueData>::template execute<T, M, U...>(_ptr->_lambda_ptr, *_args);
+        };
+
+        template<class T, class... U>
+        static void* call_2(void* data, void* args) {
+            function_lambda_ptr<M>* _ptr = static_cast<function_lambda_ptr<M>*>(data);
+            return function_lambda_ptr_helper<typename AssistedQueue<7>::QueueData>::template execute<T, M>(_ptr->_lambda_ptr);
+        };
+
+    };
+
+    template<bool B, class T, class... U>
+    class function_lam {
+    public:
+        template<class M>
+        static auto execute() {
+            return function_lambda_ptr<M>::template call_1<T, U...>;
+        }
+    };
+
+    template<class T, class... U>
+    class function_lam<false, T, U...> {
+    public:
+        template<class M>
+        static auto execute() {
+            return function_lambda_ptr<M>::template call_2<T, U...>;
+        }
+    };
+
+    template<class T, class... U>
+    class function_lambda {
+    public:
+        static constexpr int _size = sizeof...(U);
+    public:
+        void* _data = nullptr;
+        void* (*fun)(void*, void*) = nullptr;
+
+
+        function_lambda() : _data(nullptr), fun(nullptr) {};
+        template<class M>
+        function_lambda(const M& lambda_ptr) {
+            this->_data = new function_lambda_ptr<M>(lambda_ptr);
+            this->fun = stl::function_lam<_size, T, U...>::template execute<M>();
+        };
+
+
+        T operator()(U... args) {
+            if (_size == 0) {
+                void* _temp = fun(_data, nullptr);
+                return is_type<T>::_cast(_temp);
+            }
+            Tuple<U...>* _args = new Tuple<U...>(args...);
+            void* _temp = fun(_data, _args);
+            delete _args;
+            return is_type<T>::_cast(_temp);
+        };
+
+    };
+
+    // template<class T>
+    // class function;
+
+    // template<class T, class... U>
+    // class function<T(U...)> {
+    // public:
+    //     using _bind = function_bind<T, U...>;
+
+    // public:
+    //     static constexpr int _size = sizeof...(U);
+    //     bool is_bind = false;
+    //     _bind* _bind_ptr = nullptr;
+    //     _lambda_ptr_base* _lambda_ptr = nullptr;
+
+    //     function() : _bind_ptr(nullptr), _lambda_ptr(nullptr) {};
+    //     template<class... M>
+    //     function(const stl::anybind<M...>& bind) :_bind_ptr(new _bind(bind)), is_bind(true) {};
+    //     template<class M>
+    //     function(const M& lambda_ptr) {
+    //         this->_lambda_pt = new function_lambda_ptr<_size, T, M, U...>(lambda_ptr);
+    //     };
+
+    //     T operator()(U... args) {
+    //         //如果是绑定函数
+    //         if (is_bind) { return (*_bind_ptr)(args...); }
+    //         //如果没有参数
+    //         if (_size == 0) { return (*_lambda_ptr)(); }
+    //         Tuple<U...>* _args = new Tuple<U...>(args...);
+    //         void* _temp = (*_lambda_ptr)(_args);
+    //         delete _args;
+    //         //如果返回值是void,说明没有返回值
+    //         if (_temp == nullptr) { return; }
+    //         return (*_lambda_ptr)(_args);
+    //     };
+
+    //     ~function() {
+    //         if (is_bind) {
+    //             delete _bind_ptr;
+    //         }
+    //         else {
+    //             delete _lambda_ptr;
+    //         }
+    //     }
+    // };
 
 
 }

@@ -159,8 +159,6 @@ namespace stl {
     };
 
 
-
-
     //基本数据类型和指针类型-其他引用类型  常用于初始化
     template<bool T>
     class void_type;
