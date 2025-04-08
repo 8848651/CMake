@@ -27,88 +27,55 @@
 
 using namespace std;
 using namespace stl;
+#include <iostream>
+#include <functional>
 
-class myclass {
-public:
-    int a = 10;
+template<typename T>
+using MyFunction = stl::function<T>; 
 
-    myclass() {};
-    myclass(int b) {
-        a = b;
-    }
-};
+// 函数指针
+int func_int_ret(int x) { return x + 1; }
+int func_void_param() { return 42; }
+void func_void_ret(int x) { std::cout << "Value: " << x << std::endl; }
 
+// 带有状态的lambda
+auto lambda_int_ret = [](int x) -> int { return x * 2; };
+auto lambda_void_param = []() -> int { return 123; };
+auto lambda_void_ret = [](int x) { std::cout << "Lambda print: " << x << std::endl; };
 
-void ABC1(int a, myclass b, int c, std::string d) {
-
-    std::cout << "a " << a << " b " << b.a << " c " << c << " d " << d << std::endl;
-}
-
-void ABC2(int a, int b) {
-
-    std::cout << a + b << std::endl;
-    //return new int(100);
-    //return 1001;
-    //return a+b;
-}
-
-void ABC3(int a) {
-    std::cout << "ABC3 " << a << std::endl;
-}
+// 用于bind测试的普通函数
+int bind_target(int x) { return x + 10; }
+int bind_no_param() { return 2025; }
+void bind_void_ret(int x) { std::cout << "Bind void ret: " << x << std::endl; }
 
 int main() {
+    // 函数指针
+    MyFunction<int(int)> f1 = func_int_ret;
+    MyFunction<int()> f2 = func_void_param;
+    MyFunction<void(int)> f3 = func_void_ret;
+
+    std::cout << "f1(10) = " << f1(10) << std::endl;
+    std::cout << "f2() = " << f2() << std::endl;
+    f3(99);
+
+    // lambda 表达式
+    MyFunction<int(int)> l1 = lambda_int_ret;
+    MyFunction<int()> l2 = lambda_void_param;
+    MyFunction<void(int)> l3 = lambda_void_ret;
+
+    std::cout << "l1(5) = " << l1(5) << std::endl;
+    std::cout << "l2() = " << l2() << std::endl;
+    l3(123);
 
 
+    // std::bind
+    MyFunction<int(int)> b1 = stl::bind(bind_target, stl::placeholders::_1);
+    MyFunction<int()> b2 = stl::bind(bind_no_param);
+    MyFunction<void(int)> b3 = stl::bind(bind_void_ret, stl::placeholders::_1);
 
+    std::cout << "b1(7) = " << b1(7) << std::endl;
+    std::cout << "b2() = " << b2() << std::endl;
+    b3(456);
 
-
-
-
-
-
-
-
-
-    // std::cout<<"300"<<std::endl;
-    // auto temp = bind(ABC, 10, stl::placeholders::_1, 30, stl::placeholders::_2);
-    // temp(myclass(10000), "321");
-
-    //std::thread t(ABC, 10, myclass(10000), 30, "321");
-    //std::bind(ABC, 10, myclass(10000), 30, "321");
-    //tt
-
-
-
-
-
-    // int lfd = socket(AF_INET, SOCK_STREAM, 0);
-    // struct sockaddr_in addr;
-    // addr.sin_family = AF_INET;
-    // addr.sin_port = htons(10000);
-    // addr.sin_addr.s_addr = inet_addr("0.0.0.0");
-    // bind(lfd, (struct sockaddr*)&addr, sizeof(addr));
-    // listen(lfd, 128);
-    // stl::vector<int> socket_cfd(100);
-    // int client_num = 0;
-    // ThreadPool pool;
-    // while (1) {
-
-    //     struct sockaddr_in cliaddr;
-    //     int clilen = sizeof(cliaddr);
-    //     int cfd = accept(lfd, (struct sockaddr*)&cliaddr, (socklen_t*)&clilen);
-    //     cout << "有一个客户端连接" << endl;
-    //     socket_cfd.push_back(cfd);
-    //     connectionstruct* conn_struct = new connectionstruct;
-    //     conn_struct->cfd = cfd;
-    //     conn_struct->client_id = socket_cfd;
-    //     //stl::Thread thread(project::Connection_Http_Test, cfd);
-    //     pool.submit(project::Connection_Http_Test, cfd);
-
-    //     client_num++;
-    //     if (client_num > 10) {
-    //         cout << "连接数超过限制" << endl;
-    //         break;
-    //     }
-    // }
-    // close(lfd);
+    return 0;
 }

@@ -233,6 +233,11 @@ namespace stl {
 
 
         function_lambda() : _data(nullptr), fun(nullptr) {};
+        template<class... M>
+        function_lambda(const stl::anybind<M...>& bind) {
+            this->_data = new function_lambda_ptr<stl::anybind<M...>>(bind);
+            this->fun = stl::function_lam<_size, T, U...>::template execute<stl::anybind<M...>>();
+        };
         template<class M>
         function_lambda(const M& lambda) {
             this->_data = new function_lambda_ptr<M>(lambda);
@@ -260,50 +265,45 @@ namespace stl {
 
     };
 
-    // template<class T>
-    // class function;
+    //-----------------------------------------------------------------------------------------
+    //function
 
-    // template<class T, class... U>
-    // class function<T(U...)> {
-    // public:
-    //     using _bind = function_bind<T, U...>;
+    template<class T>
+    class function;
 
-    // public:
-    //     static constexpr int _size = sizeof...(U);
-    //     bool is_bind = false;
-    //     _bind* _bind_ptr = nullptr;
-    //     _lambda_ptr_base* _lambda_ptr = nullptr;
+    template<class T, class... U>
+    class function<T(U...)> {
+    public:
+        using _bind = function_bind<T(U...)>;
+        using _lambda = function_lambda<T(U...)>;
+    public:
+        bool is_bind = false;
+        _bind* _bind_ptr = nullptr;
+        _lambda* _lambda_ptr = nullptr;
 
-    //     function() : _bind_ptr(nullptr), _lambda_ptr(nullptr) {};
-    //     template<class... M>
-    //     function(const stl::anybind<M...>& bind) :_bind_ptr(new _bind(bind)), is_bind(true) {};
-    //     template<class M>
-    //     function(const M& lambda_ptr) {
-    //         this->_lambda_pt = new function_lambda_ptr<_size, T, M, U...>(lambda_ptr);
-    //     };
+        function() : _bind_ptr(nullptr), _lambda_ptr(nullptr) {};
+        template<class... M>
+        function(const stl::anybind<M...>& bind) :_bind_ptr(new _bind(bind)), is_bind(true) {};
+        template<class M>
+        function(const M& lambda_ptr) : _lambda_ptr(new _lambda(lambda_ptr)) {};
+        template<class M>
+        function(M* lambda_ptr) : _lambda_ptr(new _lambda(lambda_ptr)) {};
 
-    //     T operator()(U... args) {
-    //         //如果是绑定函数
-    //         if (is_bind) { return (*_bind_ptr)(args...); }
-    //         //如果没有参数
-    //         if (_size == 0) { return (*_lambda_ptr)(); }
-    //         Tuple<U...>* _args = new Tuple<U...>(args...);
-    //         void* _temp = (*_lambda_ptr)(_args);
-    //         delete _args;
-    //         //如果返回值是void,说明没有返回值
-    //         if (_temp == nullptr) { return; }
-    //         return (*_lambda_ptr)(_args);
-    //     };
+        T operator()(U... args) {
+            //如果是绑定函数
+            if (is_bind) { return (*_bind_ptr)(args...); }
+            return (*_lambda_ptr)(args...);
+        };
 
-    //     ~function() {
-    //         if (is_bind) {
-    //             delete _bind_ptr;
-    //         }
-    //         else {
-    //             delete _lambda_ptr;
-    //         }
-    //     }
-    // };
+        ~function() {
+            if (is_bind) {
+                delete _bind_ptr;
+            }
+            else {
+                delete _lambda_ptr;
+            }
+        }
+    };
 
 
 }
