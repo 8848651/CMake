@@ -3,16 +3,15 @@
 namespace stl {
 
 
+    //bind和lambda一样，都是对包装并在包装选择执行
+
     template<class T>
     class callbase_function;
 
     template<bool T>
     class callbase_function_;
 
-    template<class T>
-    class function_lambda_ptr_helper;
-
-
+    //anybind执行类
     template<>
     class callbase_function_<true> {
     public:
@@ -46,7 +45,7 @@ namespace stl {
     };
 
 
-    //anybind版本
+    //anybind包装类
     template<class... T>
     class callbase_function<stl::anybind<T...>> {
     public:
@@ -131,21 +130,53 @@ namespace stl {
 
     //-----------------------------------------------------------------------------------------
     //function_lambda_ptr
+    template<bool B, class T>
+    class function_lambda_ptr_helper;
+
+    //lambda执行类
     template<int... Is>
-    class function_lambda_ptr_helper<IntList<Is...>> {
+    class function_lambda_ptr_helper<true, IntList<Is...>> {
+    public:
+        //有参
+        template<class T, class M, class... Args>
+        static void* execute(M& lambda_ptr, Tuple<Args...>& args) {
+            constexpr bool is_same_1 = stl::is_same<T, decltype(lambda_ptr(stl::TupleFindElement<Is>::find(args.base)...))>::value;
+            static_assert(is_same_1, "返回值类型不匹配");
+            lambda_ptr(stl::TupleFindElement<Is>::find(args.base)...);
+            return nullptr;
+        };
+
+        //无参
+        template<class T, class M>
+        static void* execute(M& lambda_ptr) {
+            constexpr bool is_same_1 = stl::is_same<T, decltype(lambda_ptr())>::value;
+            static_assert(is_same_1, "返回值类型不匹配");
+            lambda_ptr();
+            return nullptr;
+        };
+    };
+
+    //有返回值
+    template<int... Is>
+    class function_lambda_ptr_helper<false, IntList<Is...>> {
     public:
         template<class T, class M, class... Args>
         static void* execute(M& lambda_ptr, Tuple<Args...>& args) {
             constexpr bool is_same_1 = stl::is_same<T, decltype(lambda_ptr(stl::TupleFindElement<Is>::find(args.base)...))>::value;
-            static_assert(!is_same_1, "返回值类型不匹配");
-            constexpr bool is_same_2 = stl::is_same<T, void>::value;
+            static_assert(is_same_1, "返回值类型不匹配");
             return stl::is_type<T>::execute(lambda_ptr(stl::TupleFindElement<Is>::find(args.base)...));
         };
 
         template<class T, class M>
-        static void* execute(M& lambda_ptr)  };
+        static void* execute(M& lambda_ptr) {
+            constexpr bool is_same_1 = stl::is_same<T, decltype(lambda_ptr())>::value;
+            static_assert(is_same_1, "返回值类型不匹配");
+            return stl::is_type<T>::execute(lambda_ptr());
+        };
     };
 
+
+    //lambda包装类
     template<class M>
     class function_lambda_ptr {
     public:
@@ -154,17 +185,19 @@ namespace stl {
         function_lambda_ptr(const M& _lambda_ptr) : _lambda_ptr(_lambda_ptr) {};
 
         template<class T, class... U>
-        static void* call_1(void* data, void* args) {
-            static constexpr int _size = sizeof...(U) - 1;
+        static void* call_1(void* obj, void* args) {
+            function_lambda_ptr<M>* data = static_cast<function_lambda_ptr<M>*>(obj);
             Tuple<U...>* _args = static_cast<Tuple<U...>*>(args);
-            function_lambda_ptr<M>* _ptr = static_cast<function_lambda_ptr<M>*>(data);
-            return function_lambda_ptr_helper<typename AssistedQueue<_size>::QueueData>::template execute<T, M, U...>(_ptr->_lambda_ptr, *_args);
+            static constexpr int _size = sizeof...(U) - 1;
+            constexpr bool is_same_2 = stl::is_same<T, void>::value;
+            return function_lambda_ptr_helper<is_same_2, typename AssistedQueue<_size>::QueueData>::template execute<T, M, U...>(data->_lambda_ptr, *_args);
         };
 
-        template<class T, class... U>
-        static void* call_2(void* data, void* args) {
-            function_lambda_ptr<M>* _ptr = static_cast<function_lambda_ptr<M>*>(data);
-            return function_lambda_ptr_helper<typename AssistedQueue<7>::QueueData>::template execute<T, M>(_ptr->_lambda_ptr);
+        template<class T>
+        static void* call_2(void* obj, void* args) {
+            function_lambda_ptr<M>* data = static_cast<function_lambda_ptr<M>*>(obj);
+            constexpr bool is_same_2 = stl::is_same<T, void>::value;
+            return function_lambda_ptr_helper<is_same_2, typename AssistedQueue<7>::QueueData>::template execute<T, M>(data->_lambda_ptr);
         };
 
     };
@@ -183,12 +216,15 @@ namespace stl {
     public:
         template<class M>
         static auto execute() {
-            return function_lambda_ptr<M>::template call_2<T, U...>;
+            return function_lambda_ptr<M>::template call_2<T>;
         }
     };
 
+    template<class T>
+    class function_lambda;
+
     template<class T, class... U>
-    class function_lambda {
+    class function_lambda<T(U...)> {
     public:
         static constexpr int _size = sizeof...(U);
     public:
@@ -198,20 +234,27 @@ namespace stl {
 
         function_lambda() : _data(nullptr), fun(nullptr) {};
         template<class M>
-        function_lambda(const M& lambda_ptr) {
-            this->_data = new function_lambda_ptr<M>(lambda_ptr);
+        function_lambda(const M& lambda) {
+            this->_data = new function_lambda_ptr<M>(lambda);
             this->fun = stl::function_lam<_size, T, U...>::template execute<M>();
         };
 
+        template<class M>
+        function_lambda(M* ptr) {
+            this->_data = new function_lambda_ptr<M*>(ptr);
+            this->fun = stl::function_lam<_size, T, U...>::template execute<M*>();
+        };
 
-        T operator()(U... args) {
-            if (_size == 0) {
-                void* _temp = fun(_data, nullptr);
-                return is_type<T>::_cast(_temp);
-            }
-            Tuple<U...>* _args = new Tuple<U...>(args...);
+        template<class... M>
+        T operator()(M... args) {
+            Tuple<M...>* _args = new Tuple<M...>(args...);
             void* _temp = fun(_data, _args);
             delete _args;
+            return is_type<T>::_cast(_temp);
+        };
+
+        T operator()() {
+            void* _temp = fun(_data, nullptr);
             return is_type<T>::_cast(_temp);
         };
 
