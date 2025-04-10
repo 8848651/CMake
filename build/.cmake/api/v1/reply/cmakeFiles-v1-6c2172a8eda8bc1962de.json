@@ -165,8 +165,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/develop/Project/Socket_Sever/build",
-		"source" : "/home/develop/Project/Socket_Sever"
+		"build" : "/workspaces/CMake/build",
+		"source" : "/workspaces/CMake"
 	},
 	"version" : 
 	{

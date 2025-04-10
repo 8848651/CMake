@@ -12,6 +12,37 @@ namespace stl {
     //3:constexpr类型初始化后无法改变的，可以通过is_nmber_minus将数转为类型，再将类型转为数实现
     //4:在使用三目运算符时后面两个类型必须是相同的，否则会出现编译错误，可以使用if constexpr,C++11没有可以使用ConditionalDispatcher代替
 
+
+    template<class T, class... Args>
+    class anybind;
+
+    template<class T,class MyClass, class... Args>
+    class anybind_class;
+
+    template<class T,class...U, class... Args>
+    auto bind(T(*func)(U...), Args... args) {
+        return anybind<T(U...), Args...>(func, args...);
+    };
+
+    template<class T>
+    auto bind(T(*func)()) {
+        return func;
+    };
+
+    template<class T,class...U,class MyClass, class... Args>
+    auto bind(T(MyClass::*func)(U...), MyClass* ptr,Args... args) {
+        return anybind_class<T(MyClass::*)(U...),MyClass,Args...>(func,ptr,args...);
+    };
+
+    //类方法指针和普通函数不一样，不能退化为指针，使用就必须解引用
+    template<class T,class MyClass>
+    auto bind(T(MyClass::*func)(), MyClass* ptr) {
+        return anybind_class<T(MyClass::*)(),MyClass>(func,ptr);
+    };
+
+
+    //--------------------------------------------------------------------------------------
+
     enum class placeholders {
         _1, _2, _3, _4, _5, _6, _7, _8, _9, _10
     };
@@ -87,16 +118,74 @@ namespace stl {
 
     };
 
-    template<class T, class... Args>
-    auto bind(T* func, Args... args) {
-        return anybind<T, Args...>(func, args...);
+    //--------------------------------------------------------------------------------------
+
+
+    template<class U>
+    class bind_assisted_class;
+
+    template<int... Is>
+    class bind_assisted_class<IntList<Is...>> {
+    public:
+        template<class T,class MyClass, class... M, class... N>
+        static auto run(T _func, MyClass* _ptr,Tuple<M...>& _data, Tuple<N...>& _args) {
+            static constexpr int _size_args = sizeof...(N) - 1;
+            static constexpr int _size_data = sizeof...(M) - 1;
+            constexpr int a = stl::TupleFindType<_size_data, stl::placeholders>::find(_data.base);
+            static_assert(_size_args != a, "入参和占位符数量不匹配");
+            Tuple<decltype(bind_assisted_helper<Is>::_test(_data, _args))...> _args_tmp(bind_assisted_helper<Is>::_test(_data, _args)...);
+            return (_ptr->*_func)(TupleFindElement<Is>::find(_args_tmp.base)...);
+        };
+
+        template<class T,class MyClass, class... M>
+        static auto run(T* _func, MyClass* _ptr,Tuple<M...>& _data) {
+            return (_ptr->*_func)(TupleFindElement<Is>::find(_data.base)...);
+        };
+
+
     };
 
-    template<class T>
-    auto bind(T* func) {
-        return func;
+    //注意类方法无法用T*接收
+    template<class T,class MyClass,class... Args>
+    class anybind_class{
+    public:
+        T _func;
+        MyClass* _ptr;
+        Tuple<Args...> _data;
+        static constexpr int _size = sizeof...(Args) - 1;
+        anybind_class(T func,MyClass* ptr, Args... args) : _func(func),_ptr(ptr), _data(args...) {};
+        anybind_class(const anybind_class& other):_func(other._func),_ptr(other._ptr),_data(other._data){};
+
+        template<class... U>
+        auto operator()(U... args) {
+            Tuple<U...> _args(args...);
+            return bind_assisted_class<class AssistedQueue<_size>::QueueData>::run(_func,_ptr, _data, _args);
+        };
+
+        template<class... U>
+        auto operator()(Tuple<U...>& _args) {
+            return bind_assisted_class<class AssistedQueue<_size>::QueueData>::run(_func,_ptr, _data, _args);
+        };
+
+        auto operator()() {
+            return bind_assisted_class<class AssistedQueue<_size>::QueueData>::run(_func,_ptr, _data);
+        };
+
     };
 
+    template<class T,class MyClass>
+    class anybind_class<T,MyClass>{
+    public:
+        T _func;
+        MyClass* _ptr;
+        anybind_class(T func,MyClass* ptr) : _func(func),_ptr(ptr){};
+        anybind_class(const anybind_class& other):_func(other._func),_ptr(other._ptr){};
+
+        auto operator()() {
+            return (_ptr->*_func)();
+        };
+
+    };
 
 
 

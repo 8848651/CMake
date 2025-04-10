@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/develop/Project/Socket_Sever/build"
+			"value" : "/workspaces/CMake/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -643,7 +643,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/develop/Project/Socket_Sever"
+			"value" : "/workspaces/CMake"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1182,54 +1182,6 @@
 			"value" : "[TRUE][v()]"
 		},
 		{
-			"name" : "Project_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever/build"
-		},
-		{
-			"name" : "Project_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever"
-		},
-		{
-			"name" : "Sever_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever/build"
-		},
-		{
-			"name" : "Sever_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever"
-		},
-		{
 			"name" : "Socket_Sever_BINARY_DIR",
 			"properties" : 
 			[
@@ -1239,7 +1191,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever/build"
+			"value" : "/workspaces/CMake/build"
 		},
 		{
 			"name" : "Socket_Sever_SOURCE_DIR",
@@ -1251,31 +1203,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever"
-		},
-		{
-			"name" : "make_test_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever/build"
-		},
-		{
-			"name" : "make_test_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/develop/Project/Socket_Sever"
+			"value" : "/workspaces/CMake"
 		}
 	],
 	"kind" : "cache",

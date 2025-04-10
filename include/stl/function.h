@@ -114,6 +114,12 @@ namespace stl {
             this->_data = new function_wrapper_ptr<stl::anybind<M...>>(bind);
             this->fun = stl::function_base_ptr<_size, T, U...>::template execute<stl::anybind<M...>>();
         };
+        //自定义stl::bind_class
+        template<class... M>
+        function_base(const stl::anybind_class<M...>& bind) {
+            this->_data = new function_wrapper_ptr<stl::anybind_class<M...>>(bind);
+            this->fun = stl::function_base_ptr<_size, T, U...>::template execute<stl::anybind_class<M...>>();
+        };
         //lambda表达式,std::bind
         template<class M>
         function_base(const M& lambda) {

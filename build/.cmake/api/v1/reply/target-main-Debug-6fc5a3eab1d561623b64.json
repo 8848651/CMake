@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/home/develop/Project/Socket_Sever/bin/main"
+			"path" : "/workspaces/CMake/bin/main"
 		}
 	],
 	"backtrace" : 1,
@@ -63,7 +63,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "/home/develop/Project/Socket_Sever/include"
+					"path" : "/workspaces/CMake/include"
 				}
 			],
 			"language" : "CXX",

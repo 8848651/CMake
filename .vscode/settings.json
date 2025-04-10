@@ -53,6 +53,7 @@
         "thread": "cpp",
         "typeinfo": "cpp",
         "cassert": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "cinttypes": "cpp"
     }
 }
