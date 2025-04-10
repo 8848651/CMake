@@ -6,6 +6,30 @@
 
 #IncludeRegexTransform: 
 
+../include/muduo/version_1/loop.h
+stdio.h
+-
+unistd.h
+-
+cstring
+-
+string.h
+-
+stdlib.h
+-
+errno.h
+-
+fcntl.h
+-
+netinet/in.h
+-
+sys/socket.h
+-
+sys/epoll.h
+-
+arpa/inet.h
+-
+
 ../include/project/connect.h
 string.h
 -
@@ -157,6 +181,8 @@ project/connect.h
 /workspaces/CMake/src/project/connect.h
 stl/brtree.h
 /workspaces/CMake/src/stl/brtree.h
+muduo/version_1/loop.h
+/workspaces/CMake/src/muduo/version_1/loop.h
 iostream
 -
 functional

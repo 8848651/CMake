@@ -22,6 +22,7 @@
 #include "stl/threadpool.h"
 #include "project/connect.h"
 #include "stl/brtree.h"
+#include "muduo/version_1/loop.h"
 
 
 
@@ -30,30 +31,10 @@ using namespace stl;
 #include <iostream>
 #include <functional>
 
-template<typename T>
-using MyFunction = stl::function<T>; 
-
-class myclass{
-public:
-    int x=1;
-    void test(int a,int b,int c){
-        std::cout<<x<<std::endl;
-        std::cout<<a<<std::endl;
-        std::cout<<b<<std::endl;
-        std::cout<<c<<std::endl;
-    }
-
-
-};
-
 
 int main() {
 
-
-    myclass a;
-    auto tt=stl::bind(&myclass::test,&a,10,stl::placeholders::_1,300);
-    tt(30);
-
+    test();
 
 
     return 0;
