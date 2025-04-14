@@ -6,7 +6,13 @@
 
 #IncludeRegexTransform: 
 
-../include/muduo/version_1/loop.h
+../include/muduo/version_3/channel.h
+stl/function.h
+../include/muduo/version_3/stl/function.h
+
+../include/muduo/version_3/loop.h
+channel.h
+../include/muduo/version_3/channel.h
 stdio.h
 -
 unistd.h
@@ -29,6 +35,34 @@ sys/epoll.h
 -
 arpa/inet.h
 -
+
+../include/muduo/version_3/version.h
+stdio.h
+-
+unistd.h
+-
+cstring
+-
+string.h
+-
+stdlib.h
+-
+errno.h
+-
+fcntl.h
+-
+netinet/in.h
+-
+sys/socket.h
+-
+sys/epoll.h
+-
+arpa/inet.h
+-
+channel.h
+../include/muduo/version_3/channel.h
+loop.h
+../include/muduo/version_3/loop.h
 
 ../include/project/connect.h
 string.h
@@ -181,8 +215,8 @@ project/connect.h
 /workspaces/CMake/src/project/connect.h
 stl/brtree.h
 /workspaces/CMake/src/stl/brtree.h
-muduo/version_1/loop.h
-/workspaces/CMake/src/muduo/version_1/loop.h
+muduo/version_3/version.h
+/workspaces/CMake/src/muduo/version_3/version.h
 iostream
 -
 functional

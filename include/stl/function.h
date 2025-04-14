@@ -147,7 +147,9 @@ namespace stl {
         };
 
         ~function_base() {
-            delete _data;
+            if (_data != nullptr) {
+                delete _data;
+            }
         }
 
     };
@@ -168,6 +170,8 @@ namespace stl {
         function(const function& other) : _fun(other._fun), _number(other._number) { *_number += 1; };
         template<class... M>
         function(const stl::anybind<M...>& bind) :_fun(new function_base<T(U...)>(bind)) {};
+        template<class... M>
+        function(const stl::anybind_class<M...>& bind) :_fun(new function_base<T(U...)>(bind)) {};
         template<class M>
         function(const M& lambda_ptr) : _fun(new function_base<T(U...)>(lambda_ptr)) {};
         template<class M>
