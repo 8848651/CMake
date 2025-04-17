@@ -90,6 +90,8 @@ namespace stl {
         thread(T* _fun, Args... _args) {
             ThreadSimpleTemp<T, Args...>* temp = new  ThreadSimpleTemp<T, Args...>(_fun, _args...);
             static constexpr int size = sizeof...(Args) - 1;
+            //*一个类方法如果是模版需要加上template
+            //静态  myclass::template fun<T> 非静态 myclass.template fun<T>
             void* (*runtime_init)(void*) = &ThreadTemp<typename AssistedQueue<size>::QueueData>::template run<T, Args...>;
             pthread_create(&tid, nullptr, runtime_init, temp);
             pthread_detach(tid);
