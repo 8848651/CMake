@@ -11,9 +11,7 @@
 #include <sys/epoll.h>
 #include <arpa/inet.h>
 #include <tcl8.6/tcl-private/compat/string.h>
-
 #include "channel.h"
-#include <version.h>
 
 int get_socket_fd(){
     struct sockaddr_in servaddr;

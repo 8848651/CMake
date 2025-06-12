@@ -22,7 +22,7 @@
 #include "stl/threadpool.h"
 #include "project/connect.h"
 #include "stl/brtree.h"
-#include "muduo/version_3/version.h"
+#include "muduo/version_4/version.h"
 
 
 
@@ -34,7 +34,7 @@ using namespace stl;
 
 int main() {
 
-    //test();
+    test();
 
 
     return 0;

@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/workspaces/CMake/build",
-  "command": "/usr/bin/g++   -I/workspaces/CMake/include  -g   -Wno-return-type -std=gnu++14 -o CMakeFiles/main.dir/src/main.cpp.o -c /workspaces/CMake/src/main.cpp",
-  "file": "/workspaces/CMake/src/main.cpp"
-}
-]

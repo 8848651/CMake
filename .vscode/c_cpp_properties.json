@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/include/stl",
-                "${workspaceFolder}/include/project"
+                "${workspaceFolder}/include/project",
+                "${workspaceFolder}/include/muduo"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
