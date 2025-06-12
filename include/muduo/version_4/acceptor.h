@@ -46,8 +46,8 @@ class acceptor {
         channel connect_channel;
 
     public:
-        acceptor():connect_channel(socketfd),socketfd(get_socket_fd()){
-            connect_channel.setReadCallback([this](){return acceptor::accepter();});
+        acceptor():socketfd(get_socket_fd()),connect_channel(socketfd){
+            connect_channel.setReadCallback([&](){acceptor::accepter();});
         };
         void accepter();
         void setReadCallback(EventCallback cb) { Callback_ = std::move(cb); }
