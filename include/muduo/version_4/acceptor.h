@@ -10,7 +10,7 @@
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <arpa/inet.h>
-#include <tcl8.6/tcl-private/compat/string.h>
+//#include <tcl8.6/tcl-private/compat/string.h>
 #include "channel.h"
 
 int get_socket_fd(){
