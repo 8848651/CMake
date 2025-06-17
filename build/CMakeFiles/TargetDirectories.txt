@@ -1,3 +1,3 @@
-/workspaces/CMake/build/CMakeFiles/rebuild_cache.dir
-/workspaces/CMake/build/CMakeFiles/edit_cache.dir
-/workspaces/CMake/build/CMakeFiles/main.dir
+/home/develop/Project/server/build/CMakeFiles/main.dir
+/home/develop/Project/server/build/CMakeFiles/edit_cache.dir
+/home/develop/Project/server/build/CMakeFiles/rebuild_cache.dir

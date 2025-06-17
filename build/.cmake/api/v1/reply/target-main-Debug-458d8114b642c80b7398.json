@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/workspaces/CMake/bin/main"
+			"path" : "/home/develop/Project/server/bin/main"
 		}
 	],
 	"backtrace" : 1,
@@ -49,24 +49,29 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g  "
+					"fragment" : "-g -std=gnu++14"
 				},
 				{
 					"backtrace" : 2,
 					"fragment" : "-Wno-return-type"
-				},
-				{
-					"fragment" : "-std=gnu++14"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 3,
-					"path" : "/workspaces/CMake/include"
+					"path" : "/home/develop/Project/server/include"
 				}
 			],
 			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "14"
+			},
 			"sourceIndexes" : 
 			[
 				0
@@ -85,10 +90,6 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lpthread",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"

@@ -10,6 +10,7 @@
 #include <vector>
 #include <thread>
 #include <functional>
+#include <sys/syscall.h>
 
 #include "stl/bind.h"
 #include "stl/function.h"
@@ -28,14 +29,18 @@
 
 using namespace std;
 using namespace stl;
-#include <iostream>
-#include <functional>
+
+void* test_1(void*) {
+    pid_t t_cachedTid = static_cast<pid_t>(::syscall(SYS_gettid));
+    printf("Thread ID: %d\n", t_cachedTid);
+    return nullptr;
+}
+
 
 
 int main() {
 
     test();
-
 
     return 0;
 }

@@ -17,7 +17,7 @@ int get_socket_fd(){
     struct sockaddr_in servaddr;
     memset(&servaddr, 0, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(8888);
+    servaddr.sin_port = htons(10000);
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -39,12 +39,11 @@ class acceptor {
         using EventCallback = std::function<void(int)>;
 
     public:
-        int socketfd;
         EventCallback Callback_;
         channel connect_channel;
 
     public:
-        acceptor():socketfd(get_socket_fd()),connect_channel(socketfd){
+        acceptor():connect_channel(get_socket_fd()){
             connect_channel.setReadCallback([&](){acceptor::accepter();});
         };
         void accepter();
@@ -55,7 +54,7 @@ class acceptor {
 void acceptor::accepter(){
     struct sockaddr_in clientaddr;
     socklen_t len = sizeof(clientaddr);
-    int clientfd = accept(socketfd, (struct sockaddr *)&clientaddr, &len);
+    int clientfd = accept(connect_channel.socketfd, (struct sockaddr*)&clientaddr, &len);
     setnonblocking(clientfd);
     Callback_(clientfd);  
 }
