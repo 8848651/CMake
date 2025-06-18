@@ -39,7 +39,6 @@ void* test_1(void*) {
 
 
 int main() {
-
     test();
 
     return 0;
