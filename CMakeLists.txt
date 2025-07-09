@@ -1,28 +1,19 @@
-# 安装最小版本
-cmake_minimum_required(VERSION 3.16.3)
+# 顶层 CMakeLists.txt
+cmake_minimum_required(VERSION 3.10)
+project(Socket_Server)
 
-# 项目名称
-project(Socket_Sever)
 
-# 关闭编译警告
-add_compile_options(-Wno-return-type)
-
-# 指定C++版本
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 指定头文件目录 PROJECT_SOURCE_DIR即CMakeLists所在目录
-include_directories(${PROJECT_SOURCE_DIR}/include)
+# CMake刷新  CMake: Delete Cache and Reconfigure
+add_library(common_main OBJECT src/main.cpp)
 
-# 可执行文件生成的目录 放exe文件
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+#将子目录添加到项目中
+add_subdirectory(stl)
+add_subdirectory(muduo/version_5)
 
-aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC_LIST)
-aux_source_directory(${PROJECT_SOURCE_DIR}/include/muduo SRC_LIST)
+add_executable(main $<TARGET_OBJECTS:common_main>)
 
-find_package(Threads REQUIRED)
-
-add_executable(
-    main
-    ${SRC_LIST}
-)
-target_link_libraries(main PRIVATE Threads::Threads)
+#将库链接
+target_link_libraries(main PRIVATE v5)

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libv3.a CMakeFiles/v3.dir/src/channel.cpp.o CMakeFiles/v3.dir/src/loop.cpp.o
+/usr/bin/ranlib libv3.a

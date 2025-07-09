@@ -1,8 +1,14 @@
 [
 {
   "directory": "/home/develop/Project/server/build",
-  "command": "/usr/bin/g++  -I/home/develop/Project/server/include -g -std=gnu++14 -Wno-return-type -o CMakeFiles/main.dir/src/main.cpp.o -c /home/develop/Project/server/src/main.cpp",
+  "command": "/usr/bin/g++   -g -std=gnu++14 -o CMakeFiles/common_main.dir/src/main.cpp.o -c /home/develop/Project/server/src/main.cpp",
   "file": "/home/develop/Project/server/src/main.cpp",
-  "output": "CMakeFiles/main.dir/src/main.cpp.o"
+  "output": "CMakeFiles/common_main.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/develop/Project/server/build/muduo/version_5",
+  "command": "/usr/bin/g++  -I/home/develop/Project/server/muduo/version_5/include -isystem /home/develop/Project/server/stl/include -g -std=gnu++14 -o CMakeFiles/v5.dir/src/channel.cpp.o -c /home/develop/Project/server/muduo/version_5/src/channel.cpp",
+  "file": "/home/develop/Project/server/muduo/version_5/src/channel.cpp",
+  "output": "muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o"
 }
 ]
