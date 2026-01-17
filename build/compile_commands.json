@@ -1,7 +1,7 @@
 [
 {
   "directory": "/home/develop/Project/server/build",
-  "command": "/usr/bin/g++   -g -std=gnu++14 -o CMakeFiles/common_main.dir/src/main.cpp.o -c /home/develop/Project/server/src/main.cpp",
+  "command": "/usr/bin/g++  -isystem /home/develop/Project/server/stl/include -g -std=gnu++14 -o CMakeFiles/common_main.dir/src/main.cpp.o -c /home/develop/Project/server/src/main.cpp",
   "file": "/home/develop/Project/server/src/main.cpp",
   "output": "CMakeFiles/common_main.dir/src/main.cpp.o"
 },

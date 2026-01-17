@@ -11,13 +11,25 @@
 #include <thread>
 #include <functional>
 #include <sys/syscall.h>
-#include "../muduo/version_5/include/channel.h"
+#include <meta/function.h>
+#include <meta/typedifference.h>
+
+struct A {};
+struct B {};
+struct C {};
+struct D {};
+struct E {};
+
+template<typename T>
+struct print_type;
 
 
 
 int main() {
-    channel abc;
-    abc.test();
+
+
+
+
 
     return 0;
 }

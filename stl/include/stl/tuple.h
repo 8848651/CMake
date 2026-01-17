@@ -1,0 +1,115 @@
+#pragma once
+#include <cstddef>
+#include <utility>
+#include "template.h"
+namespace stl {
+
+    //-------------------------------------------------------------------------
+    //这个TupleData必须要有，不然Get类型无法转换
+
+    template<typename T>
+    struct tupleerror{
+        static_assert(sizeof(T) == 0, "tuple 不允许包含引用类型！");
+    };
+
+    template<size_t N, typename T>
+    class tupledata {
+    public:
+        tupledata(T&& _data) : data(std::forward<T>(_data)) {};
+        tupledata(const tupledata<N, T>& _base) : data(_base.ConstGet()) {};
+        tupledata(tupledata<N,T>&& _base) : data(std::move(_base.Get())) {};
+        T& Get() { return data; }
+    private:
+        T data;
+        const T& ConstGet() const { return data; };
+    };
+
+    template<size_t N, typename T>
+    class tupledata<N,T&&>:tupleerror<T&&>{};
+
+    //-------------------------------------------------------------------------
+
+    template<size_t N, typename... T>
+    class tuplebase;
+
+    template<size_t N>
+    class tuplebase<N> {};
+
+    // <1 <2 <3...>>
+    template<size_t N, typename T, typename... U>
+    class tuplebase<N, T, U...> : public tupledata<N, T>, public tuplebase<N + 1, U...> {
+    public:
+        using data = tupledata<N, T>;
+        using base = tuplebase<N + 1, U...>;
+    public:
+        tuplebase(T&& _data, U&&... _base): data(std::forward<T>(_data)), base(std::forward<U>(_base)...) {};
+        tuplebase(const tuplebase<N,T,U...>& _base):data(_base), base(_base) {};
+        tuplebase(tuplebase<N,T,U...>&& _base):data(std::move(_base)), base(std::move(_base)) {};
+    };
+
+    //根据容器的法则中，容器不允许存引用类型如tuple<int&>
+    template<typename... T>
+    class tuple : public tuplebase<0, T...> {
+    public:
+        using base = tuplebase<0, T...>;
+        tuple(T&&... args) : base(std::forward<T>(args)...) {}
+        tuple(const tuple<T...>& _base): base(_base) {};
+        tuple(tuple<T...>&& _base): base(std::move(_base)) {};
+
+    };
+
+    //-------------------------------------------------------------------------
+
+    template<size_t N, typename T>
+    struct tupleelement;
+
+    template<size_t N, typename T, typename... U>
+    struct tupleelement<N, tuple<T, U...>> : public tupleelement<N - 1, tuple<U...>> {};
+
+    template<typename T, typename... U>
+    struct tupleelement<0, tuple<T, U...>> {
+        using type = T;
+    };
+
+    //-------------------------------------------------------------------------
+
+    template<typename T>
+    struct tuplesize;
+
+    template<typename... T>
+    struct tuplesize<tuple<T...>> {
+        static constexpr int size = sizeof...(T) - 1;
+    };
+
+    //-------------------------------------------------------------------------
+
+    template<size_t N, typename... U>
+    typename tupleelement<N, tuple<U...>>::type& tuplefindelement(tuple<U...>& base) {
+        return static_cast<tupledata<N, typename tupleelement<N, tuple<U...>>::type>&>(base).Get();
+    };
+
+    //-------------------------------------------------------------------------
+
+    template<size_t N, typename... T>
+    struct tuplefindtype;
+
+    template<typename T, typename... U>
+    struct tuplefindtype<0, T, tuple<U...>> {
+        static constexpr int value = static_cast<bool>(stl::is_same<T, typename tupleelement<0, tuple<U...>>::type>::value) ? 1 : 0;
+        static constexpr int Get() {
+            return value;
+        }
+    };
+
+    template<size_t N, typename T, typename... U>
+    struct tuplefindtype<N, T, tuple<U...>> {
+        static constexpr int value = static_cast<bool>(stl::is_same<T, typename tupleelement<N, tuple<U...>>::type>::value) ? 1 : 0;
+        static constexpr int Get() {
+            return tuplefindtype<N - 1, T, tuple<U...>>::Get() + value;
+        }
+    };
+
+    //-------------------------------------------------------------------------
+
+};
+

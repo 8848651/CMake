@@ -1,2 +1,0 @@
-/usr/bin/ar qc libv4.a CMakeFiles/v4.dir/src/channel.cpp.o
-/usr/bin/ranlib libv4.a
