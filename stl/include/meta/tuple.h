@@ -2,27 +2,40 @@
 #include <cstddef>
 #include <utility>
 #include "template.h"
+#include "referencewrapper.h"
 namespace stl {
 
     /**
     * @brief tuple 用来实现编译期的元组类型
     * @return 返回一个可以存储多种类型的元组类型
     */
-    //这个tupledata必须要有，不然Get类型无法转换
+    //这个tupledata必须要有，不然get类型无法转换
 
-    template<size_t N, typename T>
+    template<size_t N, typename T, typename R = void>
     class tupledata {
+    private:
+        using U = stl::referencewrapper<T>;
+        U data;
+        U getdata() const { return data; };
     public:
         tupledata();
         tupledata(T&& _data) : data(std::forward<T>(_data)) {};
-        tupledata(const tupledata<N, T>& _base) : data(_base.ConstGet()) {};
-        tupledata(tupledata<N, T>&& _base) : data(std::move(_base.Get())) {};
-        T& Get() { return data; }
+        tupledata(const tupledata<N, T>& _base) : data(_base.getdata()) {};
+        auto get() const -> decltype(data.get()) { return data.get(); };
+    };
+
+    template<size_t N, typename T>
+    class tupledata < N, T, typename stl::void_type<stl::is_same<T, typename std::remove_reference<T>::type>::value>::type> {
+    public:
+        tupledata();
+        tupledata(T&& _data) : data(std::forward<T>(_data)) {};
+        tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
+        tupledata(tupledata<N, T>&& _base) : data(std::move(_base.get())) {};
+        T get() const { return data; }
     private:
         //typename stl::remove_reference<T>::type;
         using U = typename std::remove_reference<T>::type;
         U data;
-        const T& ConstGet() const { return data; };
     };
 
     //-------------------------------------------------------------------------
@@ -84,8 +97,8 @@ namespace stl {
     //-------------------------------------------------------------------------
 
     template<size_t N, typename... U>
-    typename tupleelement<N, tuple<U...>>::type& tuplefindelement(tuple<U...>& base) {
-        return static_cast<tupledata<N, typename tupleelement<N, tuple<U...>>::type>&>(base).Get();
+    typename tupleelement<N, tuple<U...>>::type tuplefindelement(tuple<U...>& base) {
+        return static_cast<tupledata<N, typename tupleelement<N, tuple<U...>>::type>>(base).get();
     };
 
     //-------------------------------------------------------------------------
@@ -96,7 +109,7 @@ namespace stl {
     template<typename T, typename... U>
     struct tuplefindtype<0, T, tuple<U...>> {
         static constexpr size_t value = static_cast<bool>(stl::is_same<T, typename tupleelement<0, tuple<U...>>::type>::value) ? 1 : 0;
-        static constexpr size_t Get() {
+        static constexpr size_t get() {
             return value;
         }
     };
@@ -104,8 +117,8 @@ namespace stl {
     template<size_t N, typename T, typename... U>
     struct tuplefindtype<N, T, tuple<U...>> {
         static constexpr size_t value = static_cast<bool>(stl::is_same<T, typename tupleelement<N, tuple<U...>>::type>::value) ? 1 : 0;
-        static constexpr size_t Get() {
-            return tuplefindtype<N - 1, T, tuple<U...>>::Get() + value;
+        static constexpr size_t get() {
+            return tuplefindtype<N - 1, T, tuple<U...>>::get() + value;
         }
     };
 
