@@ -24,39 +24,44 @@ namespace stl {
 
     };
 
-    template<int N>
-    struct parameterassistedhelper {
+    /**
+     * @brief 类型模板主要用于替换类型
+     * @param N 被替换序列的索引
+     * @param type 要被替换的类型
+     * @param datatype 要被替换的序列
+     * @param argutype 替换序列
+     */
+    template<size_t N, typename type, typename datatype, typename argutype>
+    struct parameterassisttype;
 
-        template<typename type>
-        struct test_0 {
 
-            template<template T, template U>
-            struct test_1;
-
-            template<typename... T, typename... U>
-            struct test_1<tuple<T...>, tuple<U...>> {
-                constexpr int N = tuplefindtype<N, type, tuple<T...>>::Get();
-                constexpr int M = stl::is_nmber_minus<N, 1>::value;
-                using type = test_2<N, M>;
-
-                template<size_t N, size_t M>
-                struct test_2 {
-                    using Ttype = typename tupleelement<N, tuple<T...>>::type;
-                    using Utype = typename tupleelement<M, tuple<U...>>::type;
-                    constexpr bool flag = stl::is_same<Ttype, type>::value ? true : false;
-                    using Rtype = conditional_selector<flag, Utype, Ttype>::type;
-
-                    constexpr static Rtype _test(tuple<T...>& _data, tuple<U...>& _args) {
-                        Ttype b = tuplefindelement<N>(_data);
-                        Utype c = tuplefindelement<M>(_args);
-                        return conditional_selector<flag, Utype, Ttype>::execute(c, b);
-                    };
-                };
-
-            };
-
-        };
+    /**
+     * @param data_index 寻找datatype序列的前N个中有几个type类型，减一为argutype要替换索引
+     * @param arg_index argutype中的索引，去替换datatype序列
+     * @param data_type datatype中要被替换的类型，与type比较是否相同
+     * @param arg_type argutype中要去替换的类型
+     * @param type 最终的类型
+     */
+    template<int N, typename type, typename... T, typename... U>
+    struct parameterassisttype<N, type, tuple<T...>, tuple<U...>> {
+        static constexpr int data_index = tuplefindtype<N, type, tuple<T...>>::Get();
+        static constexpr int arg_index = stl::is_nmber_minus<data_index, 1>::value;
+        using data_type = typename tupleelement<data_index, tuple<T...>>::type;
+        using arg_type = typename tupleelement<arg_index, tuple<U...>>::type;
+        static constexpr bool use_arg = stl::is_same<data_type, type>::value ? true : false;
+        using re_type = typename conditional_selector<use_arg, arg_type, data_type>::type;
     };
+
+    template<int N, typename Type, typename... T, typename... U>
+    typename parameterassisttype<N, Type, tuple<T...>, tuple<U...>>::re_type parameter_assist(stl::tuple<T...>& data, stl::tuple<U...>& args) {
+        using traits = parameterassisttype<N, Type, tuple<T...>, tuple<U...>>;
+        typename traits::data_type b = tuplefindelement<traits::data_index>(data);
+        typename traits::arg_type c = tuplefindelement<traits::arg_index>(args);
+        return conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(c, b);
+    }
+
+
+
 
 
     template<typename U>
