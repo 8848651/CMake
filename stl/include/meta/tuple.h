@@ -2,7 +2,6 @@
 #include <cstddef>
 #include <utility>
 #include "template.h"
-#include "referencewrapper.h"
 namespace stl {
 
     /**
@@ -14,18 +13,16 @@ namespace stl {
     template<size_t N, typename T, typename R = void>
     class tupledata {
     private:
-        using U = stl::referencewrapper<T>;
-        U data;
-        U getdata() const { return data; };
+        T data;
     public:
-        tupledata();
+        tupledata() = delete;
         tupledata(T&& _data) : data(std::forward<T>(_data)) {};
-        tupledata(const tupledata<N, T>& _base) : data(_base.getdata()) {};
-        auto get() const -> decltype(data.get()) { return data.get(); };
+        tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
+        T get() const { return std::forward<T>(data); };
     };
 
     template<size_t N, typename T>
-    class tupledata < N, T, typename stl::void_type<stl::is_same<T, typename std::remove_reference<T>::type>::value>::type> {
+    class tupledata<N, T, typename stl::void_type<stl::is_same<T, typename stl::remove_reference<T>::type>::value>::type> {
     public:
         tupledata();
         tupledata(T&& _data) : data(std::forward<T>(_data)) {};
@@ -33,9 +30,7 @@ namespace stl {
         tupledata(tupledata<N, T>&& _base) : data(std::move(_base.get())) {};
         T get() const { return data; }
     private:
-        //typename stl::remove_reference<T>::type;
-        using U = typename std::remove_reference<T>::type;
-        U data;
+        T data;
     };
 
     //-------------------------------------------------------------------------

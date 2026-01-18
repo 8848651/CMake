@@ -7,6 +7,11 @@
 #include "typedifference.h"
 namespace stl {
 
+    /**
+    * @brief 此bind无法绑定入参为右值引用，如果要使用右值请使用const T&
+    * @return 返回一个lambda表达式
+    */
+
     enum class placeholders {
         _1, _2, _3, _4, _5, _6, _7, _8, _9, _10
     };
@@ -19,9 +24,8 @@ namespace stl {
 
     template<typename T, typename... U, typename... Args>
     auto bind(T(*func)(U...), Args&&... args) {
-        using bindtype = typename stl::bindimpl<typequeue<U...>, typequeue<Args...>>::type;
-        stl::bindimpl<bindtype> bindimplinstance;
-        return bindimplinstance.recall([=](U&&... u) {return fun(std::forward<U>(u)...)}, std::forward<Args>(args)...);
+        stl::bindimpl<typequeue<U...>> bindimplinstance;
+        return bindimplinstance.recall([=](U&&... u) {return func(std::forward<U>(u)...);}, std::forward<Args>(args)...);
     };
 
     //--------------------------------------------------------------------------------------
@@ -31,9 +35,9 @@ namespace stl {
     public:
         template<typename R, typename... Args>
         auto recall(R callblack, Args&&... args) {
-            using queuedata = typename stl::makeindexqueue<sizeof(Args...)>::queuedata;
+            using queuedata = typename stl::makeindexqueue<sizeof...(Args)>::queuedata;
             bindassisted<queuedata, Args...>  bindassistedinstance{ std::forward<Args>(args)... };
-            return [=](T&&... t) {return bindassistedinstance(callblack, std::forward<T>(t)...)};
+            return [=](T&&... t) {return bindassistedinstance(callblack, std::forward<T>(t)...);};
         };
     };
 
@@ -42,13 +46,12 @@ namespace stl {
     class bindassisted<indexqueue<Is...>, Args...> {
     public:
         parametertype<stl::placeholders(Args...)> parameter;
-        bindassisted(Args... args) :parameter(std::forward<Args>(args)...) {};
+        bindassisted(Args&&... args) :parameter(std::forward<Args>(args)...) {};
         template<typename R, typename... U>
         auto operator()(R callblack, U&&... args) {
-            auto bindparameter = parameter(args);
+            auto bindparameter = parameter(std::forward<Args>(args)...);
             return callblack(tuplefindelement<Is>(bindparameter)...);
         }
-
     };
 
 

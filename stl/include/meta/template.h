@@ -4,7 +4,7 @@
 
 
 namespace stl {
-    // conditional_selector 用于类型判断并返回判断的值
+    // conditional_selector_fun 用于类型判断并返回判断的值
     // enable_if 用于类型判断
     // br_is_pointer 用于判断是否是指针类型
     // br_destroy 用于销毁指针
@@ -21,30 +21,31 @@ namespace stl {
 
     // 条件选择器模板类
     template <bool Flag, typename T, typename U>
-    class conditional_selector;
+    struct conditional_selector;
 
     template <typename T, typename U>
-    class conditional_selector<true, T, U> {
-    public:
-        static auto execute(T t, U u) -> decltype(t) { return t; }
+    struct conditional_selector<true, T, U> {
+        using type = T;
+        static T execute(T t, U u) { return t; }
     };
 
     template <typename T, typename U>
-    class conditional_selector<false, T, U> {
-    public:
-        static auto execute(T t, U u) -> decltype(u) { return u; }
+    struct conditional_selector<false, T, U> {
+        using type = U;
+        static U execute(T t, U u) { return u; }
     };
+
 
 
 
     // 条件选择器函数模板
     template <bool Flag, typename T = void, typename U = void>
-    class enable_if {};
+    struct enable_if {};
 
     template <typename T, typename U>
-    class enable_if<true, T, U> {
+    struct enable_if<true, T, U> {
     public:
-        typedef T type;
+        using type = T;
     };
 
 
@@ -191,17 +192,17 @@ namespace stl {
 
     //去除引用
     template<typename T>
-    struct remove_reference{
+    struct remove_reference {
         using type = T;
     };
 
     template<typename T>
-    struct remove_reference<T&>{
+    struct remove_reference<T&> {
         using type = T;
     };
 
     template<typename T>
-    struct remove_reference<T&&>{
+    struct remove_reference<T&&> {
         using type = T;
     };
 

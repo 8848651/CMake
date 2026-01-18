@@ -47,12 +47,12 @@ int main() {
     auto d = stl::tuplefindelement<1>(temp2);
     std::cout << d << std::endl;
 
-    // stl::tuple<int&&, int&&> temp3{ 100,200 };
-    // int&& p = stl::tuplefindelement<0>(temp3);
-    // std::cout << p << std::endl;
+    stl::tuple<int&&, int&&> temp3{ 100,200 };
+    int&& p = stl::tuplefindelement<0>(temp3);
+    std::cout << p << std::endl;
 
-    // int&& q = stl::tuplefindelement<1>(temp3);
-    // std::cout << q << std::endl;
+    int&& q = stl::tuplefindelement<1>(temp3);
+    std::cout << q << std::endl;
 
 
 
