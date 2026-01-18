@@ -26,13 +26,13 @@ namespace stl {
     template <typename T, typename U>
     struct conditional_selector<true, T, U> {
         using type = T;
-        static T execute(T t, U u) { return t; }
+        static T execute(T t, U u) { return std::forward<T>(t); }
     };
 
     template <typename T, typename U>
     struct conditional_selector<false, T, U> {
         using type = U;
-        static U execute(T t, U u) { return u; }
+        static U execute(T t, U u) { return std::forward<U>(u); }
     };
 
 
@@ -88,16 +88,16 @@ namespace stl {
     };
 
     //两个类型数字相加减，在编译时常量无法直接相加需要变成类型相加后再变回去
-    template<int T, int U>
+    template<size_t T, size_t U>
     class is_nmber_add {
     public:
-        constexpr static int value = T + U;
+        constexpr static size_t value = T + U;
     };
 
-    template<int T, int U>
+    template<size_t T, size_t U>
     class is_nmber_minus {
     public:
-        constexpr static int value = T >= U ? T - U : 0;
+        constexpr static size_t value = T >= U ? T - U : 0;
     };
 
     //判断一个类型是否是基本类型

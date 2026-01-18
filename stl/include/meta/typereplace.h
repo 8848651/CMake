@@ -6,7 +6,7 @@
 namespace stl {
 
     /**
-    * @brief parametertype 用来实现函数参数类型替换
+    * @brief parametertype 用来实现函数参数类型替换 原始版本只能进行值绑定
     * @return 返回一个可以进行参数类型替换的对象
     */
 
@@ -42,26 +42,27 @@ namespace stl {
      * @param arg_type argutype中要去替换的类型
      * @param type 最终的类型
      */
-    template<int N, typename type, typename... T, typename... U>
+    template<size_t N, typename type, typename... T, typename... U>
     struct parameterassisttype<N, type, tuple<T...>, tuple<U...>> {
-        static constexpr int data_index = tuplefindtype<N, type, tuple<T...>>::Get();
-        static constexpr int arg_index = stl::is_nmber_minus<data_index, 1>::value;
-        using data_type = typename tupleelement<data_index, tuple<T...>>::type;
+        static constexpr size_t data_index = tuplefindtype<N, type, tuple<T...>>::get();
+        static constexpr size_t arg_index = stl::is_nmber_minus<data_index, 1>::value;
+        using data_type = typename tupleelement<N, tuple<T...>>::type;
         using arg_type = typename tupleelement<arg_index, tuple<U...>>::type;
         static constexpr bool use_arg = stl::is_same<data_type, type>::value ? true : false;
         using re_type = typename conditional_selector<use_arg, arg_type, data_type>::type;
     };
 
-    template<int N, typename Type, typename... T, typename... U>
+    template<size_t N, typename Type, typename... T, typename... U>
     typename parameterassisttype<N, Type, tuple<T...>, tuple<U...>>::re_type parameter_assist(stl::tuple<T...>& data, stl::tuple<U...>& args) {
         using traits = parameterassisttype<N, Type, tuple<T...>, tuple<U...>>;
-        typename traits::data_type b = tuplefindelement<traits::data_index>(data);
+        typename traits::data_type b = tuplefindelement<N>(data);
         typename traits::arg_type c = tuplefindelement<traits::arg_index>(args);
-        return conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(c, b);
+        return std::forward<typename traits::re_type>(
+            conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(
+                std::forward<typename traits::arg_type>(c), std::forward<typename traits::data_type>(b)
+            )
+        );
     }
-
-
-
 
 
     template<typename U>
@@ -73,9 +74,10 @@ namespace stl {
         static auto run(tuple<M...>& _data, tuple<N...>& _args) {
             constexpr size_t _size_args = tuplesize<tuple<N...>>::size;
             constexpr size_t _index_data = tuplesize<tuple<M...>>::size - 1;
-            constexpr size_t placeholderssize = stl::tuplefindtype<_index_data, type, tuple<M...>>::Get();
+            constexpr size_t placeholderssize = stl::tuplefindtype<_index_data, type, tuple<M...>>::get();
             static_assert(_size_args == placeholderssize, "入参和占位符数量不匹配");
-            tuple<decltype(parameterassistedhelper<Is>::template _test<type>(_data, _args))...> _args_tmp(parameterassistedhelper<Is>::template _test<type>(_data, _args)...);
+            using types = tuple<typename stl::parameterassisttype<Is, type, tuple<M...>, tuple<N...>>::re_type...>;
+            types _args_tmp( std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is,type>(_data, _args))... );
             return _args_tmp;
         };
 
@@ -91,8 +93,12 @@ namespace stl {
 
         template<typename... U>
         auto operator()(U&&... args) {
-            tuple<U...> _args{ std::forward<U>(args)... };
+            tuple<U&&...> _args(std::forward<U>(args)... );
             return parameterassisted<class makeindexqueue<tuplesize<tuple<Args...>>::size>::queuedata>::template run<T>(_data, _args);
+        };
+
+        auto operator()() {
+            return _data;
         };
 
     };

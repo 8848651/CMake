@@ -29,7 +29,5 @@ int&& test(int&& a) {
 
 int main() {
 
-
-
     return 0;
 }
