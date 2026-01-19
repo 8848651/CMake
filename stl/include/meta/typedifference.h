@@ -30,7 +30,7 @@ namespace stl {
 
     template<typename P, typename Q, typename T, typename U>
     struct typequeueget<P, Q, typequeueassisted<T, U>> {
-        using type = typename typequeueadd<typequeue<Q>, typename typequeueassisted<T, U>::type>::type;
+        using type = typename typequeueadd<typequeue<P>, typename typequeueassisted<T, U>::type>::type;
     };
 
     template<typename P, typename T, typename U>

@@ -11,23 +11,20 @@
 #include <thread>
 #include <functional>
 #include <sys/syscall.h>
-#include <meta/typereplace.h>
+#include <meta/bind.h>
 
-struct A {};
-struct B {};
-struct C {};
-struct D {};
-struct E {};
-
-template<typename T>
-struct print_type;
-
-int&& test(int&& a) {
-    return std::move(a);
-}
+int add(int a, int b) { return a + b; }
 
 
 int main() {
+
+    auto f1 = stl::bind(add, 1, 2);
+    int a=f1();
+    std::cout<<a<<std::endl;
+
+
+
+
 
     return 0;
 }

@@ -77,7 +77,7 @@ namespace stl {
             constexpr size_t placeholderssize = stl::tuplefindtype<_index_data, type, tuple<M...>>::get();
             static_assert(_size_args == placeholderssize, "入参和占位符数量不匹配");
             using types = tuple<typename stl::parameterassisttype<Is, type, tuple<M...>, tuple<N...>>::re_type...>;
-            types _args_tmp( std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is,type>(_data, _args))... );
+            types _args_tmp(std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args))...);
             return _args_tmp;
         };
 
@@ -90,10 +90,11 @@ namespace stl {
     struct parametertype<T(Args...)> {
         tuple<Args...> _data;
         parametertype(Args&&... args) : _data(std::forward<Args>(args)...) {};
+        parametertype(const parametertype& other) : _data(other._data) {}
 
         template<typename... U>
         auto operator()(U&&... args) {
-            tuple<U&&...> _args(std::forward<U>(args)... );
+            tuple<U&&...> _args(std::forward<U>(args)...);
             return parameterassisted<class makeindexqueue<tuplesize<tuple<Args...>>::size>::queuedata>::template run<T>(_data, _args);
         };
 
