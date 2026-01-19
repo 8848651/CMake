@@ -52,6 +52,11 @@ namespace stl {
         using re_type = typename conditional_selector<use_arg, arg_type, data_type>::type;
     };
 
+
+    /**
+    * @brief  (值类型)获取要替换序列b发生一次拷贝 execute函数入参一次拷贝 返回值一次拷贝
+    */
+
     template<size_t N, typename Type, typename... T, typename... U>
     typename parameterassisttype<N, Type, tuple<T...>, tuple<U...>>::re_type parameter_assist(stl::tuple<T...>& data, stl::tuple<U...>& args) {
         using traits = parameterassisttype<N, Type, tuple<T...>, tuple<U...>>;
@@ -67,6 +72,10 @@ namespace stl {
 
     template<typename U>
     struct parameterassisted;
+
+    /**
+    * @brief _args_tmp 是一个tuple，值类型会发生一次值拷贝
+    */
 
     template<size_t... Is>
     struct parameterassisted<indexqueue<Is...>> {
@@ -86,10 +95,15 @@ namespace stl {
     template<typename T, typename... Args>
     struct parametertype;
 
+    /**
+    * @brief 返回值是一个tuple，值类型会发生一次值拷贝 如果值类型发生拷贝parametertype返回有4次拷贝
+    */
+
     template<typename T, typename... Args>
     struct parametertype<T(Args...)> {
         tuple<Args...> _data;
-        parametertype(Args&&... args) : _data(std::forward<Args>(args)...) {};
+        template<typename... UArgs>
+        parametertype(UArgs&&... args) : _data(std::forward<UArgs>(args)...) {};
         parametertype(const parametertype& other) : _data(other._data) {}
 
         template<typename... U>

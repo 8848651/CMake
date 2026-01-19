@@ -22,7 +22,7 @@ namespace stl {
     template<typename T>
     class bindimpl;
 
-    //被绑定阶段只能是值绑定
+    //被绑定阶段只能是值绑定 
     // bind captures by value only. No dangling references by design.
     template<typename T, typename... U, typename... Args>
     auto bind(T(*func)(U...), Args... args) {
