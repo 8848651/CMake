@@ -22,20 +22,35 @@ public:
     }
 };
 
-int add(ppt a) { return 0; }
+int add(ppt& a) { return 0; }
 
 template<typename T>
-auto tt(T t) {};
+T t1(T&& t) {
+    return std::forward<T>(t);
+};
+
+template<typename T>
+auto t2(T t) {};
+
+template<typename T>
+class tt;
+
 
 
 int main() {
 
     ppt a1;
-    tt([=]() {return a1;});
+
+    using P = stl::typequeue<int&>;
+    using Q = stl::typequeue<stl::placeholders>;
+
+    using R = stl::typequeuereferenceassisted<P, Q>::type;
+    //tt<R> _;
+
 
     //auto f1 = stl::bind(add, stl::placeholders::_1);
-    // auto f2 = stl::bind(add, a1);
-    // f2();
+    // auto f2 = stl::bind(add, stl::placeholders::_1);
+    // f2(a1);
     //int a=f1(100,10);
     //std::cout<<a<<std::endl;
 

@@ -19,34 +19,46 @@ namespace stl {
     template<typename... T>
     class bindassisted;
 
-    template<typename T>
+    template<typename T,typename U>
     class bindimpl;
 
+    template<typename T, typename U, typename R>
+    class bindtypeimpl;
+
     //被绑定阶段只能是值绑定 
-    // bind captures by value only. No dangling references by design.
     template<typename T, typename... U, typename... Args>
     auto bind(T(*func)(U...), Args... args) {
-        using type=typename stl::typequeueassisted<stl::typequeue<U...>,stl::typequeue<Args...>>::type;
-        stl::bindimpl<type> bindimplinstance;
+        using type = typename stl::typequeueassisted<stl::typequeue<U...>, stl::typequeue<Args...>>::type;
+        stl::bindimpl<type, typequeue<Args...>> bindimplinstance;
         return bindimplinstance.recall([=](U&&... u) mutable {return std::forward<T>(func(std::forward<U&&>(u)...));}, std::forward<Args&&>(args)...);
     };
 
-    //--------------------------------------------------------------------------------------
+    //添加一个可以绑定引用的版本 
+    //Atype 新绑定类型
+    //Ltype 入参类型
+    template<typename T, typename... U, typename... Args>
+    auto bindreference(T(*func)(U...), Args&&... args) {
+        using Atype = typename stl::typequeuereferenceassisted<stl::typequeue<U...>, stl::typequeue<Args...>>::type;
+        using Ltype = typename stl::typequeueassisted<stl::typequeue<U...>, Atype>::type;
+        bindimpl<Ltype, Atype> bindimplinstance;
+        return bindimplinstance.recall([=](U&&... u) mutable {return std::forward<T>(func(std::forward<U&&>(u)...));}, std::forward<Args&&>(args)...);
+    };
 
-    template<typename... T>
-    class bindimpl<typequeue<T...>> {
+
+    template<typename... T,typename... U>
+    class bindimpl<typequeue<T...>, typequeue<U...>> {
     public:
         template<typename R, typename... Args>
         auto recall(R callblack, Args&&... args) {
             using queuedata = typename stl::makeindexqueue<sizeof...(Args)>::queuedata;
-            bindassisted<queuedata, Args...>  bindassistedinstance(std::forward<Args&&>(args)...);
+            bindassisted<queuedata, typequeue<U...>>  bindassistedinstance(std::forward<Args&&>(args)...);
             return [=](T&&... t) mutable {return bindassistedinstance(callblack, std::forward<T&&>(t)...);};
         };
     };
 
 
     template<size_t... Is, typename... Args>
-    class bindassisted<indexqueue<Is...>, Args...> {
+    class bindassisted<indexqueue<Is...>, typequeue<Args...>> {
     public:
         parametertype<stl::placeholders(Args...)> parameter;
         bindassisted(Args&&... args) :parameter(std::forward<Args>(args)...) {};
@@ -57,30 +69,6 @@ namespace stl {
             return callblack(std::forward<typename tupleelement<Is, decltype(bindparameter)>::type>(tuplefindelement<Is>(bindparameter))...);
         }
     };
-
-
-    //--------------------------------------------------------------------------------------
-
-    template<typename T, typename... U, typename MyClass, typename... Args>
-    auto bind(T(MyClass::* func)(U...), MyClass* ptr, Args... args) {
-        return 0;
-    };
-
-    template<typename T, typename... U, typename... Args>
-    auto bind(stl::function<T(U...)> fun, Args... args) {
-        return 0;
-    };
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -76,14 +76,14 @@ namespace stl {
     template<class T, class U>
     class is_same {
     public:
-        typedef std::false_type type;
+        using  type = std::false_type;
         static type value;
     };
 
     template<class T>
     class is_same<T, T> {
     public:
-        typedef std::true_type type;
+        using type = std::true_type;
         static type value;
     };
 
