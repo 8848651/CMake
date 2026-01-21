@@ -206,36 +206,10 @@ namespace stl {
         using type = T;
     };
 
-
-
-    //创建squence序列模板类,AssistedQueue::QueueData的类型为IntList<0,1,2,3>
-    template<int... Is>
-    class IntList;
-
-    template<typename T, typename U>
-    class Assemble;
-
-    template<int First, int... Rest>
-    class Assemble<IntList<First>, IntList<Rest...>> {
-    public:
-        typedef IntList<Rest..., First> type;
-    };
-
-    template<int Is>
-    class AssistedQueue {
-    public:
-        //1:模式一
-        // typedef typename AssistedQueue<Is - 1>::QueueData QueueType;
-        // typedef typename Assemble<IntList<Is>, QueueType>::type QueueData;
-        //2:模式二
-        typedef AssistedQueue<Is - 1> QueueType;
-        typedef typename Assemble<IntList<Is>, typename QueueType::QueueData>::type QueueData;
-    };
-
-    template<>
-    class AssistedQueue<0> {
-    public:
-        typedef IntList<0> QueueData;
+    //取参数包第一个值
+    template<typename T, typename... Rest>
+    struct first_type {
+        using type = T;
     };
 
 

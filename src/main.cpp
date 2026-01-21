@@ -17,10 +17,11 @@
 
 
 int main() {
+    char a = 'a';
 
-    stl::tuple<int,char,int> data(1,'a',3);
-    stl::tuple<int,int,int> args(1,2,3);
-    stl::parametertype<char,stl::typequeue<int,char,int>,stl::typequeue<int,int,int>> type(data,args);
+    stl::tuple<int,char,int> data(1,a,3);
+    stl::tuple<int> args(1);
+    stl::parametertype<char,stl::typequeue<int,char,int>,stl::typequeue<int>> type(data,args);
     auto tt=type.recell();
 
 

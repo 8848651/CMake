@@ -55,7 +55,8 @@ namespace stl {
         using data = tupledata<N, T>;
         using base = tuplebase<N + 1, U...>;
     public:
-        template<typename P, typename... Q>
+        template<typename P, typename... Q, typename = typename stl::void_type<stl::is_same<tuplebase<N, T, U...>,
+            typename stl::remove_reference<P>::type>::value>::type>
         tuplebase(P&& _data, Q&&... _base) : data(std::forward<P>(_data)), base(std::forward<Q>(_base)...) {};
         tuplebase(const tuplebase<N, T, U...>& _base) :data(static_cast<data>(_base)), base(static_cast<base>(_base)) {};
         tuplebase(tuplebase<N, T, U...>&& _base) :data(std::move(_base)), base(std::move(_base)) {};
@@ -65,8 +66,9 @@ namespace stl {
     template<typename... T>
     class tuple : public tuplebase<0, T...> {
     public:
-        using base = tuplebase<0, T...>;
-        template<typename... P>
+        using base = tuplebase<0, T...>;//first_type
+        template<typename... P, typename = typename stl::void_type<stl::is_same<tuple<T...>,
+            typename stl::remove_reference<stl::first_type<P...>>::type>::value>::type>
         tuple(P&&... args) : base(std::forward<P>(args)...) {};
         tuple(const tuple<T...>& _base) : base(_base) {};
         tuple(tuple<T...>&& _base) : base(std::move(_base)) {};

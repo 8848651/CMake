@@ -40,7 +40,8 @@ namespace stl {
     */
 
     template<size_t N, typename Type, typename... T, typename... U>
-    typename parameterassisttype<N, Type, tuple<T...>, tuple<U...>>::re_type parameter_assist(stl::tuple<T...>& data, stl::tuple<U...>& args) {
+    typename parameterassisttype<N, Type, typequeue<T...>, typequeue<U...>>::re_type
+        parameter_assist(stl::tuple<T...>& data, stl::tuple<U...>& args) {
         using traits = parameterassisttype<N, Type, typequeue<T...>, typequeue<U...>>;
         typename traits::data_type b = tuplefindelement<N>(data);
         typename traits::arg_type c = tuplefindelement<traits::arg_index>(args);
@@ -52,54 +53,62 @@ namespace stl {
     }
 
 
-    template<typename type,typename U,typename P,typename Q>
+    template<typename type, typename U, typename P, typename Q>
     struct parameterassistedtype;
 
-    template<typename type,size_t... Is,typename... T,typename... U>
-    struct parameterassistedtype<type,indexqueue<Is...>,typequeue<T...>, typequeue<U...>>{
-        using types = tuple<typename stl::parameterassisttype<Is, type, tuple<T...>, tuple<U...>>::re_type...>;
+    template<typename type, size_t... Is, typename... T, typename... U>
+    struct parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>> {
+        using types = tuple<typename stl::parameterassisttype<Is, type, typequeue<T...>, typequeue<U...>>::re_type...>;
     };
 
-    template<typename type,size_t... Is,typename... T,typename... U>
-    typename parameterassistedtype<type,indexqueue<Is...>,typequeue<T...>, typequeue<U...>>::types 
-        parameter_args_tmp(tuple<T...>& _data, tuple<U...>& _args,indexqueue<Is...>){
-            using types = typename parameterassistedtype<type,indexqueue<Is...>,typequeue<T...>, typequeue<U...>>::types;
-            constexpr size_t _size_args = tuplesize<tuple<T...>>::size;
-            constexpr size_t _index_data = tuplesize<tuple<U...>>::size - 1;
-            constexpr size_t placeholderssize = stl::tuplefindtype<_index_data, type, tuple<U...>>::get();
-            static_assert(_size_args == placeholderssize, "入参和占位符数量不匹配");
-            types _args_tmp(std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args))...);
-            return _args_tmp;
+    template<typename type, size_t... Is, typename... T, typename... U>
+    typename parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>>::types
+        parameter_args_tmp(tuple<T...>& _data, tuple<U...>& _args, indexqueue<Is...>) {
+        using types = typename parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>>::types;
+        constexpr size_t _size_args = tuplesize<tuple<U...>>::size;
+        constexpr size_t _index_data = tuplesize<tuple<T...>>::size - 1;
+        constexpr size_t placeholderssize = stl::tuplefindtype<_index_data, type, tuple<T...>>::get();
+        static_assert(_size_args == placeholderssize, "入参和占位符数量不匹配");
+        //stl::tp<decltype(std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args)))...> _;
+        types _args_tmp(std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args))...);
+        return _args_tmp;
     };
 
 
-    template<typename T, typename U,typename Q>
+    template<typename T, typename U, typename Q>
     class parametertype;
 
-    template<typename Type, typename... T,typename... U>
-    class parametertype<Type,typequeue<T...>,typequeue<U...>> {
+    /**
+    * @param _data_1 <int,placeholders,char,placeholders> 要替换类型
+    * @param _data_2 <int,int> 被替换类型
+    */
+    template<typename Type, typename... T, typename... U>
+    class parametertype<Type, typequeue<T...>, typequeue<U...>> {
     public:
         tuple<T...>& _data_1;
         tuple<U...>& _data_2;
-        template<typename... P,typename... Q>
-        parametertype(tuple<P...>& data_1,tuple<Q...>& data_2) 
-            : _data_1(std::forward<tuple<P...>&>(data_1)),_data_2(std::forward<tuple<Q...>&>(data_2)) {};
-        parametertype(const parametertype& other) : _data_1(other._data_1) , _data_2(other._data_2) {}
-        auto recell(){
-            return parameter_args_tmp<Type>(_data_1,_data_2,makeindexqueue<tuplesize<tuple<T...>>::size>::queuedata());
+        template<typename... P, typename... Q>
+        parametertype(tuple<P...>& data_1, tuple<Q...>& data_2)
+            : _data_1(std::forward<tuple<P...>&>(data_1)), _data_2(std::forward<tuple<Q...>&>(data_2)) {
+        };
+        parametertype(const parametertype& other) : _data_1(other._data_1), _data_2(other._data_2) {}
+        auto recell() {
+            using type = typename makeindexqueue<tuplesize<tuple<T...>>::size>::queuedata;
+            return parameter_args_tmp<Type>(_data_1, _data_2, type());
         }
     };
 
     template<typename Type, typename... T>
-    class parametertype<Type,typequeue<T...>,typequeue<>> {
+    class parametertype<Type, typequeue<T...>, typequeue<>> {
     public:
         tuple<T...>& _data_1;
         tuple<>& _data_2;
-        template<typename... P,typename... Q>
-        parametertype(tuple<P...>& data_1,tuple<Q...>& data_2) 
-            : _data_1(std::forward<tuple<P...>&>(data_1)),_data_2(std::forward<tuple<Q...>&>(data_2)) {};
-        parametertype(const parametertype& other) : _data_1(other._data_1) , _data_2(other._data_2) {}
-        auto recell(){
+        template<typename... P, typename... Q>
+        parametertype(tuple<P...>& data_1, tuple<Q...>& data_2)
+            : _data_1(std::forward<tuple<P...>&>(data_1)), _data_2(std::forward<tuple<Q...>&>(data_2)) {
+        };
+        parametertype(const parametertype& other) : _data_1(other._data_1), _data_2(other._data_2) {}
+        auto recell() {
             return _data_1;
         }
     };
