@@ -18,7 +18,7 @@ namespace stl {
         tupledata() = delete;
         template<typename P, typename = typename stl::void_type<stl::is_same<typename stl::remove_reference<P>::type,
             typename stl::remove_reference<T>::type>::value>::type>
-        tupledata(P&& _data) : data(std::forward<P&&>(_data)) {};
+        tupledata(P&& _data) : data(std::forward<P>(_data)) {};
         tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
         T get() const { return std::forward<T>(data); };
     };
@@ -29,7 +29,7 @@ namespace stl {
         tupledata() = delete;
         template<typename P, typename = typename stl::void_type<stl::is_same<typename stl::remove_reference<P>::type,
             typename stl::remove_reference<T>::type>::value>::type>
-        tupledata(P&& _data) : data(std::forward<P&&>(_data)) {};
+        tupledata(P&& _data) : data(std::forward<P>(_data)) {};
         tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
         tupledata(tupledata<N, T>&& _base) : data(std::move(_base.get())) {};
         T get() const { return data; }
@@ -45,6 +45,9 @@ namespace stl {
     template<size_t N>
     class tuplebase<N> {};
 
+    template<typename... T>
+    class tp;
+
     // <1 <2 <3...>>
     template<size_t N, typename T, typename... U>
     class tuplebase<N, T, U...> : public tupledata<N, T>, public tuplebase<N + 1, U...> {
@@ -53,7 +56,7 @@ namespace stl {
         using base = tuplebase<N + 1, U...>;
     public:
         template<typename P, typename... Q>
-        tuplebase(P&& _data, Q&&... _base) : data(std::forward<P&&>(_data)), base(std::forward<Q&&>(_base)...) {};
+        tuplebase(P&& _data, Q&&... _base) : data(std::forward<P>(_data)), base(std::forward<Q>(_base)...) {};
         tuplebase(const tuplebase<N, T, U...>& _base) :data(static_cast<data>(_base)), base(static_cast<base>(_base)) {};
         tuplebase(tuplebase<N, T, U...>&& _base) :data(std::move(_base)), base(std::move(_base)) {};
     };
@@ -64,7 +67,7 @@ namespace stl {
     public:
         using base = tuplebase<0, T...>;
         template<typename... P>
-        tuple(P&&... args) : base(std::forward<P&&>(args)...) {};
+        tuple(P&&... args) : base(std::forward<P>(args)...) {};
         tuple(const tuple<T...>& _base) : base(_base) {};
         tuple(tuple<T...>&& _base) : base(std::move(_base)) {};
 

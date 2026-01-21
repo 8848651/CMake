@@ -3,6 +3,7 @@
 #include "tuple.h"
 #include "indexqueue.h"
 #include "template.h"
+#include "typedifference.h"
 namespace stl {
 
     /**
@@ -92,19 +93,57 @@ namespace stl {
 
     };
 
-    template<typename T, typename... Args>
-    struct parametertype;
+    template<typename T,typename U>
+    class parametertypeassisteimpl;
+
+
+
+
+
+    template<typename T, typename U,typename Q>
+    class parametertype;
+
+    template<typename Type, typename... T,typename... U>
+    class parametertype<Type,typequeue<T...>,typequeue<U...>> {
+    public:
+        tuple<T...>& _data_1;
+        tuple<U...>& _data_2;
+        template<typename... P,typename... Q>
+        parametertype(tuple<P...>& data_1,tuple<Q...>& data_2) 
+            : _data_1(std::forward<tuple<P...>&>(data_1)),_data_2(std::forward<tuple<Q...>&>(data_2)) {};
+        parametertype(const parametertype& other) : _data_1(other._data_1) , _data_2(other._data_2) {}
+        auto recell(){
+            return parameterassisted<class makeindexqueue<tuplesize<tuple<Args...>>::size>::queuedata>::template run<T>(_data_1, _data_2);
+        }
+    };
+
+    template<typename Type, typename... T>
+    class parametertype<Type,typequeue<T...>,typequeue<>> {
+    public:
+        tuple<T...>& _data_1;
+        tuple<U...>& _data_2;
+        template<typename... P,typename... Q>
+        parametertype(tuple<P...>& data_1,tuple<Q...>& data_2) 
+            : _data_1(std::forward<tuple<P...>&>(data_1)),_data_2(std::forward<tuple<Q...>&>(data_2)) {};
+        parametertype(const parametertype& other) : _data_1(other._data_1) , _data_2(other._data_2) {}
+        auto recell(){
+            return _data_1;
+        }
+    };
 
     /**
     * @brief 返回值是一个tuple，值类型会发生一次值拷贝 如果值类型发生拷贝parametertype返回有4次拷贝
     */
 
     template<typename T, typename... Args>
-    struct parametertype<T(Args...)> {
+    class parametertype_1;
+
+    template<typename T, typename... Args>
+    class parametertype_1<T(Args...)> {
         tuple<Args...> _data;
         template<typename... UArgs>
-        parametertype(UArgs&&... args) : _data(std::forward<UArgs>(args)...) {};
-        parametertype(const parametertype& other) : _data(other._data) {}
+        parametertype_1(UArgs&&... args) : _data(std::forward<UArgs>(args)...) {};
+        parametertype_1(const parametertype& other) : _data(other._data) {}
 
         template<typename... U>
         auto operator()(U&&... args) {
