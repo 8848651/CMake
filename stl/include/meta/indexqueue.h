@@ -13,7 +13,7 @@ namespace stl {
 
 
     template<size_t... I>
-    struct indexqueue {};
+    struct indexqueue{};
 
     template<typename A, typename B>
     struct indexqueueconcat;
