@@ -4,6 +4,7 @@
 
 
 namespace stl {
+    // remove_reference用于去除引用
     // conditional_selector_fun 用于类型判断并返回判断的值
     // enable_if 用于类型判断
     // br_is_pointer 用于判断是否是指针类型
@@ -14,10 +15,23 @@ namespace stl {
     // is_fundamental_type 用于判断是否是基本类型
     // void_type 用于判断是否是void类型
     // is_same_temp 用于判断是否是基本类型和指针类型
-    // AssistedQueue 用于创建序列模板类
 
 
+    //去除引用
+    template<typename T>
+    struct remove_reference {
+        using type = T;
+    };
 
+    template<typename T>
+    struct remove_reference<T&> {
+        using type = T;
+    };
+
+    template<typename T>
+    struct remove_reference<T&&> {
+        using type = T;
+    };
 
     // 条件选择器模板类
     template <bool Flag, typename T, typename U>
@@ -26,13 +40,17 @@ namespace stl {
     template <typename T, typename U>
     struct conditional_selector<true, T, U> {
         using type = T;
-        static T execute(T t, U u) { return std::forward<T>(t); }
+        using Ttype = typename stl::remove_reference<T>::type;
+        using Utype = typename stl::remove_reference<U>::type;
+        static Ttype& execute(Ttype& t, Utype& u) { return t; }
     };
 
     template <typename T, typename U>
     struct conditional_selector<false, T, U> {
         using type = U;
-        static U execute(T t, U u) { return std::forward<U>(u); }
+        using Ttype = typename stl::remove_reference<T>::type;
+        using Utype = typename stl::remove_reference<U>::type;
+        static Utype& execute(Ttype& t, Utype& u) { return u; }
     };
 
 
@@ -188,22 +206,6 @@ namespace stl {
     class is_same_temp<T, typename stl::void_type<stl::is_fundamental_type<T>::value>::type> {
     public:
         typedef std::true_type type;
-    };
-
-    //去除引用
-    template<typename T>
-    struct remove_reference {
-        using type = T;
-    };
-
-    template<typename T>
-    struct remove_reference<T&> {
-        using type = T;
-    };
-
-    template<typename T>
-    struct remove_reference<T&&> {
-        using type = T;
     };
 
     //取参数包第一个值

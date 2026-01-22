@@ -37,6 +37,7 @@ namespace stl {
 
     /**
     * @brief  (值类型)获取要替换序列b发生一次拷贝 execute函数入参一次拷贝 返回值一次拷贝
+    * @brief 这个地方注意 b,c的返回值类型可能是值类型也可能是左值右值，但是我们统一使用execute进行左值计算，再转换
     */
 
     template<size_t N, typename Type, typename... T, typename... U>
@@ -45,11 +46,9 @@ namespace stl {
         using traits = parameterassisttype<N, Type, typequeue<T...>, typequeue<U...>>;
         typename traits::data_type b = tuplefindelement<N>(data);
         typename traits::arg_type c = tuplefindelement<traits::arg_index>(args);
-        return std::forward<typename traits::re_type>(
-            conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(
-                std::forward<typename traits::arg_type>(c), std::forward<typename traits::data_type>(b)
-            )
-        );
+        return static_cast<typename traits::re_type>(
+            conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(c, b)
+            );
     }
 
 
@@ -62,15 +61,14 @@ namespace stl {
     };
 
     template<typename type, size_t... Is, typename... T, typename... U>
-    typename parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>>::types
+    auto
         parameter_args_tmp(tuple<T...>& _data, tuple<U...>& _args, indexqueue<Is...>) {
         using types = typename parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>>::types;
         constexpr size_t _size_args = tuplesize<tuple<U...>>::size;
         constexpr size_t _index_data = tuplesize<tuple<T...>>::size - 1;
         constexpr size_t placeholderssize = stl::tuplefindtype<_index_data, type, tuple<T...>>::get();
         static_assert(_size_args == placeholderssize, "入参和占位符数量不匹配");
-        //stl::tp<decltype(std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args)))...> _;
-        types _args_tmp(std::forward<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args))...);
+        types _args_tmp(static_cast<typename tupleelement<Is, types>::type>(parameter_assist<Is, type>(_data, _args))...);
         return _args_tmp;
     };
 
@@ -79,7 +77,7 @@ namespace stl {
     class parametertype;
 
     /**
-    * @param _data_1 <int,placeholders,char,placeholders> 要替换类型
+    * @param _data_1 <int,placeholders,char,placeholders> 要替换的Args类型序列
     * @param _data_2 <int,int> 被替换类型
     */
     template<typename Type, typename... T, typename... U>
@@ -89,7 +87,7 @@ namespace stl {
         tuple<U...>& _data_2;
         template<typename... P, typename... Q>
         parametertype(tuple<P...>& data_1, tuple<Q...>& data_2)
-            : _data_1(std::forward<tuple<P...>&>(data_1)), _data_2(std::forward<tuple<Q...>&>(data_2)) {
+            : _data_1(data_1), _data_2(data_2) {
         };
         parametertype(const parametertype& other) : _data_1(other._data_1), _data_2(other._data_2) {}
         auto recell() {
@@ -105,7 +103,7 @@ namespace stl {
         tuple<>& _data_2;
         template<typename... P, typename... Q>
         parametertype(tuple<P...>& data_1, tuple<Q...>& data_2)
-            : _data_1(std::forward<tuple<P...>&>(data_1)), _data_2(std::forward<tuple<Q...>&>(data_2)) {
+            : _data_1(data_1), _data_2(data_2) {
         };
         parametertype(const parametertype& other) : _data_1(other._data_1), _data_2(other._data_2) {}
         auto recell() {

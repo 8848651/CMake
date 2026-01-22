@@ -45,32 +45,28 @@ namespace stl {
     template<size_t N>
     class tuplebase<N> {};
 
-    template<typename... T>
-    class tp;
-
-    // <1 <2 <3...>>
     template<size_t N, typename T, typename... U>
     class tuplebase<N, T, U...> : public tupledata<N, T>, public tuplebase<N + 1, U...> {
     public:
         using data = tupledata<N, T>;
         using base = tuplebase<N + 1, U...>;
     public:
-        template<typename P, typename... Q, typename = typename stl::void_type<stl::is_same<tuplebase<N, T, U...>,
+        template<typename P, typename... Q, typename = typename stl::void_type<stl::is_same<typename stl::remove_reference<T>::type,
             typename stl::remove_reference<P>::type>::value>::type>
         tuplebase(P&& _data, Q&&... _base) : data(std::forward<P>(_data)), base(std::forward<Q>(_base)...) {};
-        tuplebase(const tuplebase<N, T, U...>& _base) :data(static_cast<data>(_base)), base(static_cast<base>(_base)) {};
+        tuplebase(const tuplebase<N, T, U...>& _base) :data(static_cast<const data&>(_base)), base(static_cast<const base&>(_base)) {};
         tuplebase(tuplebase<N, T, U...>&& _base) :data(std::move(_base)), base(std::move(_base)) {};
     };
 
-    //根据容器的法则中，容器不允许存引用类型如tuple<size_t&>
+
     template<typename... T>
     class tuple : public tuplebase<0, T...> {
     public:
-        using base = tuplebase<0, T...>;//first_type
-        template<typename... P, typename = typename stl::void_type<stl::is_same<tuple<T...>,
-            typename stl::remove_reference<stl::first_type<P...>>::type>::value>::type>
+        using base = tuplebase<0, T...>;
+        template<typename... P, typename = typename stl::void_type<!stl::is_same<tuple<T...>,
+            typename stl::remove_reference<typename stl::first_type<P...>::type>::type>::value>::type>
         tuple(P&&... args) : base(std::forward<P>(args)...) {};
-        tuple(const tuple<T...>& _base) : base(_base) {};
+        tuple(const tuple<T...>& _base) : base(static_cast<const base&>(_base)) {};
         tuple(tuple<T...>&& _base) : base(std::move(_base)) {};
 
     };
