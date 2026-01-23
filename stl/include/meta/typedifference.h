@@ -22,6 +22,24 @@ namespace stl {
     template<typename T, typename U>
     struct typequeuereferenceassisted;
 
+    template<size_t N, typename T>
+    struct typeelement;
+
+    template<size_t N, typename T, typename... U>
+    struct typeelement<N, typequeue<T, U...>> : public typeelement<N - 1, tuple<U...>> {};
+
+    template<typename T, typename... U>
+    struct typeelement<0, typequeue<T, U...>> {
+        using type = T;
+    };
+
+    template<typename T>
+    struct typesize;
+
+    template<typename... T>
+    struct typesize<typequeue<T...>> {
+        static constexpr size_t size = sizeof...(T);
+    };
 
     template<typename... T, typename... U>
     struct typequeueadd<typequeue<T...>, typequeue<U...>> {

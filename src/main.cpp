@@ -49,10 +49,6 @@ int main() {
     stl::tuple<int> args(1);
     stl::parametertype<char,stl::typequeue<char>,stl::typequeue<int>> pool(data,args);
     auto b = pool.recell();
-    
-
-
-    
 
 
     return 0;

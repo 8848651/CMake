@@ -60,8 +60,9 @@ namespace stl {
         using types = tuple<typename stl::parameterassisttype<Is, type, typequeue<T...>, typequeue<U...>>::re_type...>;
     };
 
+
     template<typename type, size_t... Is, typename... T, typename... U>
-    auto
+    typename parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>>::types
         parameter_args_tmp(tuple<T...>& _data, tuple<U...>& _args, indexqueue<Is...>) {
         using types = typename parameterassistedtype<type, indexqueue<Is...>, typequeue<T...>, typequeue<U...>>::types;
         constexpr size_t _size_args = tuplesize<tuple<U...>>::size;
