@@ -23,35 +23,40 @@ int add1(int a, int b) {
     return a + b;
 }
 
+auto test(const int& a) {
+    std::cout << a << std::endl;
+};
+
 
 int main() {
 
-    int x=10;
-    int y=10;
-    auto f11 = stl::bind(add1, x,y);
-    std::cout <<"f11: "<< f11() << std::endl;
-    // auto f12 = stl::bind(add1, x,stl::placeholders::_1);
-    // std::cout <<"f12: "<< f12(y) << std::endl;
-    // auto f13 = stl::bind(add1, stl::placeholders::_1,stl::placeholders::_2);
-    // std::cout <<"f13: "<< f13(x,y) << std::endl;
+
+    int x = 10;
+    int y = 10;
+    // auto f11 = stl::bind(add1, x,y);
+    // std::cout <<"f11: "<< f11() << std::endl;
+    //auto f12 = stl::bind(add1, x,stl::placeholders::_1);
+    //std::cout <<"f12: "<< f12(y) << std::endl;
+    // // auto f13 = stl::bind(add1, stl::placeholders::_1,stl::placeholders::_2);
+    // // std::cout <<"f13: "<< f13(x,y) << std::endl;
 
 
-    auto f21 = stl::bind(add1, 10,10);
-    std::cout <<"f21: "<< f21() << std::endl;
-    auto f22 = stl::bind(add1, 10,stl::placeholders::_1);
-    std::cout <<"f22: "<< f22(10) << std::endl;
-    auto f23 = stl::bind(add1, stl::placeholders::_1,stl::placeholders::_2);
-    std::cout <<"f23: "<< f23(10,10) << std::endl;
+    // auto f21 = stl::bind(add1, 10,10);
+    // std::cout <<"f21: "<< f21() << std::endl;
+    // auto f22 = stl::bind(add1, 10,stl::placeholders::_1);
+    // std::cout <<"f22: "<< f22(10) << std::endl;
+    // auto f23 = stl::bind(add1, stl::placeholders::_1,stl::placeholders::_2);
+    // std::cout <<"f23: "<< f23(10,10) << std::endl;
 
-    auto f31 = stl::bind(add1, 10,x);
-    std::cout <<"f31: "<< f31() << std::endl;
-    // auto f32 = stl::bind(add1, 10,stl::placeholders::_1);
-    // std::cout <<"f32: "<< f32(x) << std::endl;
-    auto f33 = stl::bind(add1, stl::placeholders::_1,x);
-    std::cout <<"f33: "<< f33(10) << std::endl;
-    // auto f34 = stl::bind(add1, stl::placeholders::_1,stl::placeholders::_2);
-    // std::cout <<"f34: "<< f34(x,10) << std::endl;
-    
+    // auto f31 = stl::bind(add1, 10,x);
+    // std::cout <<"f31: "<< f31() << std::endl;
+    // // auto f32 = stl::bind(add1, 10,stl::placeholders::_1);
+    // // std::cout <<"f32: "<< f32(x) << std::endl;
+    // auto f33 = stl::bind(add1, stl::placeholders::_1,x);
+    // std::cout <<"f33: "<< f33(10) << std::endl;
+    // // auto f34 = stl::bind(add1, stl::placeholders::_1,stl::placeholders::_2);
+    // // std::cout <<"f34: "<< f34(x,10) << std::endl;
+
 
 
     return 0;

@@ -42,9 +42,11 @@ namespace stl {
         template<typename R, typename... Args>
         static auto recall(R callback, Args&&... data) {
             using queuedata = typename stl::makeindexqueue<sizeof...(Args)>::queuedata;
-            return [&](U&&... args) mutable -> decltype(bindtype<Re>()) {
+            return [&](typename stl::bindadd_reference<U>::type... args) mutable -> decltype(bindtype<Re>()) {
+                //tp<typequeue<U...>> _;
+                //tp<typequeue<typename stl::bindadd_reference<U>::type...>> _;
                 stl::tuple<T...> _data(std::forward<Args>(data)...);
-                stl::tuple<U...> _args(std::forward<U>(args)...);
+                stl::tuple<U...> _args(std::forward<typename stl::bindadd_reference<U>::type>(args)...);
                 parametertype<stl::placeholders, stl::typequeue<T...>, stl::typequeue<U...>> temp(_data, _args);
                 return bindrecall(callback,temp.recell(),queuedata());
                 };

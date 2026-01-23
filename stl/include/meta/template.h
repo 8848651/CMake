@@ -33,6 +33,22 @@ namespace stl {
         using type = T;
     };
 
+    //添加引用,仅限于bind使用，有很大局限性
+    template<typename T>
+    struct bindadd_reference {
+        using type = const T&;
+    };
+
+    template<typename T>
+    struct bindadd_reference<T&> {
+        using type = T&;
+    };
+
+    template<typename T>
+    struct bindadd_reference<T&&> {
+        using type = T&&;
+    };
+
     // 条件选择器模板类
     template <bool Flag, typename T, typename U>
     struct conditional_selector;

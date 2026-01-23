@@ -9,6 +9,8 @@ namespace stl {
     * @return 返回一个可以存储多种类型的元组类型
     */
     //这个tupledata必须要有，不然get类型无法转换
+    template<typename T>
+    class tt;
 
     template<size_t N, typename T, typename R = void>
     class tupledata {
@@ -16,7 +18,7 @@ namespace stl {
         T data;
     public:
         tupledata() = delete;
-        template<typename P, typename = typename stl::void_type<stl::is_same<typename stl::remove_reference<P>::type,
+        template<typename P, typename = typename stl::void_type<!stl::is_same<const tupledata<N, T>,
             typename stl::remove_reference<T>::type>::value>::type>
         tupledata(P&& _data) : data(std::forward<P>(_data)) {};
         tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
@@ -27,8 +29,8 @@ namespace stl {
     class tupledata<N, T, typename stl::void_type<stl::is_same<T, typename stl::remove_reference<T>::type>::value>::type> {
     public:
         tupledata() = delete;
-        template<typename P, typename = typename stl::void_type<stl::is_same<typename stl::remove_reference<P>::type,
-            typename stl::remove_reference<T>::type>::value>::type>
+        template<typename P, typename = typename stl::void_type<!stl::is_same<const tupledata<N, T>,
+            typename stl::remove_reference<P>::type>::value>::type>
         tupledata(P&& _data) : data(std::forward<P>(_data)) {};
         tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
         tupledata(tupledata<N, T>&& _base) : data(std::move(_base.get())) {};
@@ -37,7 +39,7 @@ namespace stl {
         T data;
     };
 
-    //-------------------------------------------------------------------------
+
 
     template<size_t N, typename... T>
     class tuplebase;
@@ -51,7 +53,7 @@ namespace stl {
         using data = tupledata<N, T>;
         using base = tuplebase<N + 1, U...>;
     public:
-        template<typename P, typename... Q, typename = typename stl::void_type<stl::is_same<typename stl::remove_reference<T>::type,
+        template<typename P, typename... Q, typename = typename stl::void_type<!stl::is_same<const tuplebase<N, T, U...>,
             typename stl::remove_reference<P>::type>::value>::type>
         tuplebase(P&& _data, Q&&... _base) : data(std::forward<P>(_data)), base(std::forward<Q>(_base)...) {};
         tuplebase(const tuplebase<N, T, U...>& _base) :data(static_cast<const data&>(_base)), base(static_cast<const base&>(_base)) {};
@@ -63,7 +65,7 @@ namespace stl {
     class tuple : public tuplebase<0, T...> {
     public:
         using base = tuplebase<0, T...>;
-        tuple(){};
+        tuple() {};
         template<typename... P, typename = typename stl::void_type<!stl::is_same<tuple<T...>,
             typename stl::remove_reference<typename stl::first_type<P...>::type>::type>::value>::type>
         tuple(P&&... args) : base(std::forward<P>(args)...) {};
@@ -72,7 +74,7 @@ namespace stl {
 
     };
 
-    //-------------------------------------------------------------------------
+
 
     template<size_t N, typename T>
     struct tupleelement;
@@ -85,7 +87,7 @@ namespace stl {
         using type = T;
     };
 
-    //-------------------------------------------------------------------------
+
 
     template<typename T>
     struct tuplesize;
@@ -95,14 +97,14 @@ namespace stl {
         static constexpr size_t size = sizeof...(T);
     };
 
-    //-------------------------------------------------------------------------
+
 
     template<size_t N, typename... U>
     typename tupleelement<N, tuple<U...>>::type tuplefindelement(tuple<U...>& base) {
-        return static_cast<tupledata<N, typename tupleelement<N, tuple<U...>>::type>>(base).get();
+        return static_cast<tupledata<N, typename tupleelement<N, tuple<U...>>::type>&>(base).get();
     };
 
-    //-------------------------------------------------------------------------
+
 
     template<size_t N, typename... T>
     struct tuplefindtype;
@@ -123,7 +125,6 @@ namespace stl {
         }
     };
 
-    //-------------------------------------------------------------------------
 
 };
 
