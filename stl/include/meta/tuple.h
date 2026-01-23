@@ -63,6 +63,7 @@ namespace stl {
     class tuple : public tuplebase<0, T...> {
     public:
         using base = tuplebase<0, T...>;
+        tuple(){};
         template<typename... P, typename = typename stl::void_type<!stl::is_same<tuple<T...>,
             typename stl::remove_reference<typename stl::first_type<P...>::type>::type>::value>::type>
         tuple(P&&... args) : base(std::forward<P>(args)...) {};
