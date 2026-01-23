@@ -57,11 +57,6 @@ namespace stl {
     * @brief 获取序列中前N个数中类型T的数量
     */
 
-    template<typename T>
-    struct typequantity<0, T, typequeue<>> {
-        constexpr static size_t value = 0;
-    };
-
     template<typename T, typename U, typename... R>
     struct typequantity<0, T, typequeue<U, R...>> {
         constexpr static size_t Tvalue = static_cast<bool>(stl::is_same<T, U>::value) ? 1 : 0;
@@ -70,7 +65,6 @@ namespace stl {
 
     template<size_t N, typename T, typename U, typename... R>
     struct typequantity<N, T, typequeue<U, R...>> {
-        //static_assert(N >= typesize<typequeue<U, R...>>::size, "入参和占位符数量不匹配");
         constexpr static size_t Tvalue = static_cast<bool>(stl::is_same<T, U>::value) ? 1 : 0;
         constexpr static size_t value = typequantity<N - 1, T, typequeue<R...>>::value + Tvalue;
     };

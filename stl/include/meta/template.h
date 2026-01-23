@@ -44,9 +44,19 @@ namespace stl {
         using type = T;
     };
 
+    template<typename T>
+    struct remove_const<const T&> {
+        using type = T;
+    };
+
     //添加引用,仅限于bind使用，有很大局限性
     template<typename T>
     struct bindadd_reference {
+        using type = const T&;
+    };
+
+    template<typename T>
+    struct bindadd_reference<const T> {
         using type = const T&;
     };
 
@@ -232,9 +242,17 @@ namespace stl {
     };
 
     //取参数包第一个值
-    template<typename T, typename... Rest>
-    struct first_type {
+    template<typename... T>
+    struct first_type;
+
+    template<typename T, typename... U>
+    struct first_type<T, U...> {
         using type = T;
+    };
+
+    template<>
+    struct first_type<> {
+        using type = void;
     };
 
 

@@ -13,7 +13,7 @@ namespace stl {
     template<size_t N, typename T, typename R = void>
     class tupledata {
     private:
-        T data;
+        T data;          
     public:
         tupledata() = delete;
         template<typename P, typename = typename stl::void_type<stl::is_same<
