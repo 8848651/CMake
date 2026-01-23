@@ -30,14 +30,9 @@ int add1(int a, int b) {
 
 
 int main() {
-    stl::tuple<int, int> t1(10, 10);
-    stl::tuple<int, int> t2(t1);
-    auto abc = stl::tuplefindelement<0>(t2);
-    std::cout << abc << std::endl;
 
-    bool t = 5 ? true : false;
-    std::cout << t << std::endl;
-    //test();
+    auto a = stl::typequantity<1, int, stl::typequeue<int>>::value;
+    std::cout << a << std::endl;
 
 
 

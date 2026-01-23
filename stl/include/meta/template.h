@@ -33,6 +33,17 @@ namespace stl {
         using type = T;
     };
 
+    //移除const
+    template<typename T>
+    struct remove_const {
+        using type = T;
+    };
+
+    template<typename T>
+    struct remove_const<const T> {
+        using type = T;
+    };
+
     //添加引用,仅限于bind使用，有很大局限性
     template<typename T>
     struct bindadd_reference {
