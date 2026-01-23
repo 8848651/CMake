@@ -23,12 +23,22 @@ int add1(int a, int b) {
     return a + b;
 }
 
-auto test(const int& a) {
-    std::cout << a << std::endl;
-};
+// stl::tuple<int, int> test() {
+//     stl::tuple<int, int> t1(10, 10);
+//     return t1;
+// };
 
 
 int main() {
+    stl::tuple<int, int> t1(10, 10);
+    stl::tuple<int, int> t2(t1);
+    auto abc = stl::tuplefindelement<0>(t2);
+    std::cout << abc << std::endl;
+
+    bool t = 5 ? true : false;
+    std::cout << t << std::endl;
+    //test();
+
 
 
     int x = 10;

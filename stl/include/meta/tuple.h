@@ -9,8 +9,6 @@ namespace stl {
     * @return 返回一个可以存储多种类型的元组类型
     */
     //这个tupledata必须要有，不然get类型无法转换
-    template<typename T>
-    class tt;
 
     template<size_t N, typename T, typename R = void>
     class tupledata {

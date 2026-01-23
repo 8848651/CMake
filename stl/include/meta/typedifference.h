@@ -10,20 +10,57 @@ namespace stl {
     * @return 返回一个可以进行参数类型替换的对象
     */
 
+    //类型序列
     template<typename... T>
     struct typequeue;
 
+    //两个类型序列相加
     template<typename T, typename U>
     struct typequeueadd;
 
+    //取A序列与 AB交集 的差集
     template<typename T, typename U>
     struct typequeueassisted;
 
+    //取AB类型相同的引用，AB去掉引用的值类型，以及AB不同B的类型
     template<typename T, typename U>
     struct typequeuereferenceassisted;
 
+    //获取序列第N个类型
     template<size_t N, typename T>
     struct typeelement;
+
+    //获取序列的长度
+    template<typename T>
+    struct typesize;
+
+    //获取序列中类型T的个数
+    template<typename T,typename U>
+    struct typequantity;
+
+    //序列中是否有某个值whether
+    template<typename T, typename U>
+    struct typewhether;
+
+
+    template<typename T, typename... U>
+    struct typewhether<T, typequeue<U...>> {
+        constexpr static bool value = typequantity<T, typequeue<U...>>::value ? true : false;
+    };
+
+
+    template<typename T>
+    struct typequantity<T, typequeue<>> {
+        constexpr static size_t value = 0;
+    };
+        
+    template<typename T, typename U, typename... R>
+    struct typequantity<T, typequeue<U, R...>> {
+        constexpr static size_t Tvalue = static_cast<bool>(stl::is_same<T, U>::value) ? 1 : 0;
+        constexpr static size_t value = typequeue<R...>::value + Tvalue;
+    };
+
+
 
     template<size_t N, typename T, typename... U>
     struct typeelement<N, typequeue<T, U...>> : public typeelement<N - 1, tuple<U...>> {};
@@ -33,13 +70,14 @@ namespace stl {
         using type = T;
     };
 
-    template<typename T>
-    struct typesize;
+
 
     template<typename... T>
     struct typesize<typequeue<T...>> {
         static constexpr size_t size = sizeof...(T);
     };
+
+
 
     template<typename... T, typename... U>
     struct typequeueadd<typequeue<T...>, typequeue<U...>> {

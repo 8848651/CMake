@@ -56,17 +56,13 @@ namespace stl {
     template <typename T, typename U>
     struct conditional_selector<true, T, U> {
         using type = T;
-        using Ttype = typename stl::remove_reference<T>::type;
-        using Utype = typename stl::remove_reference<U>::type;
-        static Ttype& execute(Ttype& t, Utype& u) { return t; }
+        static T execute(T t, U u) { return std::forward<T>(t); }
     };
 
     template <typename T, typename U>
     struct conditional_selector<false, T, U> {
         using type = U;
-        using Ttype = typename stl::remove_reference<T>::type;
-        using Utype = typename stl::remove_reference<U>::type;
-        static Utype& execute(Ttype& t, Utype& u) { return u; }
+        static U execute(T t, U u) { return std::forward<U>(u); }
     };
 
 
