@@ -16,8 +16,10 @@ namespace stl {
         T data;
     public:
         tupledata() = delete;
-        template<typename P, typename = typename stl::void_type<!stl::is_same<const tupledata<N, T>,
-            typename stl::remove_reference<T>::type>::value>::type>
+        template<typename P, typename = typename stl::void_type<stl::is_same<
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<T>::type>::type>::type,
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<P>::type>::type>::type
+        >::value>::type>
         tupledata(P&& _data) : data(std::forward<P>(_data)) {};
         tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
         T get() const { return std::forward<T>(data); };
@@ -27,8 +29,10 @@ namespace stl {
     class tupledata<N, T, typename stl::void_type<stl::is_same<T, typename stl::remove_reference<T>::type>::value>::type> {
     public:
         tupledata() = delete;
-        template<typename P, typename = typename stl::void_type<!stl::is_same<const tupledata<N, T>,
-            typename stl::remove_reference<P>::type>::value>::type>
+        template<typename P, typename = typename stl::void_type<stl::is_same<
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<T>::type>::type>::type,
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<P>::type>::type>::type
+        >::value>::type>
         tupledata(P&& _data) : data(std::forward<P>(_data)) {};
         tupledata(const tupledata<N, T>& _base) : data(_base.get()) {};
         tupledata(tupledata<N, T>&& _base) : data(std::move(_base.get())) {};
@@ -51,8 +55,10 @@ namespace stl {
         using data = tupledata<N, T>;
         using base = tuplebase<N + 1, U...>;
     public:
-        template<typename P, typename... Q, typename = typename stl::void_type<!stl::is_same<const tuplebase<N, T, U...>,
-            typename stl::remove_reference<P>::type>::value>::type>
+        template<typename P, typename... Q, typename = typename stl::void_type<stl::is_same<
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<T>::type>::type>::type,
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<P>::type>::type>::type
+        >::value>::type>
         tuplebase(P&& _data, Q&&... _base) : data(std::forward<P>(_data)), base(std::forward<Q>(_base)...) {};
         tuplebase(const tuplebase<N, T, U...>& _base) :data(static_cast<const data&>(_base)), base(static_cast<const base&>(_base)) {};
         tuplebase(tuplebase<N, T, U...>&& _base) :data(std::move(_base)), base(std::move(_base)) {};
@@ -64,8 +70,10 @@ namespace stl {
     public:
         using base = tuplebase<0, T...>;
         tuple() {};
-        template<typename... P, typename = typename stl::void_type<!stl::is_same<tuple<T...>,
-            typename stl::remove_reference<typename stl::first_type<P...>::type>::type>::value>::type>
+        template<typename... P, typename = typename stl::void_type<stl::is_same<
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<T...>::type>::type>::type,
+            typename stl::remove_reference<typename stl::remove_const<typename stl::first_type<P...>::type>::type>::type
+        >::value>::type>
         tuple(P&&... args) : base(std::forward<P>(args)...) {};
         tuple(const tuple<T...>& _base) : base(static_cast<const base&>(_base)) {};
         tuple(tuple<T...>&& _base) : base(std::move(_base)) {};

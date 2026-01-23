@@ -23,10 +23,10 @@ int add1(int a, int b) {
     return a + b;
 }
 
-// stl::tuple<int, int> test() {
-//     stl::tuple<int, int> t1(10, 10);
-//     return t1;
-// };
+stl::tuple<int, int> test() {
+    stl::tuple<int, int> t1(10, 10);
+    return t1;
+};
 
 
 int main() {
