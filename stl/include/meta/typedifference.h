@@ -35,32 +35,48 @@ namespace stl {
     struct typesize;
 
     //获取序列中类型T的个数
-    template<typename T,typename U>
+    template<size_t N, typename T, typename U>
     struct typequantity;
+
 
     //序列中是否有某个值whether
     template<typename T, typename U>
     struct typewhether;
 
+    /**
+    * @brief 获取序列中是否有类型T
+    */
 
     template<typename T, typename... U>
     struct typewhether<T, typequeue<U...>> {
-        constexpr static bool value = typequantity<T, typequeue<U...>>::value ? true : false;
+        constexpr static size_t size = typesize<typequeue<U...>>::size - 1;
+        constexpr static bool value = typequantity<size, T, typequeue<U...>>::value ? true : false;
     };
 
+    /**
+    * @brief 获取序列中前N个数中类型T的数量
+    */
 
-    template<typename T>
-    struct typequantity<T, typequeue<>> {
+    template<size_t N, typename T>
+    struct typequantity<N, T, typequeue<>> {
         constexpr static size_t value = 0;
     };
-        
+
     template<typename T, typename U, typename... R>
-    struct typequantity<T, typequeue<U, R...>> {
+    struct typequantity<0, T, typequeue<U, R...>> {
         constexpr static size_t Tvalue = static_cast<bool>(stl::is_same<T, U>::value) ? 1 : 0;
-        constexpr static size_t value = typequeue<R...>::value + Tvalue;
+        constexpr static size_t value = Tvalue;
     };
 
+    template<size_t N, typename T, typename U, typename... R>
+    struct typequantity<N, T, typequeue<U, R...>> {
+        constexpr static size_t Tvalue = static_cast<bool>(stl::is_same<T, U>::value) ? 1 : 0;
+        constexpr static size_t value = typequantity<N - 1, T, typequeue<R...>>::value + Tvalue;
+    };
 
+    /**
+    * @brief 获取序列第N个的类型
+    */
 
     template<size_t N, typename T, typename... U>
     struct typeelement<N, typequeue<T, U...>> : public typeelement<N - 1, tuple<U...>> {};
@@ -70,14 +86,18 @@ namespace stl {
         using type = T;
     };
 
-
+    /**
+    * @brief 获取类型序列的长度
+    */
 
     template<typename... T>
     struct typesize<typequeue<T...>> {
         static constexpr size_t size = sizeof...(T);
     };
 
-
+    /**
+    * @brief 两个序列相加
+    */
 
     template<typename... T, typename... U>
     struct typequeueadd<typequeue<T...>, typequeue<U...>> {
