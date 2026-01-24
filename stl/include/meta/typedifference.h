@@ -59,7 +59,7 @@ namespace stl {
     * @brief 获取序列第N个的类型
     */
     template<size_t N, typename T, typename... U>
-    struct typeelement<N, typequeue<T, U...>> : public typeelement<N - 1, tuple<U...>> {};
+    struct typeelement<N, typequeue<T, U...>> : public typeelement<N - 1, typequeue<U...>> {};
 
     template<typename T, typename... U>
     struct typeelement<0, typequeue<T, U...>> {
