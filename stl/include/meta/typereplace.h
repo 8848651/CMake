@@ -47,7 +47,9 @@ namespace stl {
         typename traits::data_type b = tuplefindelement<N>(data);
         typename traits::arg_type c = tuplefindelement<traits::arg_index>(args);
         return static_cast<typename traits::re_type>(
-            conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(c, b)
+            conditional_selector<traits::use_arg, typename traits::arg_type, typename traits::data_type>::execute(
+                std::forward<typename traits::arg_type>(c), std::forward<typename traits::data_type>(b)
+            )
             );
     }
 

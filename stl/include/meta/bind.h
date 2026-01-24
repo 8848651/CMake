@@ -27,7 +27,7 @@ namespace stl {
     auto bind(T(*func)(U...), Args&&... data) {
         //Atype 新绑定类型  Ltype 入参类型
         using Utype = stl::typequeue<U...>;
-        using Atype = typename stl::typequeuereferenceassisted<Utype, stl::typequeue<Args...>>::type;
+        using Atype = typename stl::typequeuereferenceassisted<Utype, stl::typequeue<Args&&...>>::type;
         using Ltype = typename stl::typequeueassisted<Utype, Atype>::type;
         return bindimpl<T, Atype, Ltype, Utype>::recall(
             [=](U... u) mutable -> decltype(bindtype<T>()) {return func(std::forward<U>(u)...);},
@@ -49,7 +49,6 @@ namespace stl {
                 // l<typequeue<Utype...>> _1;
                 // l<typequeue<T...>> _2;
                 // l<typequeue<U...>> _3;
-                temp.recell();
                 return bindrecall(_callback, temp.recell(), queuedata());
                 //return Re{};
                 };

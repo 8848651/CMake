@@ -24,8 +24,11 @@ namespace stl {
         static re_type argument_assist(stl::tuple<T...>& data, stl::tuple<U...>& args) {
             data_type b = tuplefindelement<N>(data);
             arg_type c = tuplefindelement<arg_index>(args);
+            // l<data_type> _1;
+            // l<arg_type> _2;
+            // l<re_type> _3;
             return static_cast<re_type>(
-                conditional_selector<use_arg, data_type, arg_type>::execute(b, c)
+                conditional_selector<use_arg, data_type, arg_type>::execute(std::forward<data_type>(b), std::forward<arg_type>(c))
                 );
         }
     };
