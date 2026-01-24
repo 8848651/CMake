@@ -71,6 +71,11 @@ namespace stl {
     };
 
     template<typename T>
+    struct bindadd_reference<const T&&> {
+        using type = const T&&;
+    };
+
+    template<typename T>
     struct bindadd_reference<T&> {
         using type = T&;
     };
@@ -78,6 +83,17 @@ namespace stl {
     template<typename T>
     struct bindadd_reference<T&&> {
         using type = T&&;
+    };
+
+    //判断类型是否为const左值引用
+    template<typename T>
+    struct is_left_const {
+        constexpr static bool value = false;
+    };
+
+    template<typename T>
+    struct is_left_const<const T&> {
+        constexpr static bool value = true;
     };
 
     // 条件选择器模板类

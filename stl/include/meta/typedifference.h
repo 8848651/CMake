@@ -141,11 +141,16 @@ namespace stl {
     template<typename P, typename Q, typename R>
     struct typequeuereferenceget;
 
+    //注意const int&& 这种可能会报错
     template<typename P, typename Q, typename T, typename U>
     struct typequeuereferenceget<P, Q, typequeuereferenceassisted<T, U>> {
         static constexpr bool Pvalue = stl::is_same<typename stl::remove_reference<P>::type, P>::value;
-        static constexpr bool Qvalue = stl::is_same<typename stl::remove_reference<Q>::type, typename stl::remove_reference<P>::type>::value;
-        using Rtype = typename stl::conditional_selector<Pvalue&& Qvalue, P, Q>::type;
+        static constexpr bool Pconst = stl::is_left_const<P>::value;
+        static constexpr bool Qvalue = stl::is_same<
+            typename stl::remove_reference<typename stl::remove_const<P>::type>::type,
+            typename stl::remove_reference<typename stl::remove_const<Q>::type>::type
+        >::value;
+        using Rtype = typename stl::conditional_selector<(Pvalue || Pconst) && Qvalue, P, Q>::type;
         using type = typename typequeueadd<typequeue<Rtype>, typename typequeuereferenceassisted<T, U>::type>::type;
     };
 
