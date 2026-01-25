@@ -46,9 +46,6 @@ namespace stl {
                 stl::tuple<U...> _args(std::forward<typename stl::bindadd_reference<U>::type>(args)...);
                 //stl::parametertype<stl::placeholders, stl::typequeue<T...>, stl::typequeue<U...>> temp(_data, _args);
                 stl::argumenttype<stl::typequeue<Utype...>, stl::typequeue<T...>, stl::typequeue<U...>> temp(_data, _args);
-                // l<typequeue<Utype...>> _1;
-                // l<typequeue<T...>> _2;
-                // l<typequeue<U...>> _3;
                 return bindrecall(_callback, temp.recell(), queuedata());
                 //return Re{};
                 };

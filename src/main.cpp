@@ -51,25 +51,30 @@ int add_mix(int&& a, int& b) {
     return a + b;
 }
 
+int take_rvalue(int&& a) {};
 
 int main() {
 
+    // int x = 10;
+    // auto f = stl::bind(take_rvalue, x);
+    // f();
 
-    int x = 10;
-    int y = 20;
 
-    // 纯右值调用
-    auto f1 = stl::bind(add_rvalue, stl::placeholders::_1, stl::placeholders::_2);
-    std::cout << "f1: " << f1(10, 20) << std::endl;
+    // int x = 10;
+    // int y = 20;
+
+    // // 纯右值调用
+    // auto f1 = stl::bind(add_rvalue, stl::placeholders::_1, stl::placeholders::_2);
+    // std::cout << "f1: " << f1(10, 20) << std::endl;
 
     // // bind 阶段给右值
-    auto f2 = stl::bind(add_rvalue, 10, 20);
-    std::cout << "f2: " << f2() << std::endl;
+    // auto f2 = stl::bind(add_rvalue, 10, 20);
+    // std::cout << "f2: " << f2() << std::endl;
 
     // 混合：右值 + 左值
-    auto f3 = stl::bind(add_mix, stl::placeholders::_1, y);
-    std::cout << "f3: " << f3(10) << std::endl;
-    std::cout << "y: " << y << std::endl;
+    // auto f3 = stl::bind(add_mix, stl::placeholders::_1, y);
+    // std::cout << "f3: " << f3(10) << std::endl;
+    // std::cout << "y: " << y << std::endl;
 
 
     // int x = 10;
