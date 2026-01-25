@@ -43,7 +43,7 @@ namespace stl {
     struct typetwodifference;
 
     //取AB类型相同的引用，AB去掉引用的值类型，以及AB不同B的类型
-    template<typename T, typename U>
+    template<typename R,typename T, typename U>
     struct typequeuereferenceassisted;
 
     /**
@@ -167,32 +167,42 @@ namespace stl {
     template<typename P, typename Q, typename R>
     struct typequeuereferenceget;
 
-    template<typename P, typename Q, typename T, typename U>
-    struct typequeuereferenceget<P, Q, typequeuereferenceassisted<T, U>> {
+    template<typename P, typename Q, typename R,typename T, typename U>
+    struct typequeuereferenceget<P, Q, typequeuereferenceassisted<R, T, U>> {
+        
+        static constexpr bool QAvalue = stl::is_same<
+            typename stl::remove_reference<R>::type, typename stl::remove_reference<Q>::type
+        >::value;
+        using QAtype = typename stl::conditional_selector<QAvalue, typename stl::remove_reference<Q>::type, Q>::type;
+
+        static constexpr bool QBvalue = is_right_const<P, QAtype>::value;
+        using QBtype = typename stl::conditional_selector<QBvalue, P, QAtype>::type;
+
         static constexpr bool Pvalue = stl::is_same<typename stl::remove_reference<P>::type, P>::value;
         static constexpr bool Pconst = stl::is_left_const<P>::value;
-        static constexpr bool Qvalue = stl::is_same<
+        static constexpr bool QCvalue = stl::is_same<
             typename stl::remove_reference<typename stl::remove_const<P>::type>::type,
-            typename stl::remove_reference<typename stl::remove_const<Q>::type>::type
+            typename stl::remove_reference<typename stl::remove_const<QBtype>::type>::type
         >::value;
-        using Rtype = typename stl::conditional_selector<(Pvalue || Pconst) && Qvalue, P, Q>::type;
-        using type = typename typequeueadd<typequeue<Rtype>, typename typequeuereferenceassisted<T, U>::type>::type;
+
+        using Rtype = typename stl::conditional_selector<(Pvalue || Pconst) && QCvalue, P, QBtype>::type;
+        using type = typename typequeueadd<typequeue<Rtype>, typename typequeuereferenceassisted<R,T, U>::type>::type;
     };
 
-    template<typename P, typename T, typename U>
-    struct typequeuereferenceget<P, P, typequeuereferenceassisted<T, U>> {
-        using type = typename typequeueadd<typequeue<P>, typename typequeuereferenceassisted<T, U>::type>::type;;
+    template<typename P, typename R,typename T, typename U>
+    struct typequeuereferenceget<P, P, typequeuereferenceassisted<R,T, U>> {
+        using type = typename typequeueadd<typequeue<P>, typename typequeuereferenceassisted<R,T, U>::type>::type;;
     };
 
-    template<>
-    struct typequeuereferenceassisted<typequeue<>, typequeue<>> {
+    template<typename R>
+    struct typequeuereferenceassisted<R,typequeue<>, typequeue<>> {
         using type = typequeue<>;
         using previoustyep = typequeue<>;
     };
 
-    template<typename P, typename... T, typename Q, typename... U>
-    struct typequeuereferenceassisted<typequeue<P, T...>, typequeue<Q, U...>> {
-        using previoustyep = typequeuereferenceassisted<typequeue<T...>, typequeue<U... >>;
+    template<typename R,typename P, typename... T, typename Q, typename... U>
+    struct typequeuereferenceassisted<R,typequeue<P, T...>, typequeue<Q, U...>> {
+        using previoustyep = typequeuereferenceassisted<R,typequeue<T...>, typequeue<U... >>;
         using type = typename typequeuereferenceget<P, Q, previoustyep>::type;
     };
 }

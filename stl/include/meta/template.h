@@ -96,6 +96,22 @@ namespace stl {
         constexpr static bool value = true;
     };
 
+    //判断类型是否为const右值引用
+    template<typename T, typename U>
+    struct is_right_const {
+        constexpr static bool value = false;
+    };
+
+    template<typename T, typename U>
+    struct is_right_const<const T&&, const U&&> {
+        constexpr static bool value = true;
+    };
+
+    template<typename T, typename U>
+    struct is_right_const<const T&&, U&&> {
+        constexpr static bool value = true;
+    };
+
     // 条件选择器模板类
     template <bool Flag, typename T, typename U>
     struct conditional_selector;
