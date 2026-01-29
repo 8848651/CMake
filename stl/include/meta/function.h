@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 
 namespace stl {
 
@@ -16,7 +17,7 @@ namespace stl {
 
         function() :function([](U... u) {throw std::bad_function_call{};}) {}
 
-        template<typename R>
+        template<typename R,typename = decltype(std::declval<R>()(std::declval<U>()...))>
         function(R temp) {
             funimpl = new R{ std::move(temp) };
             destroy = function<T(U...)>::template fundestory<R>;
