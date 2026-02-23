@@ -6,19 +6,12 @@
 
 class eventloop;
 
-class channel : public std::enable_shared_from_this<channel> {
+class channel{
 public:
-    using EventCallback = std::function<void()>;
+    channel(int _socketfd,eventloop& _loop):socketfd(_socketfd),loop(_loop) {};
 
-public:
-    channel() { std::cout << 123321 << std::endl; };
-    channel(int socketfd, std::shared_ptr<eventloop> loop) :socketfd(socketfd), loop(loop) {};
-    void setReadCallback(EventCallback cb) { readCallback_ = std::move(cb); }
-    void updateForEpoll();
-    void test();
 
 public:
     int socketfd;
-    std::shared_ptr<eventloop> loop;
-    EventCallback readCallback_;
+    eventloop& loop;
 };

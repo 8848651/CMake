@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/common_main.dir/src/main.cpp.o"
-  "CMakeFiles/common_main.dir/src/main.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -10,8 +10,6 @@
 #include <stdio.h>
 
 
-// 1: baseloop
-// 2: eventloop
 class tcpserver {
 public:
     using readblack = std::function<void(int)>;
@@ -26,26 +24,24 @@ public:
     std::thread t;
 
 public:
-    void start();
-    void acceptserver(int);
-    tcpserver(readblack readblack_) :t([&]() {eventloop_.loop();}), readblack_(readblack_)
-        , acceptor_(std::shared_ptr<eventloop>(&baseloop)) {
-        acceptor_.setReadCallback([&](int clientfd) {acceptserver(clientfd);});
+    // void start(){
+    //     pid_t t_cachedTid = static_cast<pid_t>(::syscall(SYS_gettid));
+    //     printf("t_cachedTid: %d\n", t_cachedTid);
+    //     acceptor_.connect_channel->updateForEpoll();
+    //     baseloop.loop();
+    // };
+
+    void acceptserver(int socketfd){
+        std::shared_ptr<channel> businesschannel = std::make_shared<channel>(socketfd, std::shared_ptr<eventloop>(&eventloop_));
+        businesschannel->setReadCallback([&]() {readblack_(socketfd);});
+        businesschannel->updateForEpoll();
     };
+    
+    // tcpserver(readblack readblack_) :t([&]() {eventloop_.loop();}), readblack_(readblack_)
+    //     , acceptor_(std::shared_ptr<eventloop>(&baseloop)) {
+    //     acceptor_.setReadCallback([&](int clientfd) {acceptserver(clientfd);});
+    // };
 
 
 
 };
-
-void tcpserver::start() {
-    pid_t t_cachedTid = static_cast<pid_t>(::syscall(SYS_gettid));
-    printf("t_cachedTid: %d\n", t_cachedTid);
-    acceptor_.connect_channel->updateForEpoll();
-    baseloop.loop();
-}
-
-void tcpserver::acceptserver(int socketfd) {
-    std::shared_ptr<channel> businesschannel = std::make_shared<channel>(socketfd, std::shared_ptr<eventloop>(&eventloop_));
-    businesschannel->setReadCallback([&]() {readblack_(socketfd);});
-    businesschannel->updateForEpoll();
-}

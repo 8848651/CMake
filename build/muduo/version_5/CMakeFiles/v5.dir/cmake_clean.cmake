@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/v5.dir/src/channel.cpp.o"
-  "CMakeFiles/v5.dir/src/channel.cpp.o.d"
   "libv5.a"
   "libv5.pdb"
 )

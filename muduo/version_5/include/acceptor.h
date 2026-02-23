@@ -24,9 +24,7 @@ int get_socket_fd() {
 
 //设置非阻塞
 void setnonblocking(int fd) {
-    // 获取当前文件描述符的状态标志
     int flags = fcntl(fd, F_GETFL, 0);
-    // 设置新状态为非阻塞
     fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
 
@@ -39,7 +37,15 @@ public:
     acceptor(std::shared_ptr<eventloop> loop) :connect_channel(std::make_shared<channel>(get_socket_fd(), loop)) {
         connect_channel->setReadCallback([&]() {acceptor::accepter();});
     };
-    void accepter();
+
+    void accepter(){
+        struct sockaddr_in clientaddr;
+        socklen_t len = sizeof(clientaddr);
+        int clientfd = accept(connect_channel->socketfd, (struct sockaddr*)&clientaddr, &len);
+        setnonblocking(clientfd);
+        Callback_(clientfd);
+    };
+
     void setReadCallback(EventCallback cb) { Callback_ = std::move(cb); }
 
 public:
@@ -48,12 +54,5 @@ public:
 
 };
 
-void acceptor::accepter() {
-    struct sockaddr_in clientaddr;
-    socklen_t len = sizeof(clientaddr);
-    int clientfd = accept(connect_channel->socketfd, (struct sockaddr*)&clientaddr, &len);
-    setnonblocking(clientfd);
-    Callback_(clientfd);
-}
 
 

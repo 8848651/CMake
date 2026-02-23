@@ -33,13 +33,13 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 11,
+				"line" : 12,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 14,
+				"line" : 20,
 				"parent" : 0
 			}
 		]
@@ -50,30 +50,29 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++14"
+					"fragment" : " -pthread -g  "
+				},
+				{
+					"fragment" : "-std=gnu++14"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 2,
-					"path" : "/home/develop/Project/server/muduo/version_5/include"
+					"path" : "/workspaces/CMake/muduo/version_5/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/workspaces/CMake/muduo/version_5/src"
 				},
 				{
 					"backtrace" : 3,
 					"isSystem" : true,
-					"path" : "/home/develop/Project/server/stl/include"
+					"path" : "/workspaces/CMake/stl/include"
 				}
 			],
 			"language" : "CXX",
-			"languageStandard" : 
-			{
-				"backtraces" : 
-				[
-					1
-				],
-				"standard" : "14"
-			},
 			"sourceIndexes" : 
 			[
 				0

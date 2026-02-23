@@ -11,7 +11,6 @@
 						1,
 						2
 					],
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10"
@@ -26,7 +25,6 @@
 				},
 				{
 					"build" : "stl",
-					"jsonFile" : "directory-stl-Debug-949e2383570759ef4751.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10"
@@ -37,7 +35,6 @@
 				},
 				{
 					"build" : "muduo/version_5",
-					"jsonFile" : "directory-muduo.version_5-Debug-8fdff024ffbd3d99c2c3.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10"
@@ -75,21 +72,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "common_main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-common_main-Debug-9cf0f92f3355a353b1fb.json",
+					"jsonFile" : "target-common_main-Debug-bbd3fe3292ccb647a6e3.json",
 					"name" : "common_main",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Debug-e7e2778efce30e932af6.json",
+					"jsonFile" : "target-main-Debug-e95cd0a902404e233c51.json",
 					"name" : "main",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "v5::@d654bca7de2bef6a7116",
-					"jsonFile" : "target-v5-Debug-795363ee0832a743c8fe.json",
+					"jsonFile" : "target-v5-Debug-d3aafc2430f7b0617615.json",
 					"name" : "v5",
 					"projectIndex" : 0
 				}
@@ -99,12 +96,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/develop/Project/server/build",
-		"source" : "/home/develop/Project/server"
+		"build" : "/workspaces/CMake/build",
+		"source" : "/workspaces/CMake"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 6
+		"minor" : 0
 	}
 }

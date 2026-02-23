@@ -1,32 +1,29 @@
 #pragma once
 #include <sys/epoll.h>
+#include <sys/eventfd.h>
 #include "channel.h"
+#include "poller.h"
 
-class eventloop {
+class eventloop{
 public:
-    eventloop() :epollfd(epoll_create(1)) {};
-    void loop();
-    void update(std::shared_ptr<channel> ch);
+    poller _poller;
+    int wakeupfd_;
+    std::shared_ptr<channel> wakeupchannel_;
 
-public:
-    epoll_event evs[10];
-    int epollfd;
+    //注意这里初始化列表顺序是按照声明顺序
+    eventloop()
+        :_poller(*this)
+        ,wakeupfd_(createEventfd())
+        ,wakeupchannel_(std::make_shared<channel>(wakeupfd_,*this)){};
+
+    void update(std::shared_ptr<channel> ch){
+        _poller.update(ch);
+    }
+
+    static int createEventfd(){
+        int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        return evtfd;
+    }
+    
 
 };
-
-void eventloop::loop() {
-    while (true) {
-        int infds = epoll_wait(epollfd, evs, 10, -1);
-        for (int i = 0; i < infds; i++) {
-            //channel* ch = (channel*)evs[i].data.ptr;
-           // ch->readCallback_();
-        }
-    }
-}
-
-void eventloop::update(std::shared_ptr<channel> ch) {
-    // epoll_event ev;
-    // ev.data.ptr = ch;
-    // ev.events = EPOLLIN | EPOLLET; // 边缘触发
-    //epoll_ctl(epollfd, EPOLL_CTL_ADD, ch->socketfd, &ev);
-}

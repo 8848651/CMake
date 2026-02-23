@@ -1,2 +1,2 @@
-/usr/bin/ar qc libv5.a CMakeFiles/v5.dir/src/channel.cpp.o
+/usr/bin/ar qc libv5.a  CMakeFiles/v5.dir/src/channel.cpp.o
 /usr/bin/ranlib libv5.a
