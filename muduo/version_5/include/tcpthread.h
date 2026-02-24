@@ -16,25 +16,9 @@ public:
     std::mutex mutex_;
     std::condition_variable cond_;
 
-public:
-    tcpthread():eventloop_(nullptr),pthread([&](){start();}){
-        pthread.detach(); 
-    };
-
-    void start(){
-        std::unique_lock<std::mutex> lock(mutex_);
-        eventloop_=std::make_shared<eventloop>();
-        std::cout<<"设置eventloop"<<std::endl;
-        cond_.notify_one();
-    };
-
-    std::shared_ptr<eventloop> geteventloopptr(){
-        std::unique_lock<std::mutex> lock(mutex_);
-        while ( eventloop_ == nullptr ){
-            cond_.wait(lock);
-        }
-        return eventloop_;
-    };
+    tcpthread();
+    void start();
+    std::shared_ptr<eventloop> geteventloopptr();
 
 
 };

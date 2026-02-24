@@ -15,7 +15,7 @@ int test() {
             printf("客户端: %s\n", buf);
         }
     } };
-    server.start();
+    //server.start();
 
     return 0;
 }

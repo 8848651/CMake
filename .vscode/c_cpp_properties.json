@@ -10,7 +10,8 @@
             "configurationProvider": "ms-vscode.cmake-tools",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/stl/include"
+                "${workspaceFolder}/stl/include",
+                "${workspaceFolder}/muduo/version_5/include"
             ]
         }
     ],

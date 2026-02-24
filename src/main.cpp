@@ -9,8 +9,5 @@
 
 int main() {
 
-    tcpthread thread{};
-    if(thread.geteventloopptr() != nullptr){
-        std::cout<<"123"<<std::endl;
-    }
+    
 }

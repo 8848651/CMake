@@ -6,51 +6,41 @@
 #include <arpa/inet.h>
 #include <memory>
 #include <functional>
-
 #include "channel.h"
-
-int get_socket_fd() {
-    struct sockaddr_in servaddr;
-    memset(&servaddr, 0, sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(10000);
-    servaddr.sin_addr.s_addr = INADDR_ANY;
-
-    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
-    bind(socketfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
-    listen(socketfd, 128);
-    return socketfd;
-}
-
-//设置非阻塞
-void setnonblocking(int fd) {
-    int flags = fcntl(fd, F_GETFL, 0);
-    fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-}
+#include "eventloop.h"
 
 
 class acceptor {
 public:
-    using EventCallback = std::function<void(int)>;
+    using callback = std::function<void(int)>;
 
 public:
-    acceptor(std::shared_ptr<eventloop> loop) :connect_channel(std::make_shared<channel>(get_socket_fd(), loop)) {
-        connect_channel->setReadCallback([&]() {acceptor::accepter();});
-    };
+    int sockfd;
+    callback readcallback_;
+    std::shared_ptr<channel> connectchannel;
 
-    void accepter(){
-        struct sockaddr_in clientaddr;
-        socklen_t len = sizeof(clientaddr);
-        int clientfd = accept(connect_channel->socketfd, (struct sockaddr*)&clientaddr, &len);
-        setnonblocking(clientfd);
-        Callback_(clientfd);
-    };
+    acceptor(eventloop& loop);
+    void setcallback(callback readcallback);
+    void newaccept();
 
-    void setReadCallback(EventCallback cb) { Callback_ = std::move(cb); }
+    static int getsocketfd() {
+        struct sockaddr_in servaddr;
+        memset(&servaddr, 0, sizeof(servaddr));
+        servaddr.sin_family = AF_INET;
+        servaddr.sin_port = htons(10000);
+        servaddr.sin_addr.s_addr = INADDR_ANY;
 
-public:
-    EventCallback Callback_;
-    std::shared_ptr<channel> connect_channel;
+        int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+        bind(socketfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+        listen(socketfd, 128);
+        return socketfd;
+    }
+
+    //设置非阻塞
+    static void setnonblocking(int fd) {
+        int flags = fcntl(fd, F_GETFL, 0);
+        fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+    }
 
 };
 

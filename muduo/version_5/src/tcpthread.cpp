@@ -1,0 +1,24 @@
+#include "tcpthread.h"
+
+
+
+
+tcpthread::tcpthread():eventloop_(nullptr),pthread([&](){start();}){
+    pthread.detach(); 
+};
+
+void tcpthread::start(){
+    std::unique_lock<std::mutex> lock(mutex_);
+    eventloop_=std::make_shared<eventloop>();
+    std::cout<<"设置eventloop"<<std::endl;
+    cond_.notify_one();
+};
+
+std::shared_ptr<eventloop> tcpthread::geteventloopptr(){
+    std::unique_lock<std::mutex> lock(mutex_);
+    while ( eventloop_ == nullptr ){
+        cond_.wait(lock);
+    }
+    return eventloop_;
+};
+
