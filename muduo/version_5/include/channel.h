@@ -6,7 +6,7 @@
 
 class eventloop;
 
-class channel{
+class channel : public std::enable_shared_from_this<channel>{
 public:
     using callback=std::function<void()>;
 
@@ -17,6 +17,7 @@ public:
 
     channel(int socketfd_,eventloop& loop_);
     void setreadcallback(callback readcallback_);
+    void update();
 
 
 };

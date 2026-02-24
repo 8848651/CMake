@@ -9,10 +9,11 @@ eventloop::eventloop()
     ,threadid_(::syscall(SYS_gettid))
     ,wakeupchannel_(std::make_shared<channel>(wakeupfd_,*this)){
         wakeupchannel_->setreadcallback([&](){readeventfd();});
+        wakeupchannel_->update();
     };
 
-void eventloop::update(std::shared_ptr<channel> ch){
-    _poller.update(ch);
+void eventloop::update(std::shared_ptr<channel> channel_){
+    _poller.update(channel_);
 }
 
 

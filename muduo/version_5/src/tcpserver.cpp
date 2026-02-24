@@ -12,7 +12,7 @@ void tcpserver::newconnect(int acceptfd){
     std::shared_ptr<eventloop> loop = thread.eventloop_;
     std::shared_ptr<channel> connectchannel=std::make_shared<channel>(acceptfd,loop);
     connectchannel->setreadcallback(readcallback);
-    loop->tosubmittask([&](){});
+    loop->tosubmittask([&](){connectchannel->update();});
 }
 
 
