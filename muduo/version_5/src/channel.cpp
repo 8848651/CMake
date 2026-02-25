@@ -8,11 +8,11 @@ void channel::setreadcallback(callback readcallback_){
     readcallback = readcallback_;
 };
 
-void channel::executecallback(){
-    readcallback(socketfd);
-}
-
 void channel::update(){
     loop.update(shared_from_this());
+};
+
+std::shared_ptr<channel> channel::getshaared(){
+    return shared_from_this();
 };
 

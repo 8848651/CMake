@@ -21,7 +21,7 @@ std::vector<std::shared_ptr<channel>> poller::wait(){
     int infds = ::epoll_wait(epollfd, evs, 10, -1);
     std::vector<std::shared_ptr<channel>> ve;
     for(int i=0;i<infds;i++){
-        ve.emplace_back(evs[i].data.ptr);
+        ve.emplace_back(static_cast<channel*>(evs[i].data.ptr)->getshaared());
     }
     return ve;
 }

@@ -4,7 +4,7 @@
 acceptor::acceptor(eventloop& loop)
     :sockfd(getsocketfd())
     ,connectchannel(std::make_shared<channel>(sockfd,loop)){
-        connectchannel->setreadcallback([&](int){newaccept();});
+        connectchannel->setreadcallback([&](){newaccept();});
         connectchannel->update();
 };
 
@@ -17,7 +17,7 @@ void acceptor::newaccept(){
     socklen_t len = sizeof(clientaddr);
     int clientfd = accept(sockfd, (struct sockaddr*)&clientaddr, &len);
     setnonblocking(clientfd);
-    callback(clientfd);
+    readcallback_(clientfd);
 }
 
 

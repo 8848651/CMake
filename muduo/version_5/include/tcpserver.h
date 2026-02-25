@@ -11,18 +11,20 @@
 #include "tcpthread.h"
 
 
+
 class tcpserver {
 public:
-    using callback = std::function<void(int)>;
+    using messagecallback = std::function<void(channel)>;
 
 public:
     std::shared_ptr<eventloop> baseloop_;
     tcpthread thread;
     acceptor accepto;
-    callback readcallback;
+    messagecallback messagecallback_;
     
     tcpserver();
     void newconnect(int acceptfd);
+    void setmessagecallback(messagecallback messagecallback);
 
 
 
