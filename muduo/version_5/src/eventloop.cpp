@@ -8,9 +8,19 @@ eventloop::eventloop()
     ,wakeupfd_(createeventfd())
     ,threadid_(::syscall(SYS_gettid))
     ,wakeupchannel_(std::make_shared<channel>(wakeupfd_,*this)){
-        wakeupchannel_->setreadcallback([&](){readeventfd();});
+        wakeupchannel_->setreadcallback([](int eventfd){readeventfd(eventfd);});
         wakeupchannel_->update();
     };
+
+
+void eventloop::loop(){
+    while(true){
+        std::vector<std::shared_ptr<channel>> ve = _poller.wait();
+        for(std::shared_ptr<channel> vel : ve){
+            vel->executecallback();
+        }
+    }
+}
 
 void eventloop::update(std::shared_ptr<channel> channel_){
     _poller.update(channel_);
@@ -22,17 +32,19 @@ void eventloop::tosubmittask(submittasktype task){
         std::unique_lock<std::mutex> lock(mutex_);
         submittask.emplace_back(task);
     }
-    writeeventfd();
+    writeeventfd(wakeupfd_);
 };
 
-void eventloop::readeventfd(){
-    uint64_t one = 1;
-    ssize_t n = read(wakeupfd_, &one, sizeof one);
-}
 
-void eventloop::writeeventfd(){
-    uint64_t one = 1;
-    ssize_t n = write(wakeupfd_, &one, sizeof one);
+void eventloop::dopendingfunctors(){
+    std::vector<submittasktype> submittasks;
+    {
+        std::unique_lock<std::mutex> lock(mutex_);
+        submittasks.swap(submittask);
+    }
+    for(submittasktype task : submittask){
+        task();
+    }
 }
     
 

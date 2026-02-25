@@ -4,7 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/workspaces/CMake/muduo/version_5/src/acceptor.cpp" "/workspaces/CMake/build/muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.o"
   "/workspaces/CMake/muduo/version_5/src/channel.cpp" "/workspaces/CMake/build/muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o"
+  "/workspaces/CMake/muduo/version_5/src/eventloop.cpp" "/workspaces/CMake/build/muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.o"
+  "/workspaces/CMake/muduo/version_5/src/poller.cpp" "/workspaces/CMake/build/muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.o"
+  "/workspaces/CMake/muduo/version_5/src/tcpserver.cpp" "/workspaces/CMake/build/muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.o"
+  "/workspaces/CMake/muduo/version_5/src/tcpthread.cpp" "/workspaces/CMake/build/muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

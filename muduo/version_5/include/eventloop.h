@@ -26,14 +26,25 @@ public:
     //注意这里初始化列表顺序是按照声明顺序
     eventloop();
 
+    void loop();
+
     void update(std::shared_ptr<channel> ch);
     void tosubmittask(submittasktype task);
-    void readeventfd();
-    void writeeventfd();
+    void dopendingfunctors();
 
     static int createeventfd(){
         int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         return evtfd;
+    }
+
+    static void readeventfd(int eventfd){
+        uint64_t one = 1;
+        ssize_t n = read(eventfd, &one, sizeof one);
+    };
+    
+    static void writeeventfd(int eventfd){
+        uint64_t one = 1;
+        ssize_t n = write(eventfd, &one, sizeof one);
     }
 
 };

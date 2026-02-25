@@ -6,7 +6,32 @@
 },
 {
   "directory": "/workspaces/CMake/build/muduo/version_5",
+  "command": "/usr/bin/g++   -I/workspaces/CMake/muduo/version_5/include -I/workspaces/CMake/muduo/version_5/src -isystem /workspaces/CMake/stl/include   -pthread -g   -std=gnu++14 -o CMakeFiles/v5.dir/src/acceptor.cpp.o -c /workspaces/CMake/muduo/version_5/src/acceptor.cpp",
+  "file": "/workspaces/CMake/muduo/version_5/src/acceptor.cpp"
+},
+{
+  "directory": "/workspaces/CMake/build/muduo/version_5",
   "command": "/usr/bin/g++   -I/workspaces/CMake/muduo/version_5/include -I/workspaces/CMake/muduo/version_5/src -isystem /workspaces/CMake/stl/include   -pthread -g   -std=gnu++14 -o CMakeFiles/v5.dir/src/channel.cpp.o -c /workspaces/CMake/muduo/version_5/src/channel.cpp",
   "file": "/workspaces/CMake/muduo/version_5/src/channel.cpp"
+},
+{
+  "directory": "/workspaces/CMake/build/muduo/version_5",
+  "command": "/usr/bin/g++   -I/workspaces/CMake/muduo/version_5/include -I/workspaces/CMake/muduo/version_5/src -isystem /workspaces/CMake/stl/include   -pthread -g   -std=gnu++14 -o CMakeFiles/v5.dir/src/eventloop.cpp.o -c /workspaces/CMake/muduo/version_5/src/eventloop.cpp",
+  "file": "/workspaces/CMake/muduo/version_5/src/eventloop.cpp"
+},
+{
+  "directory": "/workspaces/CMake/build/muduo/version_5",
+  "command": "/usr/bin/g++   -I/workspaces/CMake/muduo/version_5/include -I/workspaces/CMake/muduo/version_5/src -isystem /workspaces/CMake/stl/include   -pthread -g   -std=gnu++14 -o CMakeFiles/v5.dir/src/poller.cpp.o -c /workspaces/CMake/muduo/version_5/src/poller.cpp",
+  "file": "/workspaces/CMake/muduo/version_5/src/poller.cpp"
+},
+{
+  "directory": "/workspaces/CMake/build/muduo/version_5",
+  "command": "/usr/bin/g++   -I/workspaces/CMake/muduo/version_5/include -I/workspaces/CMake/muduo/version_5/src -isystem /workspaces/CMake/stl/include   -pthread -g   -std=gnu++14 -o CMakeFiles/v5.dir/src/tcpserver.cpp.o -c /workspaces/CMake/muduo/version_5/src/tcpserver.cpp",
+  "file": "/workspaces/CMake/muduo/version_5/src/tcpserver.cpp"
+},
+{
+  "directory": "/workspaces/CMake/build/muduo/version_5",
+  "command": "/usr/bin/g++   -I/workspaces/CMake/muduo/version_5/include -I/workspaces/CMake/muduo/version_5/src -isystem /workspaces/CMake/stl/include   -pthread -g   -std=gnu++14 -o CMakeFiles/v5.dir/src/tcpthread.cpp.o -c /workspaces/CMake/muduo/version_5/src/tcpthread.cpp",
+  "file": "/workspaces/CMake/muduo/version_5/src/tcpthread.cpp"
 }
 ]

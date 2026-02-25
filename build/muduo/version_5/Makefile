@@ -125,6 +125,33 @@ v5/fast:
 	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/build
 .PHONY : v5/fast
 
+src/acceptor.o: src/acceptor.cpp.o
+
+.PHONY : src/acceptor.o
+
+# target to build an object file
+src/acceptor.cpp.o:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.o
+.PHONY : src/acceptor.cpp.o
+
+src/acceptor.i: src/acceptor.cpp.i
+
+.PHONY : src/acceptor.i
+
+# target to preprocess a source file
+src/acceptor.cpp.i:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.i
+.PHONY : src/acceptor.cpp.i
+
+src/acceptor.s: src/acceptor.cpp.s
+
+.PHONY : src/acceptor.s
+
+# target to generate assembly for a file
+src/acceptor.cpp.s:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.s
+.PHONY : src/acceptor.cpp.s
+
 src/channel.o: src/channel.cpp.o
 
 .PHONY : src/channel.o
@@ -152,6 +179,114 @@ src/channel.cpp.s:
 	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.s
 .PHONY : src/channel.cpp.s
 
+src/eventloop.o: src/eventloop.cpp.o
+
+.PHONY : src/eventloop.o
+
+# target to build an object file
+src/eventloop.cpp.o:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.o
+.PHONY : src/eventloop.cpp.o
+
+src/eventloop.i: src/eventloop.cpp.i
+
+.PHONY : src/eventloop.i
+
+# target to preprocess a source file
+src/eventloop.cpp.i:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.i
+.PHONY : src/eventloop.cpp.i
+
+src/eventloop.s: src/eventloop.cpp.s
+
+.PHONY : src/eventloop.s
+
+# target to generate assembly for a file
+src/eventloop.cpp.s:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.s
+.PHONY : src/eventloop.cpp.s
+
+src/poller.o: src/poller.cpp.o
+
+.PHONY : src/poller.o
+
+# target to build an object file
+src/poller.cpp.o:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.o
+.PHONY : src/poller.cpp.o
+
+src/poller.i: src/poller.cpp.i
+
+.PHONY : src/poller.i
+
+# target to preprocess a source file
+src/poller.cpp.i:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.i
+.PHONY : src/poller.cpp.i
+
+src/poller.s: src/poller.cpp.s
+
+.PHONY : src/poller.s
+
+# target to generate assembly for a file
+src/poller.cpp.s:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.s
+.PHONY : src/poller.cpp.s
+
+src/tcpserver.o: src/tcpserver.cpp.o
+
+.PHONY : src/tcpserver.o
+
+# target to build an object file
+src/tcpserver.cpp.o:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.o
+.PHONY : src/tcpserver.cpp.o
+
+src/tcpserver.i: src/tcpserver.cpp.i
+
+.PHONY : src/tcpserver.i
+
+# target to preprocess a source file
+src/tcpserver.cpp.i:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.i
+.PHONY : src/tcpserver.cpp.i
+
+src/tcpserver.s: src/tcpserver.cpp.s
+
+.PHONY : src/tcpserver.s
+
+# target to generate assembly for a file
+src/tcpserver.cpp.s:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.s
+.PHONY : src/tcpserver.cpp.s
+
+src/tcpthread.o: src/tcpthread.cpp.o
+
+.PHONY : src/tcpthread.o
+
+# target to build an object file
+src/tcpthread.cpp.o:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.o
+.PHONY : src/tcpthread.cpp.o
+
+src/tcpthread.i: src/tcpthread.cpp.i
+
+.PHONY : src/tcpthread.i
+
+# target to preprocess a source file
+src/tcpthread.cpp.i:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.i
+.PHONY : src/tcpthread.cpp.i
+
+src/tcpthread.s: src/tcpthread.cpp.s
+
+.PHONY : src/tcpthread.s
+
+# target to generate assembly for a file
+src/tcpthread.cpp.s:
+	cd /workspaces/CMake/build && $(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.s
+.PHONY : src/tcpthread.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -161,9 +296,24 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... v5"
+	@echo "... src/acceptor.o"
+	@echo "... src/acceptor.i"
+	@echo "... src/acceptor.s"
 	@echo "... src/channel.o"
 	@echo "... src/channel.i"
 	@echo "... src/channel.s"
+	@echo "... src/eventloop.o"
+	@echo "... src/eventloop.i"
+	@echo "... src/eventloop.s"
+	@echo "... src/poller.o"
+	@echo "... src/poller.i"
+	@echo "... src/poller.s"
+	@echo "... src/tcpserver.o"
+	@echo "... src/tcpserver.i"
+	@echo "... src/tcpserver.s"
+	@echo "... src/tcpthread.o"
+	@echo "... src/tcpthread.i"
+	@echo "... src/tcpthread.s"
 .PHONY : help
 
 

@@ -14,5 +14,6 @@ public:
 
     poller(eventloop& loop_);
     void update(std::shared_ptr<channel> ch);
+    std::vector<std::shared_ptr<channel>> wait();
 
 };

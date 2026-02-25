@@ -13,7 +13,7 @@
 
 class tcpserver {
 public:
-    using callback = std::function<void()>;
+    using callback = std::function<void(int)>;
 
 public:
     std::shared_ptr<eventloop> baseloop_;

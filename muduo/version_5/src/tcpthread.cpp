@@ -3,7 +3,9 @@
 
 
 
-tcpthread::tcpthread():eventloop_(),pthread([&](){start();}){
+tcpthread::tcpthread()
+    :eventloop_()
+    ,pthread([&](){start();}){
     pthread.detach(); 
 };
 

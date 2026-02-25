@@ -57,9 +57,22 @@ include muduo/version_5/CMakeFiles/v5.dir/progress.make
 # Include the compile flags for this target's objects.
 include muduo/version_5/CMakeFiles/v5.dir/flags.make
 
+muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.o: muduo/version_5/CMakeFiles/v5.dir/flags.make
+muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.o: ../muduo/version_5/src/acceptor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.o"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/v5.dir/src/acceptor.cpp.o -c /workspaces/CMake/muduo/version_5/src/acceptor.cpp
+
+muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/v5.dir/src/acceptor.cpp.i"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/CMake/muduo/version_5/src/acceptor.cpp > CMakeFiles/v5.dir/src/acceptor.cpp.i
+
+muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/v5.dir/src/acceptor.cpp.s"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/CMake/muduo/version_5/src/acceptor.cpp -o CMakeFiles/v5.dir/src/acceptor.cpp.s
+
 muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o: muduo/version_5/CMakeFiles/v5.dir/flags.make
 muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o: ../muduo/version_5/src/channel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o"
 	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/v5.dir/src/channel.cpp.o -c /workspaces/CMake/muduo/version_5/src/channel.cpp
 
 muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.i: cmake_force
@@ -70,17 +83,79 @@ muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/v5.dir/src/channel.cpp.s"
 	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/CMake/muduo/version_5/src/channel.cpp -o CMakeFiles/v5.dir/src/channel.cpp.s
 
+muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.o: muduo/version_5/CMakeFiles/v5.dir/flags.make
+muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.o: ../muduo/version_5/src/eventloop.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.o"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/v5.dir/src/eventloop.cpp.o -c /workspaces/CMake/muduo/version_5/src/eventloop.cpp
+
+muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/v5.dir/src/eventloop.cpp.i"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/CMake/muduo/version_5/src/eventloop.cpp > CMakeFiles/v5.dir/src/eventloop.cpp.i
+
+muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/v5.dir/src/eventloop.cpp.s"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/CMake/muduo/version_5/src/eventloop.cpp -o CMakeFiles/v5.dir/src/eventloop.cpp.s
+
+muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.o: muduo/version_5/CMakeFiles/v5.dir/flags.make
+muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.o: ../muduo/version_5/src/poller.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.o"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/v5.dir/src/poller.cpp.o -c /workspaces/CMake/muduo/version_5/src/poller.cpp
+
+muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/v5.dir/src/poller.cpp.i"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/CMake/muduo/version_5/src/poller.cpp > CMakeFiles/v5.dir/src/poller.cpp.i
+
+muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/v5.dir/src/poller.cpp.s"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/CMake/muduo/version_5/src/poller.cpp -o CMakeFiles/v5.dir/src/poller.cpp.s
+
+muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.o: muduo/version_5/CMakeFiles/v5.dir/flags.make
+muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.o: ../muduo/version_5/src/tcpserver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.o"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/v5.dir/src/tcpserver.cpp.o -c /workspaces/CMake/muduo/version_5/src/tcpserver.cpp
+
+muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/v5.dir/src/tcpserver.cpp.i"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/CMake/muduo/version_5/src/tcpserver.cpp > CMakeFiles/v5.dir/src/tcpserver.cpp.i
+
+muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/v5.dir/src/tcpserver.cpp.s"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/CMake/muduo/version_5/src/tcpserver.cpp -o CMakeFiles/v5.dir/src/tcpserver.cpp.s
+
+muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.o: muduo/version_5/CMakeFiles/v5.dir/flags.make
+muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.o: ../muduo/version_5/src/tcpthread.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.o"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/v5.dir/src/tcpthread.cpp.o -c /workspaces/CMake/muduo/version_5/src/tcpthread.cpp
+
+muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/v5.dir/src/tcpthread.cpp.i"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/CMake/muduo/version_5/src/tcpthread.cpp > CMakeFiles/v5.dir/src/tcpthread.cpp.i
+
+muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/v5.dir/src/tcpthread.cpp.s"
+	cd /workspaces/CMake/build/muduo/version_5 && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/CMake/muduo/version_5/src/tcpthread.cpp -o CMakeFiles/v5.dir/src/tcpthread.cpp.s
+
 # Object files for target v5
 v5_OBJECTS = \
-"CMakeFiles/v5.dir/src/channel.cpp.o"
+"CMakeFiles/v5.dir/src/acceptor.cpp.o" \
+"CMakeFiles/v5.dir/src/channel.cpp.o" \
+"CMakeFiles/v5.dir/src/eventloop.cpp.o" \
+"CMakeFiles/v5.dir/src/poller.cpp.o" \
+"CMakeFiles/v5.dir/src/tcpserver.cpp.o" \
+"CMakeFiles/v5.dir/src/tcpthread.cpp.o"
 
 # External object files for target v5
 v5_EXTERNAL_OBJECTS =
 
+muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/src/acceptor.cpp.o
 muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/src/channel.cpp.o
+muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/src/eventloop.cpp.o
+muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/src/poller.cpp.o
+muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/src/tcpserver.cpp.o
+muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/src/tcpthread.cpp.o
 muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/build.make
 muduo/version_5/libv5.a: muduo/version_5/CMakeFiles/v5.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libv5.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/workspaces/CMake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libv5.a"
 	cd /workspaces/CMake/build/muduo/version_5 && $(CMAKE_COMMAND) -P CMakeFiles/v5.dir/cmake_clean_target.cmake
 	cd /workspaces/CMake/build/muduo/version_5 && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/v5.dir/link.txt --verbose=$(VERBOSE)
 

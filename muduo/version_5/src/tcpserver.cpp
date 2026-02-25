@@ -2,7 +2,7 @@
 
 
 tcpserver::tcpserver()
-    :baseloop_()
+    :baseloop_(std::make_shared<eventloop>())
     ,accepto(*(baseloop_.get()))
     ,thread(){
     accepto.setcallback([&](int acceptfd){newconnect(acceptfd);});

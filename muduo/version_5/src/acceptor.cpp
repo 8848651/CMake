@@ -4,7 +4,7 @@
 acceptor::acceptor(eventloop& loop)
     :sockfd(getsocketfd())
     ,connectchannel(std::make_shared<channel>(sockfd,loop)){
-        connectchannel->setreadcallback([&](){newaccept();});
+        connectchannel->setreadcallback([&](int){newaccept();});
         connectchannel->update();
 };
 

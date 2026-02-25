@@ -11,7 +11,8 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/stl/include",
-                "${workspaceFolder}/muduo/version_5/include"
+                "${workspaceFolder}/muduo/version_5/include",
+                "/usr/include/x86_64-linux-gnu"
             ]
         }
     ],
