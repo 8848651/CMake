@@ -1,32 +1,27 @@
 #include "tcpserver.h"
 
 
-tcpserver::tcpserver()
-    :baseloop_(std::make_shared<eventloop>())
-    ,accepto(baseloop_)
-    ,thread(){
-    baseloop_->init();
-    accepto.setcallback([&](int acceptfd){newconnect(acceptfd);});
-};
-
 tcpserver::tcpserver(messagecallback messagecallback)
     :baseloop_(std::make_shared<eventloop>())
-    ,accepto(baseloop_)
-    ,thread(){
+    ,connection_()
+    ,accepto(){
     baseloop_->init();
+    accepto.init(baseloop_);
     accepto.setcallback([&](int acceptfd){newconnect(acceptfd);});
     messagecallback_ = messagecallback;
-};
-
-void tcpserver::setmessagecallback(messagecallback messagecallback){
-    messagecallback_ = messagecallback;
+    baseloop_->loop();
 };
 
 void tcpserver::newconnect(int acceptfd){
-    std::shared_ptr<eventloop> loop = thread.eventloop_;
-    std::shared_ptr<channel> newchannel=std::make_shared<channel>(acceptfd,loop);
+    //std::shared_ptr<eventloop> loop = thread.geteventloopptr();
+    std::cout<<"执行"<<std::endl;
+    std::shared_ptr<channel> newchannel=std::make_shared<channel>(acceptfd,baseloop_);
+    connection_.emplace_back(newchannel);
     newchannel->setreadcallback([&](){messagecallback_(*(newchannel.get()));});
-    loop->tosubmittask([&](){newchannel->update();});
+    baseloop_->tosubmittask([&](){
+        std::cout<<"添加新链接到epoll"<<std::endl;
+        newchannel->update();
+    });
 }
 
 

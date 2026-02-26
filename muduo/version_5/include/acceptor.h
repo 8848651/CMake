@@ -19,7 +19,8 @@ public:
     callback readcallback_;
     std::shared_ptr<channel> connectchannel;
 
-    acceptor(std::shared_ptr<eventloop> baseloop);
+    acceptor();
+    void init(std::shared_ptr<eventloop> baseloop);
     void setcallback(callback readcallback);
     void newaccept();
 

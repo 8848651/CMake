@@ -136,6 +136,18 @@ channel.h
 eventloop.h
 /workspaces/CMake/muduo/version_5/include/eventloop.h
 
+/workspaces/CMake/muduo/version_5/include/tcpconnection.h
+memory
+-
+thread
+-
+sys/syscall.h
+-
+unistd.h
+-
+channel.h
+/workspaces/CMake/muduo/version_5/include/channel.h
+
 /workspaces/CMake/muduo/version_5/include/tcpserver.h
 memory
 -
@@ -155,6 +167,8 @@ stdio.h
 -
 tcpthread.h
 /workspaces/CMake/muduo/version_5/include/tcpthread.h
+tcpconnection.h
+/workspaces/CMake/muduo/version_5/include/tcpconnection.h
 
 /workspaces/CMake/muduo/version_5/include/tcpthread.h
 memory

@@ -6,14 +6,13 @@
 tcpthread::tcpthread()
     :eventloop_()
     ,pthread([&](){start();}){
-    eventloop_->init();
     pthread.detach(); 
 };
 
 void tcpthread::start(){
     std::unique_lock<std::mutex> lock(mutex_);
     eventloop_=std::make_shared<eventloop>();
-    std::cout<<"设置eventloop"<<std::endl;
+    eventloop_->init();
     cond_.notify_one();
 };
 

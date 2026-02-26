@@ -9,6 +9,7 @@
 #include "channel.h"
 #include <stdio.h>
 #include "tcpthread.h"
+#include "tcpconnection.h"
 
 
 
@@ -18,15 +19,13 @@ public:
 
 public:
     std::shared_ptr<eventloop> baseloop_;
-    tcpthread thread;
+    std::vector<tcpconnection> connection_;
+    //tcpthread thread;
     acceptor accepto;
     messagecallback messagecallback_;
     
-    tcpserver();
     tcpserver(messagecallback messagecallback);
     void newconnect(int acceptfd);
-    void setmessagecallback(messagecallback messagecallback);
-
 
 
 };

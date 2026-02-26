@@ -4,7 +4,7 @@
 
 //注意这里初始化列表顺序是按照声明顺序
 eventloop::eventloop()
-    :poller_()
+    :poller_(std::make_unique<poller>())
     ,wakeupfd_(createeventfd())
     ,threadid_(::syscall(SYS_gettid))
     ,wakeupchannel_(std::make_shared<channel>(wakeupfd_)){
@@ -21,6 +21,7 @@ void eventloop::init(){
 void eventloop::loop(){
     while(true){
         std::vector<std::shared_ptr<channel>> ve = poller_->wait();
+        //std::cout<<submittask.size()<<std::endl;
         for(std::shared_ptr<channel> vel : ve){
             vel->readcallback();
         }
@@ -37,6 +38,7 @@ void eventloop::tosubmittask(submittasktype task){
         std::unique_lock<std::mutex> lock(mutex_);
         submittask.emplace_back(task);
     }
+    //std::cout<<submittask.size()<<std::endl;
     writeeventfd();
 };
 
