@@ -1,9 +1,9 @@
 #include "acceptor.h"
 
 
-acceptor::acceptor(eventloop& loop)
+acceptor::acceptor(std::shared_ptr<eventloop> baseloop)
     :sockfd(getsocketfd())
-    ,connectchannel(std::make_shared<channel>(sockfd,loop)){
+    ,connectchannel(std::make_shared<channel>(sockfd,baseloop)){
         connectchannel->setreadcallback([&](){newaccept();});
         connectchannel->update();
 };

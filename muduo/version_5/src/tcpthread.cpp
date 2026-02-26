@@ -6,6 +6,7 @@
 tcpthread::tcpthread()
     :eventloop_()
     ,pthread([&](){start();}){
+    eventloop_->init();
     pthread.detach(); 
 };
 

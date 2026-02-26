@@ -78,6 +78,26 @@ template.h
 typedifference.h
 ../stl/include/meta/typedifference.h
 
+/workspaces/CMake/muduo/version_5/include/acceptor.h
+string.h
+-
+sys/socket.h
+-
+fcntl.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+memory
+-
+functional
+-
+channel.h
+/workspaces/CMake/muduo/version_5/include/channel.h
+eventloop.h
+/workspaces/CMake/muduo/version_5/include/eventloop.h
+
 /workspaces/CMake/muduo/version_5/include/channel.h
 functional
 -
@@ -116,6 +136,26 @@ channel.h
 eventloop.h
 /workspaces/CMake/muduo/version_5/include/eventloop.h
 
+/workspaces/CMake/muduo/version_5/include/tcpserver.h
+memory
+-
+thread
+-
+sys/syscall.h
+-
+unistd.h
+-
+eventloop.h
+/workspaces/CMake/muduo/version_5/include/eventloop.h
+acceptor.h
+/workspaces/CMake/muduo/version_5/include/acceptor.h
+channel.h
+/workspaces/CMake/muduo/version_5/include/channel.h
+stdio.h
+-
+tcpthread.h
+/workspaces/CMake/muduo/version_5/include/tcpthread.h
+
 /workspaces/CMake/muduo/version_5/include/tcpthread.h
 memory
 -
@@ -132,6 +172,12 @@ mutex
 condition_variable
 -
 
+/workspaces/CMake/muduo/version_5/include/version.h
+channel.h
+/workspaces/CMake/muduo/version_5/include/channel.h
+tcpserver.h
+/workspaces/CMake/muduo/version_5/include/tcpserver.h
+
 /workspaces/CMake/src/main.cpp
 iostream
 -
@@ -141,6 +187,6 @@ meta/bind.h
 -
 meta/function.h
 -
-../muduo/version_5/include/tcpthread.h
-/workspaces/CMake/muduo/version_5/include/tcpthread.h
+../muduo/version_5/include/version.h
+/workspaces/CMake/muduo/version_5/include/version.h
 

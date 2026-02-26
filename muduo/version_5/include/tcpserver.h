@@ -23,6 +23,7 @@ public:
     messagecallback messagecallback_;
     
     tcpserver();
+    tcpserver(messagecallback messagecallback);
     void newconnect(int acceptfd);
     void setmessagecallback(messagecallback messagecallback);
 
