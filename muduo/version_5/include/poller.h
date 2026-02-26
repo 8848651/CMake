@@ -6,13 +6,14 @@
 class eventloop;
 class channel;
 
-class poller {
+class poller : public std::enable_shared_from_this<poller> {
 public:
     int epollfd;
-    eventloop& loop;
-    std::shared_ptr<channel> channel_;
+    std::weak_ptr<eventloop> loop_;
+    std::vector<std::shared_ptr<channel>> channels_;
 
-    poller(eventloop& loop_);
+    poller();
+    void init(std::weak_ptr<eventloop> loop);
     void update(std::shared_ptr<channel> ch);
     std::vector<std::shared_ptr<channel>> wait();
 

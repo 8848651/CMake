@@ -2,13 +2,17 @@
 
 
 
-poller::poller(eventloop& loop_) 
+poller::poller() 
     :epollfd(epoll_create(1))
-    ,channel_()
-    ,loop(loop_) {};
+    ,channels_() {};
+
+
+void poller::init(std::weak_ptr<eventloop> loop){
+    loop_=loop;
+};
     
 void poller::update(std::shared_ptr<channel> channel_){
-    channel_=channel_;
+    channels_.emplace_back(channel_);
     struct epoll_event ev;
     ev.data.fd = channel_->socketfd;
     ev.data.ptr = channel_.get();      

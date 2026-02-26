@@ -4,18 +4,23 @@
 
 //注意这里初始化列表顺序是按照声明顺序
 eventloop::eventloop()
-    :poller_(*this)
+    :poller_()
     ,wakeupfd_(createeventfd())
     ,threadid_(::syscall(SYS_gettid))
-    ,wakeupchannel_(std::make_shared<channel>(wakeupfd_,*this)){
+    ,wakeupchannel_(std::make_shared<channel>(wakeupfd_)){
         wakeupchannel_->setreadcallback([&](){readeventfd();});
-        wakeupchannel_->update();
     };
+
+void eventloop::init(){
+    poller_->init(shared_from_this());
+    wakeupchannel_->init(shared_from_this());
+    wakeupchannel_->update();
+};
 
 
 void eventloop::loop(){
     while(true){
-        std::vector<std::shared_ptr<channel>> ve = poller_.wait();
+        std::vector<std::shared_ptr<channel>> ve = poller_->wait();
         for(std::shared_ptr<channel> vel : ve){
             vel->readcallback();
         }
@@ -23,7 +28,7 @@ void eventloop::loop(){
 }
 
 void eventloop::update(std::shared_ptr<channel> channel_){
-    poller_.update(channel_);
+    poller_->update(channel_);
 }
 
 

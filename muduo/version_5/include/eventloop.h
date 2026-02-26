@@ -12,23 +12,22 @@
 class channel;
 class poller;
 
-class eventloop{
+class eventloop : public std::enable_shared_from_this<eventloop>{
 public:
     using submittasktype=std::function<void()>;
 
 public:
-    poller poller_;
     int wakeupfd_;
     const pid_t threadid_;
     std::mutex mutex_;
+    std::unique_ptr<poller> poller_;
     std::shared_ptr<channel> wakeupchannel_;
     std::vector<submittasktype> submittask;
 
     //注意这里初始化列表顺序是按照声明顺序
     eventloop();
-
+    void init();
     void loop();
-
     void update(std::shared_ptr<channel> ch);
     void tosubmittask(submittasktype task);
     void readeventfd();

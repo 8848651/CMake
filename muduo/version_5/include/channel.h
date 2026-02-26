@@ -12,10 +12,12 @@ public:
 
 public:
     int socketfd;
-    eventloop& loop;
+    std::weak_ptr<eventloop> loop_;
     callback readcallback;
 
-    channel(int socketfd_,eventloop& loop_);
+    channel(int socketfd);
+    channel(int socketfd,std::weak_ptr<eventloop> loop);
+    void init(std::weak_ptr<eventloop> loop);
     void setreadcallback(callback readcallback_);
     void update();
     std::shared_ptr<channel> getshaared();
