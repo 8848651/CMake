@@ -25,6 +25,7 @@ void eventloop::loop(){
         for(std::shared_ptr<channel> vel : ve){
             vel->readcallback();
         }
+        dopendingfunctors();
     }
 }
 
@@ -44,22 +45,26 @@ void eventloop::tosubmittask(submittasktype task){
 
 void eventloop::readeventfd(){
     uint64_t one = 1;
+    std::cout<<"执行了读取channel"<<std::endl;
     ssize_t n = read(wakeupfd_, &one, sizeof one);
 };
     
 void eventloop::writeeventfd(){
     uint64_t one = 1;
+    std::cout<<"执行了写入channel"<<std::endl;
     ssize_t n = write(wakeupfd_, &one, sizeof one);
 }
 
 
 void eventloop::dopendingfunctors(){
+    std::cout<<submittask.size()<<std::endl;
+    if(submittask.size()==0){return;};
     std::vector<submittasktype> submittasks;
     {
         std::unique_lock<std::mutex> lock(mutex_);
         submittasks.swap(submittask);
     }
-    for(submittasktype task : submittask){
+    for(submittasktype task : submittasks){
         task();
     }
 }

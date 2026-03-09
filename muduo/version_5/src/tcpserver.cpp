@@ -16,10 +16,9 @@ void tcpserver::newconnect(int acceptfd){
     //std::shared_ptr<eventloop> loop = thread.geteventloopptr();
     std::cout<<"执行"<<std::endl;
     std::shared_ptr<channel> newchannel=std::make_shared<channel>(acceptfd,baseloop_);
-    connection_.emplace_back(newchannel);
-    newchannel->setreadcallback([&](){messagecallback_(*(newchannel.get()));});
-    baseloop_->tosubmittask([&](){
-        std::cout<<"添加新链接到epoll"<<std::endl;
+    newchannel->setreadcallback([=](){messagecallback_(*(newchannel.get()));});
+    baseloop_->tosubmittask([=](){
+        std::cout << "对象存活：" << newchannel.use_count() << std::endl;
         newchannel->update();
     });
 }

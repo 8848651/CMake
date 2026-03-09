@@ -114,10 +114,6 @@ mutex
 condition_variable
 -
 
-/workspaces/CMake/muduo/version_5/src/eventloop.cpp
-eventloop.h
-/workspaces/CMake/muduo/version_5/src/eventloop.h
-
 /workspaces/CMake/muduo/version_5/src/tcpserver.cpp
 tcpserver.h
 /workspaces/CMake/muduo/version_5/src/tcpserver.h
