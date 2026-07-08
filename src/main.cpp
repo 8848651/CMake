@@ -5,10 +5,4 @@
 #include "../muduo/version_5/include/version.h"
 
 
-
-
-
-int main() {
-
-    test();
-}
+int main() {}

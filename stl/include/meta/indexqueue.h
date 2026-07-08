@@ -33,6 +33,19 @@ namespace stl {
     struct makeindexqueue<0> {
         using  queuedata = indexqueue<>;
     };
+
+    //reverse order
+    template<size_t N>
+    struct makereverseindexqueue {
+        using queuedata = typename indexqueueconcat<indexqueue<N - 1>,typename makereverseindexqueue<N - 1>::queuedata>::type;
+    };
+
+    // 递归终止
+    template<>
+    struct makereverseindexqueue<0> {
+        using  queuedata = indexqueue<>;
+    };
+
 }
 
 
