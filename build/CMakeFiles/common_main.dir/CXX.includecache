@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+../stl/include/meta/binaryreversal.h
+cstddef
+-
+indexqueue.h
+../stl/include/meta/indexqueue.h
+
 ../stl/include/meta/bind.h
 iostream
 -
@@ -77,6 +83,16 @@ template.h
 ../stl/include/meta/template.h
 typedifference.h
 ../stl/include/meta/typedifference.h
+
+../stl/include/stl/fft.h
+type_traits
+-
+cstddef
+-
+meta/template.h
+-
+complex
+-
 
 /workspaces/CMake/muduo/version_5/include/acceptor.h
 string.h
@@ -199,8 +215,18 @@ meta/tuple.h
 -
 meta/bind.h
 -
+meta/binaryreversal.h
+-
 meta/function.h
+-
+stl/fft.h
 -
 ../muduo/version_5/include/version.h
 /workspaces/CMake/muduo/version_5/include/version.h
+random
+-
+array
+-
+complex
+-
 
