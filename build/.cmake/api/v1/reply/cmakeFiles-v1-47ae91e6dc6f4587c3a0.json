@@ -135,7 +135,10 @@
 			"path" : "stl/CMakeLists.txt"
 		},
 		{
-			"path" : "muduo/version_5/CMakeLists.txt"
+			"path" : "muduo/CMakeLists.txt"
+		},
+		{
+			"path" : "test/CMakeLists.txt"
 		}
 	],
 	"kind" : "cmakeFiles",

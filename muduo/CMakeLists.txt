@@ -5,11 +5,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 file(GLOB SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 # 将上述收集的文件做一个静态库
-add_library(v5 STATIC ${SRC_FILES})
+add_library(muduo STATIC ${SRC_FILES})
 
 # ========== 关键修改：PRIVATE 改为 PUBLIC ==========
-# 原因：PUBLIC 表示 v5 自己用这个头文件路径，且依赖 v5 的目标（如main）也能使用
-target_include_directories(v5 
+# 原因：PUBLIC 表示 muduo 自己用这个头文件路径，且依赖 muduo 的目标（如main）也能使用
+target_include_directories(muduo 
     PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/include  # 对外暴露include目录
     PRIVATE
@@ -17,4 +17,4 @@ target_include_directories(v5
 )
 
 # 将别的库加入现库中（stl_core如果有头文件，建议也设为PUBLIC）
-target_link_libraries(v5 PRIVATE stl_core)
+target_link_libraries(muduo PRIVATE stl_core)

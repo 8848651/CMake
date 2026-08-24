@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "muduo/version_5/libv5.a"
+			"path" : "muduo/libmuduo.a"
 		}
 	],
 	"backtrace" : 1,
@@ -17,7 +17,7 @@
 		],
 		"files" : 
 		[
-			"muduo/version_5/CMakeLists.txt"
+			"muduo/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -60,11 +60,11 @@
 			[
 				{
 					"backtrace" : 2,
-					"path" : "/workspaces/CMake/muduo/version_5/include"
+					"path" : "/workspaces/CMake/muduo/include"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "/workspaces/CMake/muduo/version_5/src"
+					"path" : "/workspaces/CMake/muduo/src"
 				},
 				{
 					"backtrace" : 3,
@@ -84,13 +84,13 @@
 			]
 		}
 	],
-	"id" : "v5::@d654bca7de2bef6a7116",
-	"name" : "v5",
-	"nameOnDisk" : "libv5.a",
+	"id" : "muduo::@f2b6c746a46066769d5d",
+	"name" : "muduo",
+	"nameOnDisk" : "libmuduo.a",
 	"paths" : 
 	{
-		"build" : "muduo/version_5",
-		"source" : "muduo/version_5"
+		"build" : "muduo",
+		"source" : "muduo"
 	},
 	"sourceGroups" : 
 	[
@@ -112,37 +112,37 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "muduo/version_5/src/acceptor.cpp",
+			"path" : "muduo/src/acceptor.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "muduo/version_5/src/channel.cpp",
+			"path" : "muduo/src/channel.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "muduo/version_5/src/eventloop.cpp",
+			"path" : "muduo/src/eventloop.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "muduo/version_5/src/poller.cpp",
+			"path" : "muduo/src/poller.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "muduo/version_5/src/tcpserver.cpp",
+			"path" : "muduo/src/tcpserver.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "muduo/version_5/src/tcpthread.cpp",
+			"path" : "muduo/src/tcpthread.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

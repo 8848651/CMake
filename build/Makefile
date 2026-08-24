@@ -78,6 +78,17 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /workspaces/CMake/build/CMakeFiles /workspaces/CMake/build/CMakeFiles/progress.marks
@@ -124,30 +135,30 @@ main/fast:
 .PHONY : main/fast
 
 #=============================================================================
-# Target rules for targets named common_main
+# Target rules for targets named muduo
 
 # Build rule for target.
-common_main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 common_main
-.PHONY : common_main
+muduo: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 muduo
+.PHONY : muduo
 
 # fast build rule for target.
-common_main/fast:
-	$(MAKE) -f CMakeFiles/common_main.dir/build.make CMakeFiles/common_main.dir/build
-.PHONY : common_main/fast
+muduo/fast:
+	$(MAKE) -f muduo/CMakeFiles/muduo.dir/build.make muduo/CMakeFiles/muduo.dir/build
+.PHONY : muduo/fast
 
 #=============================================================================
-# Target rules for targets named v5
+# Target rules for targets named test_main
 
 # Build rule for target.
-v5: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 v5
-.PHONY : v5
+test_main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_main
+.PHONY : test_main
 
 # fast build rule for target.
-v5/fast:
-	$(MAKE) -f muduo/version_5/CMakeFiles/v5.dir/build.make muduo/version_5/CMakeFiles/v5.dir/build
-.PHONY : v5/fast
+test_main/fast:
+	$(MAKE) -f test/CMakeFiles/test_main.dir/build.make test/CMakeFiles/test_main.dir/build
+.PHONY : test_main/fast
 
 src/main.o: src/main.cpp.o
 
@@ -155,7 +166,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/common_main.dir/build.make CMakeFiles/common_main.dir/src/main.cpp.o
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -164,7 +175,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/common_main.dir/build.make CMakeFiles/common_main.dir/src/main.cpp.i
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -173,7 +184,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/common_main.dir/build.make CMakeFiles/common_main.dir/src/main.cpp.s
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 # Help Target
@@ -184,9 +195,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... test"
 	@echo "... main"
-	@echo "... common_main"
-	@echo "... v5"
+	@echo "... muduo"
+	@echo "... test_main"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

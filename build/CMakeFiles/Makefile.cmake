@@ -30,8 +30,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.16.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.16.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.16.3/CMakeSystem.cmake"
-  "../muduo/version_5/CMakeLists.txt"
+  "../muduo/CMakeLists.txt"
   "../stl/CMakeLists.txt"
+  "../test/CMakeLists.txt"
   )
 
 # The corresponding makefile is:
@@ -44,12 +45,13 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "stl/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "muduo/version_5/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "muduo/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "test/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/main.dir/DependInfo.cmake"
-  "CMakeFiles/common_main.dir/DependInfo.cmake"
-  "muduo/version_5/CMakeFiles/v5.dir/DependInfo.cmake"
+  "muduo/CMakeFiles/muduo.dir/DependInfo.cmake"
+  "test/CMakeFiles/test_main.dir/DependInfo.cmake"
   )

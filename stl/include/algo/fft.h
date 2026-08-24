@@ -2,10 +2,12 @@
 #include <type_traits>
 #include <cstddef>
 #include <meta/template.h>
+#include <meta/binaryreversal.h>
 #include <complex>
+#include <array>
 namespace stl {
 
-    //迭代法
+    //迭代法 迭代蝶形
     template<typename T, size_t U>
     void dit_butterfly_iterate(std::array<std::complex<T>, U>& array){
         size_t size=array.size();
@@ -24,7 +26,7 @@ namespace stl {
         }
     }
 
-    //Q为一次FFT数组的长度，M为起始地址，N为跨度
+    //Q为一次FFT数组的长度，M为起始地址，N为跨度 递归DIT蝶形
     template<size_t Q,size_t M,size_t N,typename T, size_t U>
     typename stl::void_type<Q==2>::type dit_butterfly_step(std::array<std::complex<T>, U>& array){
         auto datae = array[M];
@@ -52,8 +54,8 @@ namespace stl {
     };
 
 
-
-    //Q 为FFT长度 M为起始位置
+ 
+    //Q 为FFT长度 M为起始位置 递归DIF蝶形
     template<size_t Q,size_t M,typename T,size_t U>
     typename stl::void_type<Q==2>::type dif_butterfly_step(std::array<std::complex<T>, U>& array){
         auto datae = array[M];

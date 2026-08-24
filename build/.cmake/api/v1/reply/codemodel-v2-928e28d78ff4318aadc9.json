@@ -9,7 +9,8 @@
 					"childIndexes" : 
 					[
 						1,
-						2
+						2,
+						3
 					],
 					"minimumCMakeVersion" : 
 					{
@@ -19,8 +20,7 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				},
 				{
@@ -34,14 +34,28 @@
 					"source" : "stl"
 				},
 				{
-					"build" : "muduo/version_5",
+					"build" : "muduo",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10"
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 0,
-					"source" : "muduo/version_5",
+					"source" : "muduo",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "test",
 					"targetIndexes" : 
 					[
 						2
@@ -56,7 +70,8 @@
 					[
 						0,
 						1,
-						2
+						2,
+						3
 					],
 					"name" : "Socket_Server",
 					"targetIndexes" : 
@@ -71,23 +86,23 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "common_main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-common_main-Debug-bbd3fe3292ccb647a6e3.json",
-					"name" : "common_main",
-					"projectIndex" : 0
-				},
-				{
-					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Debug-e95cd0a902404e233c51.json",
+					"jsonFile" : "target-main-Debug-b993584fefc1b359654a.json",
 					"name" : "main",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
-					"id" : "v5::@d654bca7de2bef6a7116",
-					"jsonFile" : "target-v5-Debug-99b6e418887a28e80f56.json",
-					"name" : "v5",
+					"id" : "muduo::@f2b6c746a46066769d5d",
+					"jsonFile" : "target-muduo-Debug-5738832fd9ed003c87bc.json",
+					"name" : "muduo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "test_main::@36f028580bb02cc8272a",
+					"jsonFile" : "target-test_main-Debug-c8fd491bbbe4df31fbc3.json",
+					"name" : "test_main",
 					"projectIndex" : 0
 				}
 			]

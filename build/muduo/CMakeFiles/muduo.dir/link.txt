@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuduo.a  CMakeFiles/muduo.dir/src/acceptor.cpp.o CMakeFiles/muduo.dir/src/channel.cpp.o CMakeFiles/muduo.dir/src/eventloop.cpp.o CMakeFiles/muduo.dir/src/poller.cpp.o CMakeFiles/muduo.dir/src/tcpserver.cpp.o CMakeFiles/muduo.dir/src/tcpthread.cpp.o
+/usr/bin/ranlib libmuduo.a

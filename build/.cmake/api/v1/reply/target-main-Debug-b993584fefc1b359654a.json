@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "CMakeFiles/common_main.dir/src/main.cpp.o"
+			"path" : "main"
 		}
 	],
 	"backtrace" : 1,
@@ -10,7 +10,7 @@
 	{
 		"commands" : 
 		[
-			"add_library",
+			"add_executable",
 			"target_link_libraries"
 		],
 		"files" : 
@@ -25,13 +25,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 12,
+				"line" : 16,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 20,
+				"line" : 17,
 				"parent" : 0
 			}
 		]
@@ -52,6 +52,10 @@
 			[
 				{
 					"backtrace" : 2,
+					"path" : "/workspaces/CMake/muduo/include"
+				},
+				{
+					"backtrace" : 2,
 					"isSystem" : true,
 					"path" : "/workspaces/CMake/stl/include"
 				}
@@ -63,8 +67,36 @@
 			]
 		}
 	],
-	"id" : "common_main::@6890427a1f51a3e7e1df",
-	"name" : "common_main",
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "muduo::@f2b6c746a46066769d5d"
+		}
+	],
+	"id" : "main::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-pthread -g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-pthread",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "muduo/libmuduo.a",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "main",
+	"nameOnDisk" : "main",
 	"paths" : 
 	{
 		"build" : ".",
@@ -89,5 +121,5 @@
 			"sourceGroupIndex" : 0
 		}
 	],
-	"type" : "OBJECT_LIBRARY"
+	"type" : "EXECUTABLE"
 }
