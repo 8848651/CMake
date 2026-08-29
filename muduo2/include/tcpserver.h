@@ -25,6 +25,7 @@ namespace muduo {
             }, loop_), jobthread_([]() {
                 while (true) {
                     auto task = muduo::fiber::queue1_->pop();
+                    muduo::fiber::queue1_->front()
                     task();
                 }
                 }) {

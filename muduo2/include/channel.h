@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <functional>
 #include <memory>
+#include <vector>
+
 
 namespace muduo {
 
@@ -28,8 +30,10 @@ namespace muduo {
         };
         void setcallback(callback messagecallback) { messagecallback_ = messagecallback; };
         void execute() { messagecallback_(shared_from_this()); };
-        void update();
         auto getshaared() { return shared_from_this(); };
-        auto read();
+        void update();
+        void read();
+        void accept();
+
     };
 }
