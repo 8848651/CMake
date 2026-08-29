@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuduo2.a  CMakeFiles/muduo2.dir/src/channel.cpp.o CMakeFiles/muduo2.dir/src/eventloop.cpp.o
+/usr/bin/ranlib libmuduo2.a

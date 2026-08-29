@@ -148,6 +148,19 @@ muduo/fast:
 .PHONY : muduo/fast
 
 #=============================================================================
+# Target rules for targets named muduo2
+
+# Build rule for target.
+muduo2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 muduo2
+.PHONY : muduo2
+
+# fast build rule for target.
+muduo2/fast:
+	$(MAKE) -f muduo2/CMakeFiles/muduo2.dir/build.make muduo2/CMakeFiles/muduo2.dir/build
+.PHONY : muduo2/fast
+
+#=============================================================================
 # Target rules for targets named test_main
 
 # Build rule for target.
@@ -198,6 +211,7 @@ help:
 	@echo "... test"
 	@echo "... main"
 	@echo "... muduo"
+	@echo "... muduo2"
 	@echo "... test_main"
 	@echo "... src/main.o"
 	@echo "... src/main.i"

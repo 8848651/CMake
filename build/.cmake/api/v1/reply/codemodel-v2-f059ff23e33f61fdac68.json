@@ -10,7 +10,8 @@
 					[
 						1,
 						2,
-						3
+						3,
+						4
 					],
 					"minimumCMakeVersion" : 
 					{
@@ -48,6 +49,20 @@
 					]
 				},
 				{
+					"build" : "muduo2",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "muduo2",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
 					"build" : "test",
 					"minimumCMakeVersion" : 
 					{
@@ -58,7 +73,7 @@
 					"source" : "test",
 					"targetIndexes" : 
 					[
-						2
+						3
 					]
 				}
 			],
@@ -71,14 +86,16 @@
 						0,
 						1,
 						2,
-						3
+						3,
+						4
 					],
 					"name" : "Socket_Server",
 					"targetIndexes" : 
 					[
 						0,
 						1,
-						2
+						2,
+						3
 					]
 				}
 			],
@@ -87,19 +104,26 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Debug-b993584fefc1b359654a.json",
+					"jsonFile" : "target-main-Debug-0b23b9feee939a1e7866.json",
 					"name" : "main",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "muduo::@f2b6c746a46066769d5d",
-					"jsonFile" : "target-muduo-Debug-5738832fd9ed003c87bc.json",
+					"jsonFile" : "target-muduo-Debug-8f82e8bf150d2c25efc8.json",
 					"name" : "muduo",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 3,
+					"id" : "muduo2::@76f84736eb244e3377fe",
+					"jsonFile" : "target-muduo2-Debug-fe2f14816036e818ca49.json",
+					"name" : "muduo2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
 					"id" : "test_main::@36f028580bb02cc8272a",
 					"jsonFile" : "target-test_main-Debug-c8fd491bbbe4df31fbc3.json",
 					"name" : "test_main",

@@ -138,6 +138,9 @@
 			"path" : "muduo/CMakeLists.txt"
 		},
 		{
+			"path" : "muduo2/CMakeLists.txt"
+		},
+		{
 			"path" : "test/CMakeLists.txt"
 		}
 	],

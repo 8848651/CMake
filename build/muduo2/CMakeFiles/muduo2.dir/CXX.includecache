@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../muduo2/include/channel.h
+cstddef
+-
+functional
+-
+memory
+-
+
+../muduo2/include/eventloop.h
+vector
+-
+memory
+-
+sys/epoll.h
+-
+channel.h
+../muduo2/include/channel.h
+
+/workspaces/CMake/muduo2/src/channel.cpp
+channel.h
+/workspaces/CMake/muduo2/src/channel.h
+eventloop.h
+/workspaces/CMake/muduo2/src/eventloop.h
+

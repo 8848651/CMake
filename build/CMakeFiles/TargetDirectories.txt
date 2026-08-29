@@ -9,6 +9,10 @@
 /workspaces/CMake/build/muduo/CMakeFiles/edit_cache.dir
 /workspaces/CMake/build/muduo/CMakeFiles/test.dir
 /workspaces/CMake/build/muduo/CMakeFiles/muduo.dir
+/workspaces/CMake/build/muduo2/CMakeFiles/rebuild_cache.dir
+/workspaces/CMake/build/muduo2/CMakeFiles/edit_cache.dir
+/workspaces/CMake/build/muduo2/CMakeFiles/test.dir
+/workspaces/CMake/build/muduo2/CMakeFiles/muduo2.dir
 /workspaces/CMake/build/test/CMakeFiles/rebuild_cache.dir
 /workspaces/CMake/build/test/CMakeFiles/edit_cache.dir
 /workspaces/CMake/build/test/CMakeFiles/test.dir

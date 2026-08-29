@@ -3,8 +3,6 @@
 
 int main() {
 
-
-    test::butterfly_test();
     
     return 0;
 }

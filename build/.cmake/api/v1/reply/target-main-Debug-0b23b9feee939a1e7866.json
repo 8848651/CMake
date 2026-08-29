@@ -25,13 +25,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 16,
+				"line" : 18,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 17,
+				"line" : 19,
 				"parent" : 0
 			}
 		]
@@ -53,11 +53,6 @@
 				{
 					"backtrace" : 2,
 					"path" : "/workspaces/CMake/muduo/include"
-				},
-				{
-					"backtrace" : 2,
-					"isSystem" : true,
-					"path" : "/workspaces/CMake/stl/include"
 				}
 			],
 			"language" : "CXX",

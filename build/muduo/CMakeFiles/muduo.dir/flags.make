@@ -6,5 +6,5 @@ CXX_FLAGS =  -pthread -g   -std=gnu++14
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/workspaces/CMake/muduo/include -I/workspaces/CMake/muduo/src -isystem /workspaces/CMake/stl/include 
+CXX_INCLUDES = -I/workspaces/CMake/muduo/include -I/workspaces/CMake/muduo/src 
 

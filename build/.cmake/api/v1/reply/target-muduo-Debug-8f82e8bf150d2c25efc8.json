@@ -12,8 +12,7 @@
 		"commands" : 
 		[
 			"add_library",
-			"target_include_directories",
-			"target_link_libraries"
+			"target_include_directories"
 		],
 		"files" : 
 		[
@@ -34,12 +33,6 @@
 				"command" : 1,
 				"file" : 0,
 				"line" : 12,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 20,
 				"parent" : 0
 			}
 		]
@@ -65,11 +58,6 @@
 				{
 					"backtrace" : 2,
 					"path" : "/workspaces/CMake/muduo/src"
-				},
-				{
-					"backtrace" : 3,
-					"isSystem" : true,
-					"path" : "/workspaces/CMake/stl/include"
 				}
 			],
 			"language" : "CXX",

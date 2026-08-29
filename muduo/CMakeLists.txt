@@ -17,4 +17,4 @@ target_include_directories(muduo
 )
 
 # 将别的库加入现库中（stl_core如果有头文件，建议也设为PUBLIC）
-target_link_libraries(muduo PRIVATE stl_core)
+#target_link_libraries(muduo PRIVATE stl_core)
