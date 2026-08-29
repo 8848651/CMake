@@ -7,5 +7,6 @@ muduo2/CMakeFiles/muduo2.dir/src/channel.cpp.o: ../muduo2/src/channel.cpp
 
 muduo2/CMakeFiles/muduo2.dir/src/eventloop.cpp.o: ../muduo2/include/channel.h
 muduo2/CMakeFiles/muduo2.dir/src/eventloop.cpp.o: ../muduo2/include/eventloop.h
+muduo2/CMakeFiles/muduo2.dir/src/eventloop.cpp.o: ../muduo2/include/fiber.h
 muduo2/CMakeFiles/muduo2.dir/src/eventloop.cpp.o: ../muduo2/src/eventloop.cpp
 

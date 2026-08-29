@@ -11,16 +11,26 @@ namespace muduo {
             for (int i = 0; i < infds; i++) {
                 ve.emplace_back(static_cast<channel*>(evs[i].data.ptr)->getshaared());
             }
-            //向任务线程投递，需要一个静态fiber队列
             for (std::shared_ptr<channel> vel : ve) {
                 auto task = [&]() {
                     std::shared_ptr<fiber> fb = std::make_shared<fiber>([&]() {vel->execute();});
-                        fb->resume();
-                        if (fb->done_) {
-                            muduo::fiber::queue1_->push([&]() {fb->resume();});
+                    fb->resume();
+                    if (!fb->done_) {
+                        while (true) {
+                            if (!muduo::fiber::queue2_.count(fb->hashcode)) {
+                                break;
+                            };
+                            fb->newhashcode();
                         }
+                        muduo::fiber::queue2_[fb->hashcode] = [&]() {fb->resume();};
+                    }
                     };
                 muduo::fiber::queue1_->push(task);
+            }
+            while (!queue_.empty()) {
+                auto task_ = queue_.front();
+                queue_.pop();
+                task();
             }
         }
     }
