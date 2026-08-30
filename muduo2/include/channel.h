@@ -17,6 +17,7 @@ namespace muduo {
         std::weak_ptr<eventloop> loop_;
         callback messagecallback_;
         std::shared_ptr<std::vector<char>> buffer;
+        size_t readsize_ = 0;   // 最近一次 read 的实际字节数（read 任务里写入）
 
 
     public:

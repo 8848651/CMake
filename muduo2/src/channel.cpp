@@ -16,7 +16,8 @@ namespace muduo {
     void channel::read() {
         size_t hashcode = muduo::fiber::currentptr_.lock()->hashcode;
         loop_.lock()->queue_.push([=]() {
-            ::read(socketfd_, buffer->data(), buffer->size());
+            ssize_t n = ::read(socketfd_, buffer->data(), buffer->size());
+            readsize_ = (n > 0) ? static_cast<size_t>(n) : 0;   // read 返回 -1（EAGAIN）时置 0，避免回绕成巨大 size_t
             auto task = muduo::fiber::queue2_[hashcode];
             muduo::fiber::queue1_->push(task);
             });

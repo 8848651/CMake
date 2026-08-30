@@ -18,3 +18,7 @@ target_include_directories(muduo2
 
 # 将别的库加入现库中（stl_core如果有头文件，建议也设为PUBLIC）
 #target_link_libraries(muduo2 PRIVATE stl_core)
+
+# 演示：echo server（用 muduo2 的 CRTP 接口）
+add_executable(muduo2_demo demo/echo_server.cpp)
+target_link_libraries(muduo2_demo PRIVATE muduo2)

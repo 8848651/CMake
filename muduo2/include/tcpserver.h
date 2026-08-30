@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <type_traits>
+#include <thread>
 #include "acceptor.h"
 #include "channel.h"
 #include "fiber.h"
@@ -14,8 +15,8 @@ namespace muduo {
 
     public:
         callback messagecallback_;
+        std::shared_ptr<eventloop> loop_;   // 必须声明在 acceptor_ 之前：成员按声明顺序构造
         acceptor acceptor_;
-        std::shared_ptr<eventloop> loop_;
         std::thread jobthread_;
 
     public:
@@ -24,8 +25,12 @@ namespace muduo {
             ch->update();
             }, loop_), jobthread_([]() {
                 while (true) {
-                    auto task = muduo::fiber::queue1_->pop();
-                    muduo::fiber::queue1_->front()
+                    if (muduo::fiber::queue1_->empty()) {   // 空队列守卫，否则 front() 是 UB
+                        std::this_thread::yield();
+                        continue;
+                    }
+                    auto task = muduo::fiber::queue1_->front();
+                    muduo::fiber::queue1_->pop();
                     task();
                 }
                 }) {
@@ -35,6 +40,7 @@ namespace muduo {
             auto start() -> decltype(std::declval<U>().onmessage(std::declval<std::shared_ptr<channel>>()),
                 std::declval<U>().onconnect(std::declval<std::shared_ptr<channel>>()), void()) {
                 messagecallback_ = [this](std::shared_ptr<channel> ch) {static_cast<U*>(this)->onmessage(ch);};
+                loop_->loop();   // 补上：启动 reactor，阻塞运行
             };
 
     };
