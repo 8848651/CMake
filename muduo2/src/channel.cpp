@@ -21,7 +21,6 @@ namespace muduo {
             muduo::fiber::queue1_->push(task);
             });
         muduo::fiber::currentptr_.lock()->yield();
-
     };
 
     void channel::accept() {

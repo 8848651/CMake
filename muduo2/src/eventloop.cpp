@@ -6,7 +6,7 @@ namespace muduo {
     void eventloop::loop() {
         while (true) {
             epoll_event evs[10];
-            int infds = ::epoll_wait(epollfd, evs, 10, -1);
+            int infds = ::epoll_wait(epollfd_, evs, 10, 0);
             std::vector<std::shared_ptr<channel>> ve;
             for (int i = 0; i < infds; i++) {
                 ve.emplace_back(static_cast<channel*>(evs[i].data.ptr)->getshaared());
@@ -41,7 +41,7 @@ namespace muduo {
         ev.data.fd = ch->socketfd_;
         ev.data.ptr = ch.get();
         ev.events = EPOLLIN;
-        ::epoll_ctl(epollfd, EPOLL_CTL_ADD, ch->socketfd_, &ev);
+        ::epoll_ctl(epollfd_, EPOLL_CTL_ADD, ch->socketfd_, &ev);
     }
 
 }

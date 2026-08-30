@@ -5,10 +5,14 @@
 #include <arpa/inet.h>
 #include <memory>
 #include <functional>
-#include <functional>
 #include "channel.h"
 #include <cstring>
 #include <iostream>
+#include <sys/epoll.h>
+#include <sys/eventfd.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#include "eventloop.h"
 
 namespace muduo {
     class acceptor {
@@ -20,18 +24,18 @@ namespace muduo {
         std::shared_ptr<eventloop>& loop_;
     public:
         acceptor(callback connectcallback, std::shared_ptr<eventloop>& loop) :connectcallback_(connectcallback), loop_(loop),
-                ch_(std::make_shared<channel>(
-                    getsocketfd(),
-                    [this](std::shared_ptr<channel> ch) {
-                        struct sockaddr_in clientaddr;
-                        socklen_t len = sizeof(clientaddr);
-                        int clientfd = accept(ch->socketfd_, (struct sockaddr*)&clientaddr, &len);
-                        setnonblocking(clientfd);
-                        auto _ch = std::make_shared<channel>(clientfd, loop_);
-                        connectcallback_(_ch);
-                    }
-                )
-            ) {
+            ch_(std::make_shared<channel>(
+                getsocketfd(),
+                [this](std::shared_ptr<channel> ch) {
+                    struct sockaddr_in clientaddr;
+                    socklen_t len = sizeof(clientaddr);
+                    int clientfd = accept(ch->socketfd_, (struct sockaddr*)&clientaddr, &len);
+                    setnonblocking(clientfd);
+                    auto _ch = std::make_shared<channel>(clientfd, loop_);
+                    connectcallback_(_ch);
+                }
+            )
+            ){
             ch_->update();
         };
 
