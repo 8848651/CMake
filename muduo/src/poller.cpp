@@ -1,5 +1,5 @@
 #include "poller.h"
-
+#include "channel.h"
 
 
 poller::poller() 

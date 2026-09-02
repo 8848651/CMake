@@ -3,9 +3,11 @@
 #include <sys/eventfd.h>
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <functional>
 #include <mutex>
 #include <condition_variable>
 #include <vector>
+#include "poller.h"
 
 
 class channel;
