@@ -1,5 +1,6 @@
 #include "eventloop.h"
-
+#include "channel.h"
+#include "poller.h"
 
 
 //注意这里初始化列表顺序是按照声明顺序
@@ -21,9 +22,8 @@ void eventloop::init(){
 void eventloop::loop(){
     while(true){
         std::vector<std::shared_ptr<channel>> ve = poller_->wait();
-        //std::cout<<submittask.size()<<std::endl;
         for(std::shared_ptr<channel> vel : ve){
-            vel->readcallback();
+            vel->readcallback_();
         }
         dopendingfunctors();
     }
@@ -37,32 +37,28 @@ void eventloop::update(std::shared_ptr<channel> channel_){
 void eventloop::tosubmittask(submittasktype task){
     {
         std::unique_lock<std::mutex> lock(mutex_);
-        submittask.emplace_back(task);
+        submittask_.emplace_back(task);
     }
-    //std::cout<<submittask.size()<<std::endl;
     writeeventfd();
 };
 
 void eventloop::readeventfd(){
     uint64_t one = 1;
-    std::cout<<"执行了读取channel"<<std::endl;
     ssize_t n = read(wakeupfd_, &one, sizeof one);
 };
     
 void eventloop::writeeventfd(){
     uint64_t one = 1;
-    std::cout<<"执行了写入channel"<<std::endl;
     ssize_t n = write(wakeupfd_, &one, sizeof one);
 }
 
 
 void eventloop::dopendingfunctors(){
-    std::cout<<submittask.size()<<std::endl;
-    if(submittask.size()==0){return;};
+    if(submittask_.size()==0){return;};
     std::vector<submittasktype> submittasks;
     {
         std::unique_lock<std::mutex> lock(mutex_);
-        submittasks.swap(submittask);
+        submittasks.swap(submittask_);
     }
     for(submittasktype task : submittasks){
         task();

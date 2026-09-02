@@ -1,14 +1,15 @@
 #pragma once
 #include <sys/epoll.h>
-#include "channel.h"
-#include "eventloop.h"
+#include <memory>
+#include <vector>
+
 
 class eventloop;
 class channel;
 
 class poller : public std::enable_shared_from_this<poller> {
 public:
-    int epollfd;
+    int epollfd_;
     std::weak_ptr<eventloop> loop_;
     std::vector<std::shared_ptr<channel>> channels_;
 

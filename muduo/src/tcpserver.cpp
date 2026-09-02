@@ -4,10 +4,10 @@
 tcpserver::tcpserver(messagecallback messagecallback)
     :baseloop_(std::make_shared<eventloop>())
     ,connection_()
-    ,accepto(){
+    ,accepto_(){
     baseloop_->init();
-    accepto.init(baseloop_);
-    accepto.setcallback([&](int acceptfd){newconnect(acceptfd);});
+    accepto_.init(baseloop_);
+    accepto_.setcallback([&](int acceptfd){newconnect(acceptfd);});
     messagecallback_ = messagecallback;
     baseloop_->loop();
 };

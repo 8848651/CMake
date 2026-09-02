@@ -2,7 +2,6 @@
 #include <functional>
 #include <memory>
 #include <iostream>
-#include "eventloop.h"
 
 class eventloop;
 
@@ -11,16 +10,16 @@ public:
     using callback=std::function<void()>;
 
 public:
-    int socketfd;
+    int socketfd_;
     std::weak_ptr<eventloop> loop_;
-    callback readcallback;
+    callback readcallback_;
 
     channel(int socketfd);
     channel(int socketfd,std::weak_ptr<eventloop> loop);
     void init(std::weak_ptr<eventloop> loop);
-    void setreadcallback(callback readcallback_);
+    void setreadcallback(callback readcallback);
     void update();
-    std::shared_ptr<channel> getshaared();
+    std::shared_ptr<channel> getshared();
 
 
 

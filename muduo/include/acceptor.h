@@ -15,9 +15,9 @@ public:
     using callback = std::function<void(int)>;
 
 public:
-    int sockfd;
+    int sockfd_;
     callback readcallback_;
-    std::shared_ptr<channel> connectchannel;
+    std::shared_ptr<channel> connectchannel_;
 
     acceptor();
     void init(std::shared_ptr<eventloop> baseloop);

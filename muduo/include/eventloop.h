@@ -6,8 +6,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <vector>
-#include "channel.h"
-#include "poller.h"
+
 
 class channel;
 class poller;
@@ -22,7 +21,7 @@ public:
     std::mutex mutex_;
     std::unique_ptr<poller> poller_;
     std::shared_ptr<channel> wakeupchannel_;
-    std::vector<submittasktype> submittask;
+    std::vector<submittasktype> submittask_;
 
     //注意这里初始化列表顺序是按照声明顺序
     eventloop();

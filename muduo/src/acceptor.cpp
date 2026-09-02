@@ -2,14 +2,14 @@
 
 
 acceptor::acceptor()
-    :sockfd(getsocketfd())
-    ,connectchannel(std::make_shared<channel>(sockfd)){
-        connectchannel->setreadcallback([&](){newaccept();});
+    :sockfd_(getsocketfd())
+    ,connectchannel_(std::make_shared<channel>(sockfd_)){
+        connectchannel_->setreadcallback([&](){newaccept();});
 };
 
 void acceptor::init(std::shared_ptr<eventloop> baseloop){
-    connectchannel->init(baseloop);
-    connectchannel->update();
+    connectchannel_->init(baseloop);
+    connectchannel_->update();
 };
 
 void acceptor::setcallback(callback readcallback){
@@ -17,10 +17,9 @@ void acceptor::setcallback(callback readcallback){
 }
 
 void acceptor::newaccept(){
-    std::cout<<"新链接到了"<<std::endl;
     struct sockaddr_in clientaddr;
     socklen_t len = sizeof(clientaddr);
-    int clientfd = accept(sockfd, (struct sockaddr*)&clientaddr, &len);
+    int clientfd = accept(sockfd_, (struct sockaddr*)&clientaddr, &len);
     setnonblocking(clientfd);
     readcallback_(clientfd);
 }

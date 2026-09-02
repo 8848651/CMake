@@ -21,7 +21,7 @@ public:
     std::shared_ptr<eventloop> baseloop_;
     std::vector<tcpconnection> connection_;
     //tcpthread thread;
-    acceptor accepto;
+    acceptor accepto_;
     messagecallback messagecallback_;
     
     tcpserver(messagecallback messagecallback);
