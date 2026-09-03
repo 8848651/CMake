@@ -5,9 +5,9 @@
 
 //注意这里初始化列表顺序是按照声明顺序
 eventloop::eventloop()
-    :poller_(std::make_unique<poller>())
-    ,wakeupfd_(createeventfd())
+    :wakeupfd_(createeventfd())
     ,threadid_(::syscall(SYS_gettid))
+    ,poller_(std::make_unique<poller>())
     ,wakeupchannel_(std::make_shared<channel>(wakeupfd_)){
         wakeupchannel_->setreadcallback([&](){readeventfd();});
     }
