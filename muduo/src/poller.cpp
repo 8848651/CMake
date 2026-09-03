@@ -4,13 +4,13 @@
 
 poller::poller() 
     :epollfd_(epoll_create(1))
-    ,channels_() {};
+    ,channels_() {}
 
 
 void poller::init(std::weak_ptr<eventloop> loop){
     loop_=loop;
-};
-    
+}
+
 void poller::update(std::shared_ptr<channel> channel_){
     channels_.emplace_back(channel_);
     struct epoll_event ev;

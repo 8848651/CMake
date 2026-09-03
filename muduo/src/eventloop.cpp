@@ -10,13 +10,13 @@ eventloop::eventloop()
     ,threadid_(::syscall(SYS_gettid))
     ,wakeupchannel_(std::make_shared<channel>(wakeupfd_)){
         wakeupchannel_->setreadcallback([&](){readeventfd();});
-    };
+    }
 
 void eventloop::init(){
     poller_->init(shared_from_this());
     wakeupchannel_->init(shared_from_this());
     wakeupchannel_->update();
-};
+}
 
 
 void eventloop::loop(){
@@ -40,12 +40,12 @@ void eventloop::tosubmittask(submittasktype task){
         submittask_.emplace_back(task);
     }
     writeeventfd();
-};
+}
 
 void eventloop::readeventfd(){
     uint64_t one = 1;
     ssize_t n = read(wakeupfd_, &one, sizeof one);
-};
+}
     
 void eventloop::writeeventfd(){
     uint64_t one = 1;
