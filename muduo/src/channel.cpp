@@ -1,11 +1,12 @@
 #include "channel.h"
 #include "eventloop.h"
 
-channel::channel(int socketfd)
-    :socketfd_(socketfd){}
+channel::channel(safesocket&& socketfd)
+    :socketfd_(std::forward<safesocket>(socketfd)){
+}
 
-channel::channel(int socketfd_,std::weak_ptr<eventloop> loop)
-    :socketfd_(socketfd_)
+channel::channel(safesocket&& socketfd, std::weak_ptr<eventloop> loop)
+    :socketfd_(std::forward<safesocket>(socketfd))
     ,loop_(loop){}
 
 void channel::init(std::weak_ptr<eventloop> loop){

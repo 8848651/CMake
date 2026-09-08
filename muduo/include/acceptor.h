@@ -8,14 +8,15 @@
 #include <functional>
 #include "channel.h"
 #include "eventloop.h"
+#include "safesocket.h"
 
 
 class acceptor {
 public:
-    using callback = std::function<void(int)>;
+    using callback = std::function<void(safesocket)>;
 
 public:
-    int sockfd_;
+    safesocket sockfd_;
     callback readcallback_;
     std::shared_ptr<channel> connectchannel_;
 
@@ -24,25 +25,19 @@ public:
     void setcallback(callback readcallback);
     void newaccept();
 
-    static int getsocketfd() {
+    static safesocket getsocketfd() {
         struct sockaddr_in servaddr;
         memset(&servaddr, 0, sizeof(servaddr));
         servaddr.sin_family = AF_INET;
         servaddr.sin_port = htons(10000);
         servaddr.sin_addr.s_addr = INADDR_ANY;
 
-        int socketfd = socket(AF_INET, SOCK_STREAM, 0);
-        bind(socketfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
-        listen(socketfd, 128);
+        safesocket socketfd;
+        socketfd.createsafesocket(AF_INET, SOCK_STREAM, 0);
+        socketfd.bindsafesocket((struct sockaddr*)&servaddr, sizeof(servaddr));
+        socketfd.listensafesocket(128);
         return socketfd;
     }
-
-    //设置非阻塞
-    static void setnonblocking(int fd) {
-        int flags = fcntl(fd, F_GETFL, 0);
-        fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-    }
-
 };
 
 

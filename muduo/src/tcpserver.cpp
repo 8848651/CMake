@@ -1,4 +1,5 @@
 #include "tcpserver.h"
+#include "safesocket.h"
 
 
 tcpserver::tcpserver(messagecallback messagecallback)
@@ -7,19 +8,13 @@ tcpserver::tcpserver(messagecallback messagecallback)
     ,accepto_(){
     baseloop_->init();
     accepto_.init(baseloop_);
-    accepto_.setcallback([&](int acceptfd){newconnect(acceptfd);});
+    accepto_.setcallback([this](safesocket acceptfd) {
+        
+        });
     messagecallback_ = messagecallback;
     baseloop_->loop();
 }
 
-void tcpserver::newconnect(int acceptfd){
-    //std::shared_ptr<eventloop> loop = thread.geteventloopptr();
-    std::shared_ptr<channel> newchannel=std::make_shared<channel>(acceptfd,baseloop_);
-    newchannel->setreadcallback([=](){messagecallback_(*(newchannel.get()));});
-    baseloop_->tosubmittask([=](){
-        newchannel->update();
-    });
-}
 
 
 

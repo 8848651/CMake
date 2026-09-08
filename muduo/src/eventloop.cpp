@@ -1,40 +1,38 @@
 #include "eventloop.h"
 #include "channel.h"
 
-
-
-//注意这里初始化列表顺序是按照声明顺序
 eventloop::eventloop()
-    :wakeupfd_(createeventfd())
-    ,threadid_(::syscall(SYS_gettid))
-    ,poller_(std::make_unique<poller>())
-    ,wakeupchannel_(std::make_shared<channel>(wakeupfd_)){
-        wakeupchannel_->setreadcallback([&](){readeventfd();});
-    }
+    :threadid_(::syscall(SYS_gettid))
+    , poller_(std::make_unique<poller>()) {
+    safesocket temp;
+    temp.createsafeeventfd();
+    wakeupchannel_ = std::make_shared<channel>(temp);
+    wakeupchannel_->setreadcallback([this]() {readeventfd();});
+}
 
-void eventloop::init(){
+void eventloop::init() {
     poller_->init(shared_from_this());
     wakeupchannel_->init(shared_from_this());
     wakeupchannel_->update();
 }
 
 
-void eventloop::loop(){
-    while(true){
+void eventloop::loop() {
+    while (true) {
         std::vector<std::shared_ptr<channel>> ve = poller_->wait();
-        for(std::shared_ptr<channel> vel : ve){
+        for (std::shared_ptr<channel> vel : ve) {
             vel->readcallback_();
         }
         dopendingfunctors();
     }
 }
 
-void eventloop::update(std::shared_ptr<channel> channel_){
+void eventloop::update(std::shared_ptr<channel> channel_) {
     poller_->update(channel_);
 }
 
 
-void eventloop::tosubmittask(submittasktype task){
+void eventloop::tosubmittask(submittasktype task) {
     {
         std::unique_lock<std::mutex> lock(mutex_);
         submittask_.emplace_back(task);
@@ -42,28 +40,28 @@ void eventloop::tosubmittask(submittasktype task){
     writeeventfd();
 }
 
-void eventloop::readeventfd(){
+void eventloop::readeventfd() {
     uint64_t one = 1;
-    ssize_t n = read(wakeupfd_, &one, sizeof one);
+    wakeupchannel_->syncread(&one, sizeof(one));
 }
-    
-void eventloop::writeeventfd(){
+
+void eventloop::writeeventfd() {
     uint64_t one = 1;
-    ssize_t n = write(wakeupfd_, &one, sizeof one);
+    wakeupchannel_->syncwrite(&one, sizeof(one));
 }
 
 
-void eventloop::dopendingfunctors(){
-    if(submittask_.size()==0){return;};
+void eventloop::dopendingfunctors() {
+    if (submittask_.size() == 0) { return; };
     std::vector<submittasktype> submittasks;
     {
         std::unique_lock<std::mutex> lock(mutex_);
         submittasks.swap(submittask_);
     }
-    for(submittasktype task : submittasks){
+    for (submittasktype task : submittasks) {
         task();
     }
 }
-    
+
 
 

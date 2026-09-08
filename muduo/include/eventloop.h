@@ -18,7 +18,6 @@ public:
     using submittasktype=std::function<void()>;
 
 public:
-    int wakeupfd_;
     const pid_t threadid_;
     std::mutex mutex_;
     std::unique_ptr<poller> poller_;
@@ -34,10 +33,5 @@ public:
     void readeventfd();
     void writeeventfd();
     void dopendingfunctors();
-
-    static int createeventfd(){
-        int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-        return evtfd;
-    }
 
 };
