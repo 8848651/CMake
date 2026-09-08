@@ -15,13 +15,13 @@
 #include <system_error>
 #include <cerrno>
 
-class safesocket{
+class safesocket {
 public:
     int fd_;
 public:
-    explicit safesocket():fd_(-1){}
-    explicit safesocket(int fd):fd_(fd){}
-    ~safesocket() {if (fd_ >= 0) ::close(fd_);}
+    explicit safesocket() :fd_(-1) {}
+    explicit safesocket(int fd) :fd_(fd) {}
+    ~safesocket() { if (fd_ >= 0) ::close(fd_); }
     safesocket(const safesocket&) = delete;
     safesocket& operator=(const safesocket&) = delete;
     safesocket(safesocket&& other) noexcept : fd_(other.fd_) { other.fd_ = -1; }
@@ -33,8 +33,8 @@ public:
         }
         return *this;
     }
-    const int& get() const { return fd_; }
-    
+    int& getsocketfd() { return fd_; }
+
 
 
     ssize_t read(void* addr, int len) {
@@ -48,7 +48,7 @@ public:
         return size;
     }
 
-    ssize_t write(const void * addr, int len) {
+    ssize_t write(const void* addr, int len) {
         int size = ::write(fd_, addr, len);
         if (size == -1) {
             throw std::system_error(
@@ -79,7 +79,7 @@ public:
         }
     }
 
-    void setnonblocking(){
+    void setnonblocking() {
         int flags = ::fcntl(fd_, F_GETFL, 0);
         if (flags == -1) {
             throw std::system_error(
@@ -87,7 +87,7 @@ public:
                 "设置非阻塞失败"
             );
         }
-        if(::fcntl(fd_, F_SETFL, flags | O_NONBLOCK) == -1){
+        if (::fcntl(fd_, F_SETFL, flags | O_NONBLOCK) == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),
                 "设置非阻塞失败"
@@ -95,7 +95,7 @@ public:
         }
     }
 
-    safesocket acceptsafesocket(struct sockaddr_in& addr, socklen_t& len){
+    safesocket acceptsafesocket(struct sockaddr_in& addr, socklen_t& len) {
         int clientfd = ::accept(fd_, (struct sockaddr*)&addr, &len);
         if (clientfd == -1) {
             throw std::system_error(
@@ -103,11 +103,11 @@ public:
                 "socket接收失败"
             );
         }
-        return safesocket{clientfd};
+        return safesocket{ clientfd };
     }
 
-    void epollctlsafesocket(int op,safesocket socketfd,struct epoll_event& ev){
-        int fd = ::epoll_ctl(fd_, op, socketfd.get(), &ev);
+    void epollctlsafesocket(int op, safesocket& socketfd, struct epoll_event& ev) {
+        int fd = ::epoll_ctl(fd_, op, socketfd.getsocketfd(), &ev);
         if (fd == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),
@@ -116,8 +116,8 @@ public:
         }
     }
 
-    int epollctlsafesocket(struct epoll_event& evs,int maxevents, int timeout){
-        int infds =  ::epoll_wait(fd_, &evs, maxevents, timeout);
+    int epollwaitsafesocket(struct epoll_event* evs, int maxevents, int timeout) {
+        int infds = ::epoll_wait(fd_, evs, maxevents, timeout);
         if (infds == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),
@@ -127,7 +127,7 @@ public:
         return infds;
     }
 
-    void createepollfd(size_t t){
+    void createepollfd(size_t t) {
         int fd_ = ::epoll_create(t);
         if (fd_ == -1) {
             throw std::system_error(
@@ -137,7 +137,7 @@ public:
         }
     }
 
-    void createeventfd(){
+    void createeventfd() {
         int fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         if (fd_ == -1) {
             throw std::system_error(
@@ -147,7 +147,7 @@ public:
         }
     }
 
-    void createsocketfd(int domain, int type, int protocol){
+    void createsocketfd(int domain, int type, int protocol) {
         fd_ = ::socket(domain, type, protocol);
         if (fd_ == -1) {
             throw std::system_error(
@@ -159,5 +159,5 @@ public:
 
 
 
-    
+
 };

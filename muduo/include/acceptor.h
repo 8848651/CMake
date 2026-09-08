@@ -16,22 +16,25 @@ public:
     using callback = std::function<void(safesocket&&)>;
 
 public:
-    safesocket sockfd_;
     callback readcallback_;
-    std::shared_ptr<channel> connectchannel_;
+    channel ch_;
 
-    acceptor():sockfd_(getsocketfd()), connectchannel_(std::make_shared<channel>(sockfd_)) {
-        connectchannel_->setreadcallback([this](std::shared_ptr<channel> ch) {
+    acceptor(callback callback_, eventloop& loop_) :ch_(getsocketfd(), std::forward<eventloop&>(loop_)) {
+        ch_.setreadcallback(
+            [this](channel& ch) {
                 struct sockaddr_in clientaddr;
                 socklen_t len = sizeof(clientaddr);
-                safesocket clientfd = sockfd_.acceptsafesocket(clientaddr, len);
+                safesocket clientfd = ch.getsafesocket().acceptsafesocket(clientaddr, len);
                 clientfd.setnonblocking();
                 readcallback_(std::move(clientfd));
-            });
-        }
+            }
+        );
+        readcallback_ = callback_;
+    }
+    channel& getconnectfd() { return ch_; }
 
 
-    void setcallback(callback readcallback){readcallback_ = readcallback;}
+    void setcallback(callback readcallback) { readcallback_ = readcallback; }
 
     static safesocket getsocketfd() {
         struct sockaddr_in servaddr;

@@ -9,7 +9,6 @@
 #include "channel.h"
 #include <stdio.h>
 #include "tcpthread.h"
-#include "tcpconnection.h"
 
 
 template <typename T>
@@ -19,17 +18,17 @@ public:
 
 public:
     callback messagecallback_;
-    std::shared_ptr<eventloop> loop_;   
+    eventloop loop_;
     std::vector<channel> channels_;
     acceptor acceptor_;
     std::thread jobthread_;
 
 public:
-    tcpserver() :loop_(std::make_shared<eventloop>()), acceptor_([this](safesocket&& socketfd) {
-            channel ch{std::forward<safesocket>(socketfd)};
-            ch->setreadcallback(messagecallback_);
-            ch->update();
-            channels_.emplace_back(std::move(ch));
+    tcpserver() :loop_(), channels_(), acceptor_([this](safesocket&& socketfd) {
+        channel ch{ std::forward<safesocket>(socketfd),loop_ };
+        ch->setreadcallback(messagecallback_);
+        ch->update();
+        channels_.emplace_back(std::move(ch));
         }, loop_) {
     };
 
@@ -37,7 +36,7 @@ public:
     auto start() -> decltype(std::declval<U>().onmessage(std::declval<std::shared_ptr<channel>>()),
         std::declval<U>().onconnect(std::declval<std::shared_ptr<channel>>()), void()) {
         messagecallback_ = [this](std::shared_ptr<channel> ch) {static_cast<U*>(this)->onmessage(ch);};
-        loop_->loop();   
+        loop_->loop();
     };
 
 };
