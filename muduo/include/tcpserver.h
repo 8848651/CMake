@@ -26,8 +26,8 @@ public:
 public:
     tcpserver() :loop_(), channels_(), acceptor_([this](safesocket&& socketfd) {
         channel ch{ std::forward<safesocket>(socketfd),loop_ };
-        ch->setreadcallback(messagecallback_);
-        ch->update();
+        ch.setreadcallback(messagecallback_);
+        ch.update();
         channels_.emplace_back(std::move(ch));
         }, loop_) {
     };

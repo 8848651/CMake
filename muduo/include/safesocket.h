@@ -5,7 +5,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <cerrno>
-#include <bits/eventfd.h>
 #include <sys/eventfd.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
