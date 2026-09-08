@@ -29,7 +29,7 @@ public:
             channel ch{std::forward<safesocket>(socketfd)};
             ch->setreadcallback(messagecallback_);
             ch->update();
-            channels_.emplace_back(std::forward<safesocket>(socketfd));
+            channels_.emplace_back(std::move(ch));
         }, loop_) {
     };
 
