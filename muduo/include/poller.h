@@ -9,7 +9,7 @@ class channel;
 
 class poller : public std::enable_shared_from_this<poller> {
 public:
-    int epollfd_;
+    safesocket epollfd_;
     std::weak_ptr<eventloop> loop_;
     std::vector<std::shared_ptr<channel>> channels_;
 

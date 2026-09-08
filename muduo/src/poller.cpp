@@ -3,8 +3,9 @@
 
 
 poller::poller() 
-    :epollfd_(epoll_create(1))
-    ,channels_() {}
+    :channels_() {
+        epollfd_.createepollfd(1);
+    }
 
 
 void poller::init(std::weak_ptr<eventloop> loop){

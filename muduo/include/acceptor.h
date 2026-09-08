@@ -13,17 +13,25 @@
 
 class acceptor {
 public:
-    using callback = std::function<void(safesocket)>;
+    using callback = std::function<void(safesocket&&)>;
 
 public:
     safesocket sockfd_;
     callback readcallback_;
     std::shared_ptr<channel> connectchannel_;
 
-    acceptor();
-    void init(std::shared_ptr<eventloop> baseloop);
-    void setcallback(callback readcallback);
-    void newaccept();
+    acceptor():sockfd_(getsocketfd()), connectchannel_(std::make_shared<channel>(sockfd_)) {
+        connectchannel_->setreadcallback([this](std::shared_ptr<channel> ch) {
+                struct sockaddr_in clientaddr;
+                socklen_t len = sizeof(clientaddr);
+                safesocket clientfd = sockfd_.acceptsafesocket(clientaddr, len);
+                clientfd.setnonblocking();
+                readcallback_(std::move(clientfd));
+            });
+        }
+
+
+    void setcallback(callback readcallback){readcallback_ = readcallback;}
 
     static safesocket getsocketfd() {
         struct sockaddr_in servaddr;
@@ -33,7 +41,7 @@ public:
         servaddr.sin_addr.s_addr = INADDR_ANY;
 
         safesocket socketfd;
-        socketfd.createsafesocket(AF_INET, SOCK_STREAM, 0);
+        socketfd.createsocketfd(AF_INET, SOCK_STREAM, 0);
         socketfd.bindsafesocket((struct sockaddr*)&servaddr, sizeof(servaddr));
         socketfd.listensafesocket(128);
         return socketfd;

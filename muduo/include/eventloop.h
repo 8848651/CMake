@@ -24,7 +24,6 @@ public:
     std::shared_ptr<channel> wakeupchannel_;
     std::vector<submittasktype> submittask_;
 
-    //注意这里初始化列表顺序是按照声明顺序
     eventloop();
     void init();
     void loop();

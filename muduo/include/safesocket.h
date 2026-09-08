@@ -5,6 +5,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <cerrno>
+#include <bits/eventfd.h>
+#include <sys/eventfd.h>
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <sys/eventfd.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <system_error>
+#include <cerrno>
 
 class safesocket{
 public:
@@ -24,8 +33,10 @@ public:
         }
         return *this;
     }
-    int get() const { return fd_; }
+    const int& get() const { return fd_; }
     
+
+
     ssize_t read(void* addr, int len) {
         int size = ::read(fd_, addr, len);
         if (size == -1) {
@@ -84,16 +95,6 @@ public:
         }
     }
 
-    void createsafesocket(int domain, int type, int protocol){
-        fd_ = ::socket(domain, type, protocol);
-        if (fd_ == -1) {
-            throw std::system_error(
-                std::error_code(errno, std::generic_category()),
-                "socket创建失败"
-            );
-        }
-    }
-
     safesocket acceptsafesocket(struct sockaddr_in& addr, socklen_t& len){
         int clientfd = ::accept(fd_, (struct sockaddr*)&addr, &len);
         if (clientfd == -1) {
@@ -105,15 +106,58 @@ public:
         return safesocket{clientfd};
     }
 
-    void createsafeeventfd(){
-        int eventfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-        if (eventfd == -1) {
+    void epollctlsafesocket(int op,safesocket socketfd,struct epoll_event& ev){
+        int fd = ::epoll_ctl(fd_, op, socketfd.get(), &ev);
+        if (fd == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),
-                "socket接收失败"
+                "epoll添加socketfd失败"
             );
         }
     }
+
+    int epollctlsafesocket(struct epoll_event& evs,int maxevents, int timeout){
+        int infds =  ::epoll_wait(fd_, &evs, maxevents, timeout);
+        if (infds == -1) {
+            throw std::system_error(
+                std::error_code(errno, std::generic_category()),
+                "epoll等待socketfd失败"
+            );
+        }
+        return infds;
+    }
+
+    void createepollfd(size_t t){
+        int fd_ = ::epoll_create(t);
+        if (fd_ == -1) {
+            throw std::system_error(
+                std::error_code(errno, std::generic_category()),
+                "epoll创建失败"
+            );
+        }
+    }
+
+    void createeventfd(){
+        int fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        if (fd_ == -1) {
+            throw std::system_error(
+                std::error_code(errno, std::generic_category()),
+                "创建event失败"
+            );
+        }
+    }
+
+    void createsocketfd(int domain, int type, int protocol){
+        fd_ = ::socket(domain, type, protocol);
+        if (fd_ == -1) {
+            throw std::system_error(
+                std::error_code(errno, std::generic_category()),
+                "socket创建失败"
+            );
+        }
+    }
+
+
 
     
 };
