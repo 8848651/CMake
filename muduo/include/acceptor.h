@@ -30,6 +30,7 @@ public:
             }
         );
         readcallback_ = callback_;
+        ch_.update();
     }
     channel& getconnectfd() { return ch_; }
 

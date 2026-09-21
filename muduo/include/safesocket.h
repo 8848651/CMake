@@ -116,7 +116,10 @@ public:
     }
 
     int epollwaitsafesocket(struct epoll_event* evs, int maxevents, int timeout) {
-        int infds = ::epoll_wait(fd_, evs, maxevents, timeout);
+        int infds = -1;
+        do {
+            infds = ::epoll_wait(fd_, evs, maxevents, timeout);
+        } while (infds == -1 && errno == EINTR);   // 被信号打断不是错误，重试即可
         if (infds == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),
@@ -126,8 +129,10 @@ public:
         return infds;
     }
 
+    // 注意：这两处不能写成 int fd_ = ...，否则声明的是局部变量，会遮蔽成员 fd_，
+    // 结果是"新 fd 被泄漏、成员一直是 -1"，而且编译器不会报错（-Wshadow 才能发现）。
     void createepollfd(size_t t) {
-        int fd_ = ::epoll_create(t);
+        fd_ = ::epoll_create(t);
         if (fd_ == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),
@@ -137,7 +142,7 @@ public:
     }
 
     void createeventfd() {
-        int fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         if (fd_ == -1) {
             throw std::system_error(
                 std::error_code(errno, std::generic_category()),

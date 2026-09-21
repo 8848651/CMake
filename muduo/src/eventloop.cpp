@@ -11,10 +11,12 @@ eventloop::eventloop() :threadid_(::syscall(SYS_gettid))
 }
 
 void eventloop::loop() {
-    while (true) {
+    while (!quit_) {
         std::vector<std::reference_wrapper<channel>>& ve = poller_.wait();
         for (channel& vel : ve) {
-            vel.readcallback_(vel);
+            // 没设回调的 channel 不要直接调，否则 std::function 会抛 bad_function_call，
+            // 异常会一路穿出 loop() 把整个事件循环打掉。
+            if (vel.readcallback_) { vel.readcallback_(vel); }
         }
         dopendingfunctors();
     }
@@ -22,6 +24,16 @@ void eventloop::loop() {
 
 void eventloop::update(channel& ch) {
     poller_.update(ch);
+}
+
+void eventloop::remove(channel& ch) {
+    poller_.remove(ch);
+}
+
+void eventloop::quit() {
+    quit_ = true;
+    // 必须唤醒：loop 线程此刻很可能正阻塞在 epoll_wait(-1) 上，只置位它看不到。
+    writeeventfd();
 }
 
 void eventloop::tosubmittask(submittasktype task) {

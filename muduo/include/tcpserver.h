@@ -1,5 +1,6 @@
 #pragma once
-#include <memory>
+#include <functional>
+#include <map>
 #include <thread>
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -14,29 +15,31 @@
 template <typename T>
 class tcpserver {
 public:
-    using callback = std::function<void(std::shared_ptr<channel>)>;
+
+    using callback = std::function<void(channel&)>;
 
 public:
     callback messagecallback_;
-    eventloop loop_;
-    std::vector<channel> channels_;
+    tcpthread jobthread_;
+    eventloop loop_;                  
+    std::map<int, channel> channels_; 
     acceptor acceptor_;
-    std::thread jobthread_;
 
 public:
-    tcpserver() :loop_(), channels_(), acceptor_([this](safesocket&& socketfd) {
-        channel ch{ std::forward<safesocket>(socketfd),loop_ };
+    tcpserver() :messagecallback_(),jobthread_(), loop_(), channels_(), acceptor_([this](safesocket&& socketfd) {
+        int fd = socketfd.getsocketfd();
+        channel& ch = channels_.emplace(
+            fd, channel{ std::move(socketfd), jobthread_.getloop() }).first->second;
         ch.setreadcallback(messagecallback_);
         ch.update();
-        channels_.emplace_back(std::move(ch));
         }, loop_) {
     };
 
     template <typename U = T>
-    auto start() -> decltype(std::declval<U>().onmessage(std::declval<std::shared_ptr<channel>>()),
-        std::declval<U>().onconnect(std::declval<std::shared_ptr<channel>>()), void()) {
-        messagecallback_ = [this](std::shared_ptr<channel> ch) {static_cast<U*>(this)->onmessage(ch);};
-        loop_->loop();
+    auto start() -> decltype(std::declval<U>().onmessage(std::declval<channel&>()),
+        std::declval<U>().onconnect(std::declval<channel&>()), void()) {
+        messagecallback_ = [this](channel& ch) {static_cast<U*>(this)->onmessage(ch);};
+        loop_.loop();
     };
 
 };
